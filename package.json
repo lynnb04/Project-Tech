@@ -1,0 +1,24 @@
+{
+  "name": "projtech",
+  "version": "1.0.0",
+  "description": "",
+  "main": "server.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node server.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/ThomasPlas/projTech.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/ThomasPlas/projTech/issues"
+  },
+  "homepage": "https://github.com/ThomasPlas/projTech#readme",
+  "devDependencies": {
+    "stylelint": "^16.19.1",
+    "stylelint-config-standard": "^38.0.0"
+  }
+}
