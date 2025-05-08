@@ -2,6 +2,8 @@ console.log("hello Thomas");
 const express = require("express")
 const app = express()
 
+require('dotenv').config()
+
 app.listen(3000)
 app.use('/static', express.static('static'))
 app.use(express.urlencoded({extended: true}));
@@ -20,4 +22,21 @@ app.use(session({
     secret: process.env.SESSION_SECRET
 }))
 
+// ATLAS MONGDOB APPLICATIONC ODE
+const { MongoClient, Objectid} = require("mongodb");
+// Mango configuratie uit .env bestand
+const uri = process.env.URI;
+// nieuwe MongoDB client
+const client= new MongoClient(uri);
+const db = client.db(process.env.DB_NAME);
+// MongoDB connection
+async function connectDB() {
+try {
+    await client.connect();
+    console. log ("Client connected to database");
+    } catch (error) {
+    console.log(error);
+    }
+}
+connectDB();
 
