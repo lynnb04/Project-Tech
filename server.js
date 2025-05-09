@@ -8,6 +8,9 @@ app.listen(3000)
 app.use('/static', express.static('static'))
 app.use(express.urlencoded({extended: true}));
 
+// set the view engine to ejs
+app.set('view engine', 'ejs');
+
 app
     .set('view engine', 'ejs')
     .set('views','view')
@@ -40,3 +43,27 @@ try {
 }
 connectDB();
 
+
+app.get('/', function(req, res) {
+    res.render('pages/index');
+  });
+
+  constexpress = require('express')
+    constapp = express()
+     
+    app.use(express.urlencoded({extended:true}))
+    
+    app.get('/add',showAddForm)
+    app.post('/add-movie',addMovie)
+    
+    function showAddForm(req,res) {
+      res.render('add.ejs')
+    }
+     
+    function addMovie(req,res) {
+      res.send(`Thanksforaddingthemovie with:
+    title: ${req.body.title},
+    plot: ${req.body.plot},
+    and description: ${req.body.description}
+      `)
+    }
