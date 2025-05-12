@@ -67,3 +67,25 @@ app.get('/', function(req, res) {
     and description: ${req.body.description}
       `)
     }
+
+// Add this after your existing routes
+app.post('/form', async (req, res) => {
+    try {
+        const { naam } = req.body;
+        
+        // Create a document to insert
+        const newUser = {
+            name: naam,
+            createdAt: new Date()
+        };
+
+        // Insert the document into the 'users' collection
+        const result = await db.collection('users').insertOne(newUser);
+        
+        console.log('User added successfully:', result);
+        res.redirect('/'); // Redirect back to home page after successful submission
+    } catch (error) {
+        console.error('Error adding user:', error);
+        res.status(500).send('Error adding user to database');
+    }
+});
