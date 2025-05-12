@@ -8,6 +8,9 @@ app.listen(3000)
 app.use('/static', express.static('static'))
 app.use(express.urlencoded({extended: true}));
 
+// set the view engine to ejs
+app.set('view engine', 'ejs');
+
 app
     .set('view engine', 'ejs')
     .set('views','view')
@@ -40,3 +43,49 @@ try {
 }
 connectDB();
 
+
+app.get('/', function(req, res) {
+    res.render('pages/index');
+  });
+
+  constexpress = require('express')
+    constapp = express()
+     
+    app.use(express.urlencoded({extended:true}))
+    
+    app.get('/add',showAddForm)
+    app.post('/add-movie',addMovie)
+    
+    function showAddForm(req,res) {
+      res.render('add.ejs')
+    }
+     
+    function addMovie(req,res) {
+      res.send(`Thanksforaddingthemovie with:
+    title: ${req.body.title},
+    plot: ${req.body.plot},
+    and description: ${req.body.description}
+      `)
+    }
+
+// Add this after your existing routes
+app.post('/form', async (req, res) => {
+    try {
+        const { naam } = req.body;
+        
+        // Create a document to insert
+        const newUser = {
+            name: naam,
+            createdAt: new Date()
+        };
+
+        // Insert the document into the 'users' collection
+        const result = await db.collection('users').insertOne(newUser);
+        
+        console.log('User added successfully:', result);
+        res.redirect('/'); // Redirect back to home page after successful submission
+    } catch (error) {
+        console.error('Error adding user:', error);
+        res.status(500).send('Error adding user to database');
+    }
+});
