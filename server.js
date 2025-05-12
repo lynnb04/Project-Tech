@@ -89,3 +89,24 @@ app.post('/form', async (req, res) => {
         res.status(500).send('Error adding user to database');
     }
 });
+
+
+app.get('/detail', function(req, res) {
+    res.render('pages/detail');
+  });
+
+  app.get('/matching', function(req, res) {
+    res.render('pages/matching');
+  });
+
+  app.get('/overview', function(req, res) {
+    res.render('pages/overview');
+  });
+
+  app.get('/profile', function(req, res) {
+    res.render('pages/profile');
+  });
+
+  app.get('/profile-settings', function(req, res) {
+    res.render('pages/profileSettings');
+  });
