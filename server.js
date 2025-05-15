@@ -7,6 +7,7 @@ require('dotenv').config()
 app.listen(3000)
 app.use('/static', express.static('static'))
 app.use(express.urlencoded({extended: true}));
+app.use(express.static('styles'));
 
 // set the view engine to ejs
 app.set('view engine', 'ejs');
@@ -116,7 +117,7 @@ app.post('/form', async (req, res) => {
 // });
 
 app.get('/detail', async function(req, res) {
-    const url = 'https://app.ticketmaster.com/discovery/v2/events.json?apikey=APwvyNUXVP01u1TvB1FSzRO5ItJrnXA9';
+    const url = 'https://app.ticketmaster.com/discovery/v2/events.json?classificationName=music&apikey=APwvyNUXVP01u1TvB1FSzRO5ItJrnXA9';
   
     try {
       const response = await fetch(url);
@@ -131,7 +132,7 @@ app.get('/detail', async function(req, res) {
 
 
 
-  
+
 // matching pagina
 app.get('/matching', function(req, res) {
     res.render('pages/matching');
