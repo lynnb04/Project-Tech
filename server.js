@@ -129,8 +129,6 @@ app.get('/detail', async function(req, res) {
     }
   });
 
-
-
   
 // matching pagina
 app.get('/matching', function(req, res) {
