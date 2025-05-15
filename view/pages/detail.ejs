@@ -8,8 +8,14 @@
 <body>
     <%- include('../partials/header'); %>
     <main>
-        
+        <h1>Events</h1>
+        <ul>
+          <% events.forEach(function(event) { %>
+            <li><%= event.name %></li>
+          <% }); %>
+        </ul> 
     </main>
+    
     <%- include('../partials/footer'); %>
 </body>
 </html>
