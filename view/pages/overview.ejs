@@ -28,24 +28,42 @@
       </nav>
 
     <!-- Concert cards -->
-    <section aria-label="Overzicht van concerten">
-        <% events.forEach(function(event) { %>
+    <% events.forEach(function(event) { %>
         <article class="concert-card">
-            <img src="<%= event.images[2].url %>" alt="Foto van <%= event.name %>">
-
-            <section class="concert-card-content">
-                <h1><%= event.name %></h1>
-
-                <div class="concert-tags">
-                    <span><%= event.classifications[0].genre.name %></span>
-                  <span><%= event.classifications[0].subGenre.name %></span>
-                </div>
-
-                <p class="concert-date">Datum: <%= event.dates.start.localDate %></p>
-            </section>
+          <img src="<%= event.images[2].url %>" alt="Foto van <%= event.name %>">
+      
+          <section class="concert-card-content">
+            <h1><%= event.name %></h1>
+      
+            <div class="concert-tags">
+              <% if (
+                event.classifications &&
+                event.classifications.length > 0 &&
+                event.classifications[0].genre &&
+                event.classifications[0].genre.name
+              ) { %>
+                <p><strong>Genre:</strong> <span class="tag"><%= event.classifications[0].genre.name %></span></p>
+              <% } else { %>
+                <p><strong>Genre:</strong> <span class="tag">Niet beschikbaar</span></p>
+              <% } %>
+      
+              <% if (
+                event.classifications &&
+                event.classifications.length > 0 &&
+                event.classifications[0].subGenre &&
+                event.classifications[0].subGenre.name
+              ) { %>
+                <p><strong>Subgenre:</strong> <span class="tag"><%= event.classifications[0].subGenre.name %></span></p>
+              <% } else { %>
+                <p><strong>Subgenre:</strong> <span class="tag">Niet beschikbaar</span></p>
+              <% } %>
+            </div>
+      
+            <p class="concert-date"><strong>Datum:</strong> <%= event.dates.start.localDate %></p>
+            <p class="concert-date"><strong>Stad:</strong> <%= event._embedded.venues[0].city.name %></p>
+          </section>
         </article>
-        <% }); %>
-    </section>
+      <% }); %>      
     </main>
     <%- include('../partials/footer'); %>
 </body>

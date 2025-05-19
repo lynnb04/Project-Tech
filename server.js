@@ -140,7 +140,7 @@ app.get('/matching', function(req, res) {
 
 // overview
 app.get('/overview', function(req, res) {
-    res.render('pages/overview');
+    res.render('pages/overview', { events });
 });
 
 // profile
