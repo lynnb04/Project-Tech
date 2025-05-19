@@ -29,22 +29,50 @@
 
     <!-- Concert cards -->
     <section aria-label="Overzicht van concerten">
-        <% events.forEach(function(event) { %>
-        <article class="concert-card">
-            <img src="<%= event.images[2].url %>" alt="Foto van <%= event.name %>">
-
-            <section class="concert-card-content">
-                <h1><%= event.name %></h1>
-
-                <div class="concert-tags">
-                    <span><%= event.classifications[0].genre.name %></span>
-                  <span><%= event.classifications[0].subGenre.name %></span>
-                </div>
-
-                <p class="concert-date">Datum: <%= event.dates.start.localDate %></p>
-            </section>
+         <article class="concert-card">
+            <ul>
+                <li>
+                    <% events.forEach(function(event) { %>
+                        <img src="<%= event.images[2].url %>" alt="Foto van Event">
+                        <h1><%= event.name %></h1>
+                        <p><strong>Datum: </strong><%= event.dates.start.localDate %></p>
+                        <p><strong>Tijd:</strong> <%= event.dates.start.localTime %></p>
+            
+                        <p><strong>Locatie:</strong> <%= event._embedded.venues[0].name %></p>
+                        <p><strong>Stad:</strong> <%= event._embedded.venues[0].city.name %></p>
+                        <p><strong>Land:</strong> <%= event._embedded.venues[0].country.name %></p>
+                        
+                        <p>
+                            <strong>Tickets:</strong> 
+                            <a href="<%= event.url %>" target="_blank">Bekijk op Ticketmaster</a>
+                        </p>
+            
+                        <!-- niet elk concert heeft een genre of subgenre dus hier code om dit op te lossen -->
+                        <% if (
+                            event.classifications &&
+                            event.classifications.length > 0 &&
+                            event.classifications[0].genre &&
+                            event.classifications[0].genre.name
+                            ) { %>
+                            <p><strong>Genre:</strong> <%= event.classifications[0].genre.name %></p>
+                            <% } else { %>
+                            <p><strong>Genre:</strong> Niet beschikbaar</p>
+                            <% } %>
+            
+                        <% if (
+                            event.classifications &&
+                            event.classifications.length > 0 &&
+                            event.classifications[0].subGenre &&
+                            event.classifications[0].subGenre.name
+                            ) { %>
+                            <p><strong>Subgenre:</strong> <%= event.classifications[0].subGenre.name %></p>
+                            <% } else { %>
+                            <p><strong>Subgenre:</strong> Niet beschikbaar</p>
+                            <% } %>
+                    <% }); %>
+                </li>
+            </ul>
         </article>
-        <% }); %>
     </section>
     </main>
     <%- include('../partials/footer'); %>
