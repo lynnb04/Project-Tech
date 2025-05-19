@@ -13,7 +13,7 @@
         <% events.forEach(function(event) { %>
             <img src="<%= event.images[2].url %>" alt="Foto van Event">
             <h1><%= event.name %></h1>
-            <p><strong>Datum:</strong><%= event.dates.start.localDate %></p>
+            <p><strong>Datum: </strong><%= event.dates.start.localDate %></p>
             <p><strong>Tijd:</strong> <%= event.dates.start.localTime %></p>
 
             <p><strong>Locatie:</strong> <%= event._embedded.venues[0].name %></p>
@@ -25,6 +25,7 @@
                 <a href="<%= event.url %>" target="_blank">Bekijk op Ticketmaster</a>
             </p>
 
+            <!-- niet elk concert heeft een genre of subgenre dus hier code om dit op te lossen -->
             <% if (
                 event.classifications &&
                 event.classifications.length > 0 &&
