@@ -25,8 +25,27 @@
                 <a href="<%= event.url %>" target="_blank">Bekijk op Ticketmaster</a>
             </p>
 
-            <p><strong>Genre:</strong> <%= event.classifications[0].genre.name %></p>
-            <p><strong>Subgenre:</strong> <%= event.classifications[0].subGenre.name %></p>
+            <% if (
+                event.classifications &&
+                event.classifications.length > 0 &&
+                event.classifications[0].genre &&
+                event.classifications[0].genre.name
+                ) { %>
+                <p><strong>Genre:</strong> <%= event.classifications[0].genre.name %></p>
+                <% } else { %>
+                <p><strong>Genre:</strong> Niet beschikbaar</p>
+                <% } %>
+
+            <% if (
+                event.classifications &&
+                event.classifications.length > 0 &&
+                event.classifications[0].subGenre &&
+                event.classifications[0].subGenre.name
+                ) { %>
+                <p><strong>Subgenre:</strong> <%= event.classifications[0].subGenre.name %></p>
+                <% } else { %>
+                <p><strong>Subgenre:</strong> Niet beschikbaar</p>
+                <% } %>
         <% }); %>
 
     </main>
