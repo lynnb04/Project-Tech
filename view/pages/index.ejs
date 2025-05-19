@@ -22,9 +22,19 @@
 
     <h2>Variable</h2>
 
-    <form action="/form" method="POST">
-      <label for="naam">Name</label>
-      <input type="text" name="naam" placeholder="Enter your name">
+    <form action="/form" method="POST" enctype="multipart/form-data">
+      <label for="naam">Voornaam</label>
+      <input type="text" name="naam" placeholder="Enter your name"> 
+      <label for="achternaam">Achternaam</label>
+      <input type="text" name="achternaam" placeholder="Enter your last name">
+      <label for="email">Email</label>
+      <input type="email" name="email" placeholder="Enter your email">
+      <label for="password">Wachtwoord</label>
+      <input type="password" name="password" placeholder="Enter your password">
+      <label for="age">Leeftijd</label>
+      <input type="number" name="age" placeholder="Enter your age">     
+      <label for="img">Profiel foto</label>
+      <input type="file" name="img" accept="image/*">
       <input type="submit" value="Submit">
     </form>
   </div>

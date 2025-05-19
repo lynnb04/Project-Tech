@@ -1,5 +1,8 @@
 // server
 const express = require("express")
+const multer  = require('multer')
+const upload = multer({ dest: 'uploads/' })
+
 const app = express()
 
 require('dotenv').config()
@@ -69,13 +72,18 @@ app.get('/', function(req, res) {
       `)
     }
 
-// Add this after your existing routes
-app.post('/form', async (req, res) => {
+
+app.post('/form', upload.single('img'), async (req, res) => {
     try {
         const { naam } = req.body;
         const newUser = {
-            name: naam,
-            createdAt: new Date()
+            firstName: req.body.firstName,
+            lastName: req.body.lastName,
+            email: req.body.email,
+            password: req.body.password,
+            age: req.body.age,
+            createdAt: new Date(),
+            imagePath: req.file ? req.file.path : null
         };
 
         const result = await db.collection('users').insertOne(newUser);
@@ -87,33 +95,6 @@ app.post('/form', async (req, res) => {
         res.status(500).send('Error adding user to database');
     }
 });
-
-// detail pagina
-
-// Deze code pas ik aan
-// app.get('/detail', function(req, res) {
-// res.render('pages/detail');
-
-// async function haalDataOp(url){
-//     const responce = await fetch(url);
-//     const data = await responce.json();
-//     console.log(data)
-//     toonData(data)
-//   }
-  
-//   haalDataOp('https://app.ticketmaster.com/discovery/v2/events.json?apikey=APwvyNUXVP01u1TvB1FSzRO5ItJrnXA9')
-  
-//   const ulElement = document.querySelector("ul");
-  
-//   async function toonData(data){  
-//     data._embedded.events.forEach(event => {
-//       const liElement = document.createElement("li");
-//       liElement.textContent = event.name;
-//       ulElement.appendChild(liElement)
-
-//     })
-//   }
-// });
 
 app.get('/detail', async function(req, res) {
     const url = 'https://app.ticketmaster.com/discovery/v2/events.json?apikey=APwvyNUXVP01u1TvB1FSzRO5ItJrnXA9';
@@ -149,3 +130,6 @@ app.get('/profile', function(req, res) {
 app.get('/profile-settings', function(req, res) {
     res.render('pages/profileSettings');
 });
+
+
+
