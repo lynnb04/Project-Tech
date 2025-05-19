@@ -4,11 +4,48 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Document</title>
+    <link rel="stylesheet" href="/styles.css">
+    <link rel="stylesheet" href="/overview.css">
 </head>
 <body>
     <%- include('../partials/header'); %>
     <main>
-        
+
+            <!-- Zoekbalk -->
+    <form method="GET" action="/concerten" role="search" aria-label="Zoek concerten" class="search-bar">
+        <input 
+          type="search" 
+          name="q" 
+          placeholder="Zoek concerten..." 
+          value="<%= typeof query !== 'undefined' ? query : '' %>"
+        />
+      </form>
+  
+      <!-- Filter en Sorteer knoppen -->
+      <nav class="controls">
+        <button type="button">Filter</button>
+        <button type="button">Sorteren</button>
+      </nav>
+
+    <!-- Concert cards -->
+    <section aria-label="Overzicht van concerten">
+        <% events.forEach(function(event) { %>
+        <article class="concert-card">
+            <img src="<%= event.images[2].url %>" alt="Foto van <%= event.name %>">
+
+            <section class="concert-card-content">
+                <h1><%= event.name %></h1>
+
+                <div class="concert-tags">
+                    <span><%= event.classifications[0].genre.name %></span>
+                  <span><%= event.classifications[0].subGenre.name %></span>
+                </div>
+
+                <p class="concert-date">Datum: <%= event.dates.start.localDate %></p>
+            </section>
+        </article>
+        <% }); %>
+    </section>
     </main>
     <%- include('../partials/footer'); %>
 </body>
