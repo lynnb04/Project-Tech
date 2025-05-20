@@ -1,4 +1,4 @@
-:root {
+/* :root {
   --background:#02061E;
   --backgroundSecundary:#030a2c;
   --tekst:#f5f5f7;
@@ -9,7 +9,7 @@
   --lichtBlauw:#8E80FF;
 
   --main-gradient: linear-gradient(to right, #B91BF4, #6B3AB4, #4D37F6 ,#8E80FF);
-}
+} */
 
 /* Algemene basis */
 * {
@@ -60,14 +60,14 @@ body {
 }
 
 /* Concert Cards */
-.concert-card {
+/* .concert-card {
   width: 100%;
   margin-bottom: 2em;
   border: 1px solid #ccc;
   border-radius: 10%;
   overflow: hidden;
   background-color: var(--backgroundSecundary);
-}
+} */
 
 .concert-card img {
   width: 100%;
@@ -103,4 +103,70 @@ body {
   margin-top: 0.75em;
   font-size: 0.9em;
   color: var(--lichtBlauw);
+}
+
+/* extra code voor concert cards */
+li{
+  background-color: var(--backgroundSecundary);
+  border-radius: 1em;
+  padding-bottom: 1em;
+  margin-bottom: 1em;
+  
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  grid-template-rows: 1fr 3em repeat(3, 2em);
+  grid-column-gap: 0px;
+  grid-row-gap: 0px;
+}
+li img {
+  grid-area: 1 / 1 / 2 / 3;
+}
+li h1 {
+  grid-area: 2 / 1 / 3 / 3;
+}
+li p{
+  font-size: .7em;
+}
+li p:nth-of-type(1) {
+  grid-area: 3 / 1 / 4 / 2;
+}
+li p:nth-of-type(2) {
+  grid-area: 3 / 2 / 4 / 3;
+}
+li p:nth-of-type(3) {
+  grid-area: 4 / 1 / 5 / 2;
+}
+li p:nth-of-type(4) {
+  grid-area: 4 / 2 / 5 / 3;
+}
+li p:nth-of-type(5) {
+  grid-area: 5 / 1 / 6 / 2;
+}
+li a {
+  grid-area: 5 / 2 / 6 / 3;
+}
+/* extra code van thomas voor animatie van de cards */
+@media (prefers-reduced-motion: no-preference){
+  li:nth-child(even){
+      opacity: 0.8; 
+      transform: scale(0.8) rotate(-20deg) translate(15em, -5em);
+      animation: showConcert linear forwards;
+      animation-timeline: view(35em -15em);
+      animation-range: contain;
+  }
+  
+    li:nth-child(odd){
+      opacity: 0.2; 
+      transform: scale(0.8) rotate(20deg) translate(-15em, -5em);
+      animation: showConcert linear forwards;
+      animation-timeline: view(35em -15em);
+      animation-range: contain;
+  }
+
+  @keyframes showConcert {
+      to{
+          opacity: 1; 
+          transform: scale(1) rotate(0deg) translate(0, 0);
+      }
+  }
 }
