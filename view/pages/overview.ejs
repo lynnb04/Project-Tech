@@ -35,26 +35,36 @@
                     <li>
                         <img src="<%= event.images[2].url %>" alt="Foto van Event">
                         <h1><%= event.name %></h1>
-                        <p><strong>Datum: </strong><%= event.dates.start.localDate %></p>
-                        <p><strong>Tijd:</strong> <%= event.dates.start.localTime %></p>
-            
-                        <p><strong>Locatie:</strong> <%= event._embedded.venues[0].name %></p>
-                        <p><strong>Stad:</strong> <%= event._embedded.venues[0].city.name %></p>
+                        
+                        <p><%= event.dates.start.localDate %></p>
+                        <p><%= event._embedded.venues[0].city.name %></p>
                         
                         <!-- niet elk concert heeft een genre of subgenre dus hier code om dit op te lossen -->
-                        <% if (
-                            event.classifications &&
-                            event.classifications.length > 0 &&
-                            event.classifications[0].genre &&
-                            event.classifications[0].genre.name
-                            ) { %>
-                            <p><strong>Genre:</strong> <%= event.classifications[0].genre.name %></p>
-                            <% } else { %>
-                            <p><strong>Genre:</strong> Niet beschikbaar</p>
+                        <div>
+                            <% if (
+                                event.classifications &&
+                                event.classifications.length > 0 &&
+                                event.classifications[0].genre &&
+                                event.classifications[0].genre.name
+                                ) { %>
+                                <p><%= event.classifications[0].genre.name %></p>
+                                <% } else { %>
+                                <p>Niet beschikbaar</p>
                             <% } %>
 
-                        <a href="">zie meer</a>
-                    
+                            <% if (
+                                event.classifications &&
+                                event.classifications.length > 0 &&
+                                event.classifications[0].subGenre &&
+                                event.classifications[0].subGenre.name
+                                ) { %>
+                                <p><%= event.classifications[0].subGenre.name %></p>
+                                <% } else { %>
+                                <p>Niet beschikbaar</p>
+                            <% } %>
+                        </div>
+                        
+
                     </li>
                 <% }); %>
             </ul>
