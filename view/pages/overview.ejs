@@ -31,43 +31,42 @@
     <section>
          <article>
             <ul>
-                <li class="concert-card">
-                    <% events.forEach(function(event) { %>
+                <% events.forEach(function(event) { %>
+                    <li>
                         <img src="<%= event.images[2].url %>" alt="Foto van Event">
                         <h1><%= event.name %></h1>
-                        <section>
-                          <article>
-                            <p class="date"><%= event.dates.start.localDate %></p>
-                
-                            <p class="city"><%= event._embedded.venues[0].city.name %></p>
-                          </article>
-                          <article>
-                            <!-- niet elk concert heeft een genre of subgenre dus hier code om dit op te lossen -->
+                        
+                        <p><%= event.dates.start.localDate %></p>
+                        <p><%= event._embedded.venues[0].city.name %></p>
+                        
+                        <!-- niet elk concert heeft een genre of subgenre dus hier code om dit op te lossen -->
+                        <div>
                             <% if (
                                 event.classifications &&
                                 event.classifications.length > 0 &&
                                 event.classifications[0].genre &&
                                 event.classifications[0].genre.name
                                 ) { %>
-                                <p class="genre"><%= event.classifications[0].genre.name %></p>
+                                <p><%= event.classifications[0].genre.name %></p>
                                 <% } else { %>
-                                <p> </p>
-                                <% } %>
-                
+                                <p>Niet beschikbaar</p>
+                            <% } %>
+
                             <% if (
                                 event.classifications &&
                                 event.classifications.length > 0 &&
                                 event.classifications[0].subGenre &&
                                 event.classifications[0].subGenre.name
                                 ) { %>
-                                <p class="subgenre"><%= event.classifications[0].subGenre.name %></p>
+                                <p><%= event.classifications[0].subGenre.name %></p>
                                 <% } else { %>
-                                <p> </p>
-                                <% } %>
-                              </article>
-                          </section>
-                    <% }); %>
-                </li>
+                                <p>Niet beschikbaar</p>
+                            <% } %>
+                        </div>
+                        
+
+                    </li>
+                <% }); %>
             </ul>
         </article>
     </section>
