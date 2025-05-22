@@ -3,8 +3,9 @@
 /*********************/
 :root {
     --background:#02061E;
-    --backgroundSecundary:#02061E;
+    --backgroundSecundary:hsl(231, 88%, 6%);
 	--tekst:#f5f5f7;
+    --tekstSecundary: #f5f5f7c1;
 
 	--roze:#B91BF4;
     --paars:#6B3AB4;

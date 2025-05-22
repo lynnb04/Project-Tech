@@ -1,3 +1,11 @@
 img{
     width: 100%;
 }
+
+p {
+    color: var(--tekstSecundary);
+}
+
+p strong{
+    color: var(--tekst);
+}
