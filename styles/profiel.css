@@ -5,6 +5,10 @@ section {
     align-items: center;
 }
 
+section h2 {
+    font-family: 'Poppins', sans-serif;
+}
+
 .profiel-foto {
     width: 11em;
     height: 11em;
