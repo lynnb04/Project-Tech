@@ -1,7 +1,20 @@
-// server
 const express = require("express")
 const multer  = require('multer')
-const upload = multer({ dest: 'uploads/' })
+const path = require('path')
+
+// Configure multer storage
+const storage = multer.diskStorage({
+    destination: function (req, file, cb) {
+        cb(null, 'uploads/')
+    },
+    filename: function (req, file, cb) {
+        // Create filename with original extension
+        const uniqueSuffix = Date.now() + '-' + Math.round(Math.random() * 1E9)
+        cb(null, uniqueSuffix + path.extname(file.originalname))
+    }
+})
+
+const upload = multer({ storage: storage })
 
 const app = express()
 
@@ -76,15 +89,15 @@ app.get('/', function(req, res) {
 
 app.post('/form', upload.single('img'), async (req, res) => {
     try {
-        const { naam } = req.body;
+        const { firstName, lastName, email, password, age } = req.body;
         const newUser = {
-            firstName: req.body.firstName,
-            lastName: req.body.lastName,
-            email: req.body.email,
-            password: req.body.password,
-            age: req.body.age,
+            firstName,
+            lastName,
+            email,
+            password,
+            age,
             createdAt: new Date(),
-            imagePath: req.file ? req.file.path : null
+            imagePath: req.file ? `/uploads/${req.file.filename}` : null // Store the complete path with filename
         };
 
         const result = await db.collection('users').insertOne(newUser);
