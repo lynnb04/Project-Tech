@@ -1,0 +1,35 @@
+section {
+    display: flex;
+    flex-direction: column;
+    align-content: center;
+    align-items: center;
+}
+
+.profiel-foto {
+    width: 11em;
+    height: 11em;
+    background-color: #6B3AB4; 
+    border-radius: 50%; 
+    margin: 0 auto;
+}
+
+.profiel-info {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+
+    margin: 2em 2em 0 2em;
+}
+
+.bio {
+    display: flex;
+    flex-direction: column;
+
+    margin: 0 2em 2em;
+}
+
+.bio p {
+    border: solid 0.08em;
+    padding: 1em;
+}
+
