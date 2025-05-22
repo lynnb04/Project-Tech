@@ -119,11 +119,9 @@ app.get('/detail', async function(req, res) {
       const data = await response.json();
       const events = data._embedded?.events || [];
       res.render('pages/detail', { events });
-      res.render('pages/overview', {events});
     } catch (error) {
       console.error("Fout bij ophalen data:", error);
       res.render('pages/detail', { events: [] });
-      res.render('pages/overview', { events: [] });
     }
   });
 
