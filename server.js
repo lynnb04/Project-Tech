@@ -117,16 +117,18 @@ app.post('/form', async (req, res) => {
 // });
 
 app.get('/detail', async function(req, res) {
-    const url = 'https://app.ticketmaster.com/discovery/v2/events.json?classificationName=music&apikey=APwvyNUXVP01u1TvB1FSzRO5ItJrnXA9';
+    const url = 'https://app.ticketmaster.com/discovery/v2/events.json?countryCode=NL&segmentName=Music&apikey=APwvyNUXVP01u1TvB1FSzRO5ItJrnXA9';
   
     try {
       const response = await fetch(url);
       const data = await response.json();
       const events = data._embedded?.events || [];
       res.render('pages/detail', { events });
+      res.render('pages/overview', {events});
     } catch (error) {
       console.error("Fout bij ophalen data:", error);
       res.render('pages/detail', { events: [] });
+      res.render('pages/overview', { events: [] });
     }
   });
 
@@ -139,8 +141,18 @@ app.get('/matching', function(req, res) {
 });
 
 // overview
-app.get('/overview', function(req, res) {
-    res.render('pages/overview');
+app.get('/overview',async function(req, res) {
+    const url = 'https://app.ticketmaster.com/discovery/v2/events.json?countryCode=NL&segmentName=Music&apikey=APwvyNUXVP01u1TvB1FSzRO5ItJrnXA9';
+  
+    try {
+      const response = await fetch(url);
+      const data = await response.json();
+      const events = data._embedded?.events || [];
+      res.render('pages/overview', {events});
+    } catch (error) {
+      console.error("Fout bij ophalen data:", error);
+      res.render('pages/overview', { events: [] });
+    }
 });
 
 // profile

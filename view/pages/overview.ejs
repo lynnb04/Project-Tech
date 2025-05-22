@@ -4,11 +4,76 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Document</title>
+    <link rel="stylesheet" href="/styles.css">
+    <link rel="stylesheet" href="/overview.css">
 </head>
 <body>
     <%- include('../partials/header'); %>
     <main>
-        
+
+            <!-- Zoekbalk -->
+    <form method="GET" action="/concerten" role="search" aria-label="Zoek concerten" class="search-bar">
+        <input 
+          type="search" 
+          name="q" 
+          placeholder="Zoek concerten..." 
+          value="<%= typeof query !== 'undefined' ? query : '' %>"
+        />
+      </form>
+  
+      <!-- Filter en Sorteer knoppen -->
+      <nav class="controls">
+        <button type="button">Filter</button>
+        <button type="button">Sorteren</button>
+      </nav>
+
+    <!-- Concert cards -->
+    <section aria-label="Overzicht van concerten">
+         <article class="concert-card">
+            <ul>
+                <li>
+                    <% events.forEach(function(event) { %>
+                        <img src="<%= event.images[2].url %>" alt="Foto van Event">
+                        <h1><%= event.name %></h1>
+                        <p><strong>Datum: </strong><%= event.dates.start.localDate %></p>
+                        <p><strong>Tijd:</strong> <%= event.dates.start.localTime %></p>
+            
+                        <p><strong>Locatie:</strong> <%= event._embedded.venues[0].name %></p>
+                        <p><strong>Stad:</strong> <%= event._embedded.venues[0].city.name %></p>
+                        <p><strong>Land:</strong> <%= event._embedded.venues[0].country.name %></p>
+                        
+                        <p>
+                            <strong>Tickets:</strong> 
+                            <a href="<%= event.url %>" target="_blank">Bekijk op Ticketmaster</a>
+                        </p>
+            
+                        <!-- niet elk concert heeft een genre of subgenre dus hier code om dit op te lossen -->
+                        <% if (
+                            event.classifications &&
+                            event.classifications.length > 0 &&
+                            event.classifications[0].genre &&
+                            event.classifications[0].genre.name
+                            ) { %>
+                            <p><strong>Genre:</strong> <%= event.classifications[0].genre.name %></p>
+                            <% } else { %>
+                            <p><strong>Genre:</strong> Niet beschikbaar</p>
+                            <% } %>
+            
+                        <% if (
+                            event.classifications &&
+                            event.classifications.length > 0 &&
+                            event.classifications[0].subGenre &&
+                            event.classifications[0].subGenre.name
+                            ) { %>
+                            <p><strong>Subgenre:</strong> <%= event.classifications[0].subGenre.name %></p>
+                            <% } else { %>
+                            <p><strong>Subgenre:</strong> Niet beschikbaar</p>
+                            <% } %>
+                    <% }); %>
+                </li>
+            </ul>
+        </article>
+    </section>
     </main>
     <%- include('../partials/footer'); %>
 </body>
