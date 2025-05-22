@@ -1,0 +1,124 @@
+/* Algemene basis */
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+  font-family: sans-serif;
+}
+
+body {
+  background-color: var(--background);
+  padding: 1em;
+}
+
+form input{
+  margin-top: 1em;
+}
+
+/* Zoekbalk */
+.search-bar {
+  width: 92%;
+  margin: 0 auto 2em auto;
+  color: var(--backgroundSecundary);
+}
+
+.search-bar input[type="search"] {
+  width: 100%;
+  padding: 0.75em;
+  border: none;
+  border-radius: 999em;
+  font-size: 1em;
+  background-color: var(--tekst);
+  box-shadow: 0 0 0.25em rgba(0, 0, 0, 0.1);
+}
+
+.search-bar input::placeholder {
+  color: var(--background);
+  padding-left: 1em;
+}
+
+/* Filter & Sorteer knoppen */
+.controls {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 1em;
+  margin-left: 1em;
+  margin-right: 1em;
+}
+
+.controls button {
+  padding: 0.5em 1em;
+  border: none;
+  border-radius: 999em;
+  background-color: var(--paars);
+  color: white;
+  font-size: 0.9em;
+  cursor: pointer;
+}
+
+.controls .sort{
+  background-color: var(--backgroundSecundary);
+  border: solid 0.1em var(--lichtBlauw);
+}
+
+/* Concert Cards */
+.concert-card {
+  width: 100%;
+  margin-bottom: 2em;
+  border: 0.075em solid var(--lichtBlauw);
+  border-radius: 1em;
+  overflow: hidden;
+  background-color: var(--backgroundSecundary);
+}
+
+.concert-card img {
+  width: 100%;
+  max-width: 23.75em;
+  max-height: 13.375em;
+  height: auto;
+  display: block;
+}
+
+.concert-card h1, .concert-card .date, .concert-card .city{
+  margin-left: 1em;
+}
+
+.concert-card h1 {
+  margin-top: 0.5em;
+  margin-bottom: 0.5em;
+  font-size: 1.2em;
+}
+
+section{
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 1em;
+}
+
+.date{
+  color: var(--lichtBlauw);
+}
+
+/* Container zorgt dat genre en subgenre op dezelfde regel staan */
+.genre,
+.subgenre {
+  display: inline-block;
+  margin-top: 0.5em;
+  margin-bottom: 1em;
+  margin-left: 0.25em;
+  padding: 0.3em 0.75em;
+  border-radius: 10em;
+  font-size: 0.85em;
+  color: #fff;
+}
+
+/* Verschillende kleuren per type */
+.genre {
+  background-color: var(--roze); 
+}
+
+.subgenre {
+  background-color: var(--blauw); 
+  margin-right: 1.5em;
+}
