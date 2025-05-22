@@ -13,7 +13,7 @@
     <main>
 
             <!-- Zoekbalk -->
-    <form method="GET" action="/concerten" role="search" aria-label="Zoek concerten" class="search-bar">
+    <form method="GET" action="/concerten" role="search" class="search-bar">
         <input 
           type="search" 
           name="q" 
@@ -22,19 +22,51 @@
         />
       </form>
   
-      <!-- Filter en Sorteer knoppen -->
+            <!-- Filter en Sorteer knoppen -->
       <nav class="controls">
-        <button type="button">Filter</button>
-        <button type="button">Sorteren</button>
+        <button class="filter" type="button">Filter</button>
+        <span class="filter-count">0</span>
+        <button class="sort" type="button">Sorteren</button>
       </nav>
 
+      <!-- Uitklapbaar filtermenu -->
+      <div class="filter-menu hidden">
+        <details>
+          <summary>Locatie</summary>
+          <div class="filter-options" data-filter-group="locatie">
+            <% const provincies = ["Noord-Holland", "Zuid-Holland", "Utrecht", "Groningen", "Limburg", "Friesland", "Drenthe", "Overijssel", "Flevoland", "Gelderland", "Zeeland", "Noord-Brabant"]; %>
+            <% provincies.forEach(function(provincie) { %>
+              <div class="filter-tag" data-value="<%= provincie %>"><%= provincie %></div>
+            <% }); %>
+          </div>
+        </details>
+
+        <details>
+          <summary>Datum</summary>
+          <div>
+            <label>Vanaf: <input type="date" class="date-filter" id="date-from"></label><br>
+            <label>Tot aan: <input type="date" class="date-filter" id="date-to"></label>
+          </div>
+        </details>
+
+        <details>
+          <summary>Genre</summary>
+          <div class="filter-options" data-filter-group="genre">
+            <% const genres = ["genre1", "genre2", "genre3", "genre4", "genre5"]; %>
+            <% genres.forEach(function(genre) { %>
+              <div class="filter-tag" data-value="<%= genre %>"><%= genre %></div>
+            <% }); %>
+          </div>
+        </details>
+      </div>
+
     <!-- Concert cards -->
-    <section aria-label="Overzicht van concerten">
-         <article class="concert-card">
+    <section>
+         <article>
             <ul>
                 <% events.forEach(function(event) { %>
                     <li>
-                        <img src="<%= event.images[2].url %>" alt="Foto van Event">
+                        <img src="<%= event.images[1].url %>" alt="Foto van Event">
                         <h1><%= event.name %></h1>
                         
                         <p><%= event.dates.start.localDate %></p>
@@ -73,5 +105,40 @@
     </section>
     </main>
     <%- include('../partials/footer'); %>
+    <script>
+      document.addEventListener("DOMContentLoaded", function () {
+        const filterBtn = document.querySelector(".filter");
+        const filterMenu = document.querySelector(".filter-menu");
+        const filterCountDisplay = document.querySelector(".filter-count");
+      
+        if (!filterBtn || !filterMenu) {
+          console.warn("Filter-knop of menu niet gevonden");
+          return;
+        }
+      
+        filterBtn.addEventListener("click", () => {
+          filterMenu.classList.toggle("hidden");
+          updateFilterCount();
+        });
+      
+        document.querySelectorAll(".filter-tag").forEach(tag => {
+          tag.addEventListener("click", () => {
+            tag.classList.toggle("selected");
+            updateFilterCount();
+          });
+        });
+      
+        document.querySelectorAll(".date-filter").forEach(input => {
+          input.addEventListener("change", updateFilterCount);
+        });
+      
+        function updateFilterCount() {
+          const selectedTags = document.querySelectorAll(".filter-tag.selected").length;
+          const selectedDates = Array.from(document.querySelectorAll(".date-filter")).filter(i => i.value !== "").length;
+          const total = selectedTags + selectedDates;
+          filterCountDisplay.textContent = total;
+        }
+      });
+      </script>
 </body>
 </html>
