@@ -31,32 +31,28 @@
 
       <!-- Uitklapbaar filtermenu -->
       <div class="filter-menu hidden">
-        <details>
+        <details name="filter">
           <summary>Locatie</summary>
-          <div class="filter-options" data-filter-group="locatie">
-            <% const provincies = ["Noord-Holland", "Zuid-Holland", "Utrecht", "Groningen", "Limburg", "Friesland", "Drenthe", "Overijssel", "Flevoland", "Gelderland", "Zeeland", "Noord-Brabant"]; %>
-            <% provincies.forEach(function(provincie) { %>
-              <div class="filter-tag" data-value="<%= provincie %>"><%= provincie %></div>
+            <div class="filter-options" data-filter-group="locatie">
+                <% cities.forEach(function(city) { %>
+                <div class="filter-tag" data-value="<%= city %>"><%= city %></div>
             <% }); %>
           </div>
         </details>
-
-        <details>
+        <details name="filter">
           <summary>Datum</summary>
-          <div>
-            <label>Vanaf: <input type="date" class="date-filter" id="date-from"></label><br>
-            <label>Tot aan: <input type="date" class="date-filter" id="date-to"></label>
-          </div>
+            <div>
+                <label>Vanaf: <input type="date" class="date-filter" id="date-from"></label><br>
+                <label>Tot aan: <input type="date" class="date-filter" id="date-to"></label>
+            </div>
         </details>
-
-        <details>
+        <details name="filter">
           <summary>Genre</summary>
-          <div class="filter-options" data-filter-group="genre">
-            <% const genres = ["genre1", "genre2", "genre3", "genre4", "genre5"]; %>
-            <% genres.forEach(function(genre) { %>
-              <div class="filter-tag" data-value="<%= genre %>"><%= genre %></div>
-            <% }); %>
-          </div>
+            <div class="filter-options" data-filter-group="genre">
+                <% genres.forEach(function(genre) { %>
+                <div class="filter-tag" data-value="<%= genre %>"><%= genre %></div>
+                <% }); %>
+            </div>
         </details>
       </div>
 
