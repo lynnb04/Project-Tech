@@ -14,7 +14,7 @@ body {
 /* Zoekbalk */
 .search-bar {
   width: 92%;
-  padding: ;
+  /* padding: ; */
   margin: 1em auto 2em auto;
 }
 
@@ -52,11 +52,11 @@ body {
 }
 
 /* extra code voor concert cards */
-ul{
+article ul{
   overflow: clip;
 }
 
-li{
+article li{
   background-color: var(--backgroundSecundary);
   border-radius: 1em;
   padding-bottom: 1em;
@@ -69,34 +69,34 @@ li{
   grid-row-gap: 0px;
   border: .075em solid var(--lichtBlauw);
 }
-li img {
+article li img {
   grid-area: 1 / 1 / 2 / 3;
   max-height: 13em;
   border-radius: 1em 1em 0 0;
   width: 100%;
 }
-li h1 {
+article li h1 {
   grid-area: 2 / 1 / 3 / 3;
   margin: 0 1em .5em 1em;
   justify-self: start;
   align-self: start;
   font-size: 1.2em;
 }
-li > p{
+article li > p{
   font-size: .9em;
   margin-left: 1em;
   justify-self: start;
 }
-li > p:nth-of-type(1) {
+article li > p:nth-of-type(1) {
   color: var(--lichtBlauw);
   grid-area: 3 / 1 / 4 / 2;
   align-self: end;
 }
-li > p:nth-of-type(2) {
+article li > p:nth-of-type(2) {
   grid-area: 4 / 1 / 5 / 2;
   align-self: start;
 }
-li > div{
+article li > div{
   height: 2.9em;
   grid-area: 3 / 2 / 5 / 4;
   align-self: center;
@@ -105,7 +105,7 @@ li > div{
   justify-content: flex-end;
 }
 
-li > div p{
+article li > div p{
   font-size: .85em;
     display: block;
     margin-top: 0.5em;
@@ -116,17 +116,17 @@ li > div p{
     color: #fff;
 }
 
-li > div p:nth-of-type(1){
+article li > div p:nth-of-type(1){
   background-color: var(--roze);
 }
-li > div p:nth-of-type(2){
+article li > div p:nth-of-type(2){
   background-color: var(--blauw); 
   margin-right: 1em;
 }
 
 /* extra code van thomas voor animatie van de cards */
 @media (prefers-reduced-motion: no-preference){
-  li:nth-child(even){
+  article li:nth-child(even){
       opacity: 0.8; 
       transform: scale(0.8) rotate(-20deg) translate(15em, -5em);
       animation: showConcert linear forwards;
@@ -134,7 +134,7 @@ li > div p:nth-of-type(2){
       animation-range: contain;
   }
   
-    li:nth-child(odd){
+  article li:nth-child(odd){
       opacity: 0.2; 
       transform: scale(0.8) rotate(20deg) translate(-15em, -5em);
       animation: showConcert linear forwards;
