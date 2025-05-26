@@ -1,4 +1,4 @@
-section {
+section:first-of-type {
     display: flex;
     flex-direction: column;
     align-content: center;
@@ -30,10 +30,45 @@ section h2 {
     flex-direction: column;
 
     margin: 0 2em 2em;
+    background-color: var(--backgroundSecundary);
+    padding: 1em;
 }
 
 .bio p {
-    border: solid 0.08em;
-    padding: 1em;
+    margin: 0;
 }
+
+.top-artiesten ol, .top-genres ol {
+    display: flex;
+    gap: 1em;
+    overflow-x: auto;        /* horizontaal scrollen inschakelen */
+    list-style: none;
+    padding: 1em 1em 4em 1em;
+    margin: 0;
+  }
+  
+  .top-artiesten li, .top-genres li {
+    flex: 0 0 auto; /* voorkom dat ze krimpen */
+    text-align: center;
+    padding: 1em;
+  }
+  
+  .top-artiesten img {
+    width: 80px;
+    height: 80px;
+    border-radius: 50%;
+    object-fit: cover;
+    margin-bottom: 0.5em;
+  }
+
+  .top-artiesten h2, .top-genres h2 {
+    text-align: left;
+    margin-left: 1.5em;
+
+    font-size: 1.2em;
+  }
+  
+  
+
+  
 
