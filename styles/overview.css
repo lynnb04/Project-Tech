@@ -57,6 +57,8 @@ article ul{
 }
 
 article li{
+  position: relative;
+
   background-color: var(--backgroundSecundary);
   border-radius: 1em;
   padding-bottom: 1em;
@@ -127,7 +129,7 @@ article li > div p:nth-of-type(2){
 /* extra code van thomas voor animatie van de cards */
 @media (prefers-reduced-motion: no-preference){
   article li:nth-child(even){
-      opacity: 0.8; 
+      opacity: 0.2; 
       transform: scale(0.8) rotate(-20deg) translate(15em, -5em);
       animation: showConcert linear forwards;
       animation-timeline: view(35em -15em);
