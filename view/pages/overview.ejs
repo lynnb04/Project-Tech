@@ -6,7 +6,6 @@
     <title>Document</title>
     <link rel="stylesheet" href="/styles.css">
     <link rel="stylesheet" href="/overview.css">
-    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined" rel="stylesheet">
 </head>
 <body>
     <%- include('../partials/header'); %>
@@ -22,10 +21,12 @@
         />
       </form>
   
-            <!-- Filter en Sorteer knoppen -->
+      <!-- Filter en Sorteer knoppen-->
       <nav class="controls">
-        <button class="filter" type="button">Filter</button>
-        <span class="filter-count">0</span>
+        <div class="filter-wrapper">
+          <button class="filter" type="button">Filter</button>
+          <span class="filter-count hidden">0</span>
+        </div>
         <button class="sort" type="button">Sorteren</button>
       </nav>
 
@@ -136,7 +137,14 @@
           const selectedTags = document.querySelectorAll(".filter-tag.selected").length;
           const selectedDates = Array.from(document.querySelectorAll(".date-filter")).filter(i => i.value !== "").length;
           const total = selectedTags + selectedDates;
-          filterCountDisplay.textContent = total;
+
+          const countElement = document.querySelector(".filter-count");
+          if (total === 0) {
+            countElement.classList.add("hidden");
+          } else {
+            countElement.textContent = total;
+            countElement.classList.remove("hidden");
+          }
         }
       });
       </script>

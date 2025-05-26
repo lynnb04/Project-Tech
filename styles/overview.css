@@ -121,7 +121,7 @@ li > div p:nth-of-type(1){
 }
 li > div p:nth-of-type(2){
   background-color: var(--blauw); 
-  margin-right: 1em;
+  margin-right: 1.5em;
 }
 
 /* extra code van thomas voor animatie van de cards */
@@ -190,6 +190,12 @@ li > div p:nth-of-type(2){
 
 .filter-tag.selected {
   background-color: var(--roze);
+}
+
+.filter-wrapper {
+  display: flex;
+  align-items: center;
+  gap: 0.4em;
 }
 
 .filter-count {
