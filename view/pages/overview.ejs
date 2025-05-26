@@ -32,32 +32,28 @@
 
       <!-- Uitklapbaar filtermenu -->
       <div class="filter-menu hidden">
-        <details>
+        <details name="filter">
           <summary>Locatie</summary>
-          <div class="filter-options" data-filter-group="locatie">
-            <% const provincies = ["Noord-Holland", "Zuid-Holland", "Utrecht", "Groningen", "Limburg", "Friesland", "Drenthe", "Overijssel", "Flevoland", "Gelderland", "Zeeland", "Noord-Brabant"]; %>
-            <% provincies.forEach(function(provincie) { %>
-              <div class="filter-tag" data-value="<%= provincie %>"><%= provincie %></div>
+            <div class="filter-options" data-filter-group="locatie">
+                <% cities.forEach(function(city) { %>
+                <div class="filter-tag" data-value="<%= city %>"><%= city %></div>
             <% }); %>
           </div>
         </details>
-
-        <details>
+        <details name="filter">
           <summary>Datum</summary>
-          <div>
-            <label>Vanaf: <input type="date" class="date-filter" id="date-from"></label><br>
-            <label>Tot aan: <input type="date" class="date-filter" id="date-to"></label>
-          </div>
+            <div>
+                <label>Vanaf: <input type="date" class="date-filter" id="date-from"></label><br>
+                <label>Tot aan: <input type="date" class="date-filter" id="date-to"></label>
+            </div>
         </details>
-
-        <details>
+        <details name="filter">
           <summary>Genre</summary>
-          <div class="filter-options" data-filter-group="genre">
-            <% const genres = ["genre1", "genre2", "genre3", "genre4", "genre5"]; %>
-            <% genres.forEach(function(genre) { %>
-              <div class="filter-tag" data-value="<%= genre %>"><%= genre %></div>
-            <% }); %>
-          </div>
+            <div class="filter-options" data-filter-group="genre">
+                <% genres.forEach(function(genre) { %>
+                <div class="filter-tag" data-value="<%= genre %>"><%= genre %></div>
+                <% }); %>
+            </div>
         </details>
       </div>
 
@@ -106,47 +102,7 @@
     </section>
     </main>
     <%- include('../partials/footer'); %>
-    <script>
-      document.addEventListener("DOMContentLoaded", function () {
-        const filterBtn = document.querySelector(".filter");
-        const filterMenu = document.querySelector(".filter-menu");
-        const filterCountDisplay = document.querySelector(".filter-count");
-      
-        if (!filterBtn || !filterMenu) {
-          console.warn("Filter-knop of menu niet gevonden");
-          return;
-        }
-      
-        filterBtn.addEventListener("click", () => {
-          filterMenu.classList.toggle("hidden");
-          updateFilterCount();
-        });
-      
-        document.querySelectorAll(".filter-tag").forEach(tag => {
-          tag.addEventListener("click", () => {
-            tag.classList.toggle("selected");
-            updateFilterCount();
-          });
-        });
-      
-        document.querySelectorAll(".date-filter").forEach(input => {
-          input.addEventListener("change", updateFilterCount);
-        });
-      
-        function updateFilterCount() {
-          const selectedTags = document.querySelectorAll(".filter-tag.selected").length;
-          const selectedDates = Array.from(document.querySelectorAll(".date-filter")).filter(i => i.value !== "").length;
-          const total = selectedTags + selectedDates;
 
-          const countElement = document.querySelector(".filter-count");
-          if (total === 0) {
-            countElement.classList.add("hidden");
-          } else {
-            countElement.textContent = total;
-            countElement.classList.remove("hidden");
-          }
-        }
-      });
-      </script>
+      <script src="/overview.js"></script>
 </body>
 </html>
