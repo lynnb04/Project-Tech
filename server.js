@@ -160,7 +160,7 @@ app.get('/overview',async function(req, res) {
         const cities = Array.from(citiesSet);
     
         res.render('pages/overview', { events, genres, cities });
-        
+
       } catch (error) {
         console.error("Fout bij ophalen data:", error);
         res.render('pages/overview', { events: [], genres: [], cities: [] });
