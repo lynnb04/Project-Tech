@@ -25,6 +25,7 @@ app.listen(3000)
 app.use('/static', express.static('static'))
 app.use(express.urlencoded({extended: true}));
 app.use(express.static('styles'));
+app.use(express.static('script'));
 
 // set the view engine to ejs
 app.set('view engine', 'ejs');
@@ -112,7 +113,7 @@ app.post('/form', upload.single('img'), async (req, res) => {
 });
 
 app.get('/detail', async function(req, res) {
-    const url = 'https://app.ticketmaster.com/discovery/v2/events.json?countryCode=NL&segmentName=Music&apikey=APwvyNUXVP01u1TvB1FSzRO5ItJrnXA9';
+    const url = `${process.env.API_URL}?countryCode=NL&segmentName=Music&apikey=${process.env.API_KEY}`;
   
     try {
       const response = await fetch(url);
@@ -135,18 +136,36 @@ app.get('/matching', function(req, res) {
 
 // overview
 app.get('/overview',async function(req, res) {
-    const url = 'https://app.ticketmaster.com/discovery/v2/events.json?countryCode=NL&segmentName=Music&apikey=APwvyNUXVP01u1TvB1FSzRO5ItJrnXA9';
+    const url = `${process.env.API_URL}?countryCode=NL&segmentName=Music&size=100&apikey=${process.env.API_KEY}`;
   
     try {
-      const response = await fetch(url);
-      const data = await response.json();
-      const events = data._embedded?.events || [];
-      res.render('pages/overview', {events});
-    } catch (error) {
-      console.error("Fout bij ophalen data:", error);
-      res.render('pages/overview', { events: [] });
-    }
-});
+        const response = await fetch(url);
+        const data = await response.json();
+        const events = data._embedded?.events || [];
+    
+        // genres
+        const genresSet = new Set();
+        // cities
+        const citiesSet = new Set();
+    
+        events.forEach(event => {
+          const genre = event.classifications?.[0]?.genre?.name;
+          if (genre) genresSet.add(genre);
+    
+          const city = event._embedded?.venues?.[0]?.city?.name;
+          if (city) citiesSet.add(city);
+        });
+    
+        const genres = Array.from(genresSet);
+        const cities = Array.from(citiesSet);
+    
+        res.render('pages/overview', { events, genres, cities });
+        
+      } catch (error) {
+        console.error("Fout bij ophalen data:", error);
+        res.render('pages/overview', { events: [], genres: [], cities: [] });
+      }
+    });
 
 // profile
 app.get('/profile', function(req, res) {
