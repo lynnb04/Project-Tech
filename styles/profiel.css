@@ -6,10 +6,14 @@ section:first-of-type {
 }
 
 section h2 {
-    font-family: 'Poppins', sans-serif;
+    font-family: 'Staatliches', sans-serif;
 }
 
-.profiel-foto {
+section:first-of-type h2 {
+    font-size: 2em;
+}
+
+.profiel-foto img {
     width: 11em;
     height: 11em;
     background-color: #6B3AB4; 
@@ -23,6 +27,10 @@ section h2 {
     justify-content: space-between;
 
     margin: 2em 2em 0 2em;
+}
+
+.profiel-info p {
+    font-weight: bold;
 }
 
 .bio {
@@ -40,15 +48,15 @@ section h2 {
 
 .top-artiesten ol, .top-genres ol {
     display: flex;
-    gap: 1em;
-    overflow-x: auto;        /* horizontaal scrollen inschakelen */
+    gap: 1.2em;
+    overflow-x: auto;       
     list-style: none;
     padding: 1em 1em 4em 1em;
     margin: 0;
   }
   
   .top-artiesten li, .top-genres li {
-    flex: 0 0 auto; /* voorkom dat ze krimpen */
+    flex: 0 0 auto; 
     text-align: center;
     padding: 1em;
   }
@@ -65,10 +73,24 @@ section h2 {
     text-align: left;
     margin-left: 1.5em;
 
-    font-size: 1.2em;
+    font-size: 1.3em;
+  }
+  
+
+  .staatliches-regular {
+    font-family: "Staatliches", sans-serif;
+    font-weight: 400;
+    font-style: normal;
   }
   
   
+.genre-rank {
+    display: block;
+    font-size: 2rem;
+    font-weight: bold;
+    font-family: 'Staatliches', sans-serif;
+    margin-bottom: 0.5em;
+  }
 
   
 
