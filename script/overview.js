@@ -5,7 +5,6 @@ concertCard.forEach((li, index) => {
   li.style.zIndex = zIndex;
 });
 
-
 document.addEventListener("DOMContentLoaded", function () {
     const filterBtn = document.querySelector(".filter");
     const filterMenu = document.querySelector(".filter-menu");
@@ -30,7 +29,12 @@ document.addEventListener("DOMContentLoaded", function () {
       }
     });
   
+    // Initialize selected state for filter tags
     document.querySelectorAll(".filter-tag").forEach(tag => {
+      if (tag.dataset.selected === 'true') {
+        tag.classList.add('selected');
+      }
+      
       tag.addEventListener("click", () => {
         tag.classList.toggle("selected");
         updateFilterCount();
@@ -40,11 +44,17 @@ document.addEventListener("DOMContentLoaded", function () {
     document.querySelectorAll(".date-filter").forEach(input => {
       input.addEventListener("change", updateFilterCount);
     });
+
+    // Add event listeners for genre checkboxes
+    document.querySelectorAll('input[name="genres"]').forEach(checkbox => {
+      checkbox.addEventListener('change', updateFilterCount);
+    });
   
     function updateFilterCount() {
       const selectedTags = document.querySelectorAll(".filter-tag.selected").length;
       const selectedDates = Array.from(document.querySelectorAll(".date-filter")).filter(i => i.value !== "").length;
-      const total = selectedTags + selectedDates;
+      const selectedGenres = Array.from(document.querySelectorAll('input[name="genres"]:checked')).length;
+      const total = selectedTags + selectedDates + selectedGenres;
     
       const countElement = document.querySelector(".filter-count");
       const submitButton = document.querySelector(".filter-submit");
@@ -60,30 +70,18 @@ document.addEventListener("DOMContentLoaded", function () {
       }
     }
 
-    document.querySelector(".filter-submit").addEventListener("click", () => {
+    // Handle form submission
+    document.querySelector(".filter-menu").addEventListener("submit", (e) => {
       const selectedTags = document.querySelectorAll(".filter-tag.selected");
-      const selectedDates = Array.from(document.querySelectorAll(".date-filter")).filter(input => input.value !== "");
-    
-      const filters = {
-        locatie: [],
-        genre: [],
-        datum: {}
-      };
-    
-      selectedTags.forEach(tag => {
-        const group = tag.closest(".filter-options").dataset.filterGroup;
-        filters[group].push(tag.dataset.value);
-      });
-    
-      const from = document.getElementById("date-from").value;
-      const to = document.getElementById("date-to").value;
-      if (from) filters.datum.vanaf = from;
-      if (to) filters.datum.tot = to;
-    
-      console.log("Geselecteerde filters:", filters);
-    
-      // Filtermenu sluiten
-      document.querySelector(".filter-menu").classList.add("hidden");
-      document.body.classList.remove("no-scroll");
+      const selectedCities = Array.from(selectedTags).map(tag => tag.dataset.value);
+      
+      // Add selected cities to form data
+      if (selectedCities.length > 0) {
+        const citiesInput = document.createElement('input');
+        citiesInput.type = 'hidden';
+        citiesInput.name = 'cities';
+        citiesInput.value = selectedCities.join(',');
+        e.target.appendChild(citiesInput);
+      }
     });
   });
