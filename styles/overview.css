@@ -6,9 +6,12 @@
   font-family: sans-serif;
 }
 
+main{
+  padding: 1em;
+}
+
 body {
   background-color: var(--background);
-  padding: 1em;
 }
 
 /* Zoekbalk */

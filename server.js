@@ -178,6 +178,41 @@ app.get('/profile-settings', function(req, res) {
     res.render('pages/profileSettings');
 });
 
+// registration
+// --------------------
+app.get('/registration', async function (req, res) {
+    const url = `${process.env.API_URL_GENRES}?apikey=${process.env.API_KEY}`;
+  
+    try {
+      const response = await fetch(url);
+      const data = await response.json();
+  
+      // Haal alle classificaties eruit
+      const classifications = data._embedded?.classifications || [];
+  
+      // Verzamel unieke genres onder 'Music'
+      const genresSet = new Set();
+  
+      classifications.forEach(classification => {
+        const segment = classification.segment;
+        if (segment?.name === "Music" && segment._embedded?.genres) {
+          segment._embedded.genres.forEach(genre => {
+            if (genre.name) {
+              genresSet.add(genre.name);
+            }
+          });
+        }
+      });
+  
+      const genres = Array.from(genresSet).sort();
+  
+      res.render('pages/registration', { genres });
+  
+    } catch (error) {
+      console.error("Fout bij ophalen data:", error);
+      res.render('pages/registration', { genres: [] });
+    }
+  });
 
 
 
