@@ -17,8 +17,17 @@ document.addEventListener("DOMContentLoaded", function () {
     }
   
     filterBtn.addEventListener("click", () => {
-      filterMenu.classList.toggle("hidden");
+      const isHidden = filterMenu.classList.toggle("hidden");
       updateFilterCount();
+    
+      if (!isHidden) {
+        // Openen: scroll naar boven en blokkeer scroll
+        window.scrollTo({ top: 0, behavior: "smooth" });
+        document.body.classList.add("no-scroll");
+      } else {
+        // Sluiten: scroll weer toestaan
+        document.body.classList.remove("no-scroll");
+      }
     });
   
     document.querySelectorAll(".filter-tag").forEach(tag => {
@@ -36,6 +45,45 @@ document.addEventListener("DOMContentLoaded", function () {
       const selectedTags = document.querySelectorAll(".filter-tag.selected").length;
       const selectedDates = Array.from(document.querySelectorAll(".date-filter")).filter(i => i.value !== "").length;
       const total = selectedTags + selectedDates;
-      filterCountDisplay.textContent = total;
+    
+      const countElement = document.querySelector(".filter-count");
+      const submitButton = document.querySelector(".filter-submit");
+    
+      // Aantal tonen/verbergen
+      if (total === 0) {
+        countElement.classList.add("hidden");
+        submitButton.disabled = true;
+      } else {
+        countElement.textContent = total;
+        countElement.classList.remove("hidden");
+        submitButton.disabled = false;
+      }
     }
+
+    document.querySelector(".filter-submit").addEventListener("click", () => {
+      const selectedTags = document.querySelectorAll(".filter-tag.selected");
+      const selectedDates = Array.from(document.querySelectorAll(".date-filter")).filter(input => input.value !== "");
+    
+      const filters = {
+        locatie: [],
+        genre: [],
+        datum: {}
+      };
+    
+      selectedTags.forEach(tag => {
+        const group = tag.closest(".filter-options").dataset.filterGroup;
+        filters[group].push(tag.dataset.value);
+      });
+    
+      const from = document.getElementById("date-from").value;
+      const to = document.getElementById("date-to").value;
+      if (from) filters.datum.vanaf = from;
+      if (to) filters.datum.tot = to;
+    
+      console.log("Geselecteerde filters:", filters);
+    
+      // Filtermenu sluiten
+      document.querySelector(".filter-menu").classList.add("hidden");
+      document.body.classList.remove("no-scroll");
+    });
   });
