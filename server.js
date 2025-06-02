@@ -26,6 +26,7 @@ app.use('/static', express.static('static'))
 app.use(express.urlencoded({extended: true}));
 app.use(express.static('styles'));
 app.use(express.static('script'));
+app.use('/uploads', express.static('uploads'));
 
 // set the view engine to ejs
 app.set('view engine', 'ejs');
