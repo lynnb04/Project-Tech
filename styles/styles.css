@@ -68,11 +68,7 @@ h1{
     text-decoration: none;
   }
 
-  footer li {
-    list-style: none;
-  }
-
-  footer ul{
+  footer nav{
     display: flex;
     flex-direction: row;
     align-items: center;

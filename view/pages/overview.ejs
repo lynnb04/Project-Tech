@@ -11,8 +11,9 @@
     <%- include('../partials/header'); %>
     <main>
 
-            <!-- Zoekbalk -->
-    <form method="GET" action="/concerten" role="search" class="search-bar">
+    <!-- Zoekbalk -->
+    <div class="search-bar-container">
+      <form method="GET" action="/concerten" role="search" class="search-bar">
         <input 
           type="search" 
           name="q" 
@@ -20,8 +21,10 @@
           value="<%= typeof query !== 'undefined' ? query : '' %>"
         />
       </form>
-  
-      <!-- Filter en Sorteer knoppen-->
+    </div>
+
+    <!-- Filter- en sorteerknoppen -->
+    <div class="controls-container">
       <nav class="controls">
         <div class="filter-wrapper">
           <button class="filter" type="button">Filter</button>
@@ -29,10 +32,11 @@
         </div>
         <button class="sort" type="button">Sorteren</button>
       </nav>
+    </div>
 
       <!-- Uitklapbaar filtermenu -->
       <div class="filter-menu hidden">
-        <details name="filter">
+        <details open name="filter">
           <summary>Locatie</summary>
             <div class="filter-options" data-filter-group="locatie">
                 <% cities.forEach(function(city) { %>
@@ -55,6 +59,9 @@
                 <% }); %>
             </div>
         </details>
+        <div class="filter-submit-container">
+          <button type="button" class="filter-submit" disabled>Bevestig filters</button>
+        </div>
       </div>
 
     <!-- Concert cards -->
@@ -71,27 +78,20 @@
                         
                         <!-- niet elk concert heeft een genre of subgenre dus hier code om dit op te lossen -->
                         <div>
-                            <% if (
-                                event.classifications &&
-                                event.classifications.length > 0 &&
-                                event.classifications[0].genre &&
-                                event.classifications[0].genre.name
-                                ) { %>
-                                <p><%= event.classifications[0].genre.name %></p>
-                                <% } else { %>
-                                <p>Niet beschikbaar</p>
-                            <% } %>
-
-                            <% if (
-                                event.classifications &&
-                                event.classifications.length > 0 &&
-                                event.classifications[0].subGenre &&
-                                event.classifications[0].subGenre.name
-                                ) { %>
-                                <p><%= event.classifications[0].subGenre.name %></p>
-                                <% } else { %>
-                                <p>Niet beschikbaar</p>
-                            <% } %>
+                          <% 
+                          const genre = event.classifications?.[0]?.genre?.name;
+                          const subgenre = event.classifications?.[0]?.subGenre?.name;
+                        %>
+                        
+                        <% if (genre) { %>
+                          <p><%= genre %></p>
+                        <% } else { %>
+                          <p>Niet beschikbaar</p>
+                        <% } %>
+                        
+                        <% if (subgenre && subgenre !== genre) { %>
+                          <p><%= subgenre %></p>
+                        <% } %>
                         </div>
                         
 
