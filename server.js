@@ -136,37 +136,50 @@ app.get('/matching', function(req, res) {
 });
 
 // overview
-app.get('/overview',async function(req, res) {
-    const url = `${process.env.API_URL}?countryCode=NL&segmentName=Music&size=100&apikey=${process.env.API_KEY}`;
+app.get('/overview', async function (req, res) {
+    // API URLs
+    const urlEvents = `${process.env.API_URL}?countryCode=NL&segmentName=Music&size=100&apikey=${process.env.API_KEY}`;
+    const urlGenres = `${process.env.API_URL_GENRES}?apikey=${process.env.API_KEY}`;
   
     try {
-        const response = await fetch(url);
-        const data = await response.json();
-        const events = data._embedded?.events || [];
-    
-        // genres
-        const genresSet = new Set();
-        // cities
-        const citiesSet = new Set();
-    
-        events.forEach(event => {
-          const genre = event.classifications?.[0]?.genre?.name;
-          if (genre) genresSet.add(genre);
-    
-          const city = event._embedded?.venues?.[0]?.city?.name;
-          if (city) citiesSet.add(city);
-        });
-    
-        const genres = Array.from(genresSet);
-        const cities = Array.from(citiesSet);
-    
-        res.render('pages/overview', { events, genres, cities });
-
-      } catch (error) {
-        console.error("Fout bij ophalen data:", error);
-        res.render('pages/overview', { events: [], genres: [], cities: [] });
-      }
-    });
+      const genresResponse = await fetch(urlGenres);
+      const genresData = await genresResponse.json();
+  
+      const classifications = genresData._embedded?.classifications || [];
+      const genresSet = new Set();
+  
+      classifications.forEach(classification => {
+        const segment = classification.segment;
+        if (segment?.name === "Music" && segment._embedded?.genres) {
+          segment._embedded.genres.forEach(genre => {
+            if (genre.name) genresSet.add(genre.name);
+          });
+        }
+      });
+  
+      const genres = Array.from(genresSet).sort(); // Sorteer genres alfabetisch
+  
+      // === Stap 2: Haal evenementen op ===
+      const eventsResponse = await fetch(urlEvents);
+      const eventsData = await eventsResponse.json();
+      const events = eventsData._embedded?.events || [];
+  
+      // Verzamel unieke steden uit de events
+      const citiesSet = new Set();
+      events.forEach(event => {
+        const city = event._embedded?.venues?.[0]?.city?.name;
+        if (city) citiesSet.add(city);
+      });
+  
+      const cities = Array.from(citiesSet).sort(); // Sorteer steden alfabetisch
+  
+      res.render('pages/overview', { events, genres, cities});
+  
+    } catch (error) {
+      console.error("Fout bij ophalen data:", error);
+      res.render('pages/overview', {events: [], genres: [], cities: []});
+    }
+  });
 
 // profile
 app.get('/profile', function(req, res) {
@@ -181,10 +194,10 @@ app.get('/profile-settings', function(req, res) {
 // registration
 // --------------------
 app.get('/registration', async function (req, res) {
-    const url = `${process.env.API_URL_GENRES}?apikey=${process.env.API_KEY}`;
+    const urlGenres = `${process.env.API_URL_GENRES}?apikey=${process.env.API_KEY}`;
   
     try {
-      const response = await fetch(url);
+      const response = await fetch(urlGenres);
       const data = await response.json();
   
       // Haal alle classificaties eruit
