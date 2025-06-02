@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link rel="stylesheet" href="/styles.css">
+    <link rel="stylesheet" href="/registration.css">
+</head>
+<body>
+    <%- include('../partials/footer'); %>
+    <main>
+        <form action="">
+            <fieldset id="persoonsGegevens">
+                <label for="firstName">Voornaam
+                    <input type="text" name="firstName" placeholder="Enter your name"> 
+                </label>
+                <label for="lastName">Achternaam
+                    <input type="text" name="lastName" placeholder="Enter your last name">
+                </label>
+                <label for="email">Email
+                    <input type="email" name="email" placeholder="Enter your email">
+                </label>
+                <label for="password">Wachtwoord
+                    <input type="password" name="password" placeholder="Enter your password">
+                </label>
+                <label for="age">Leeftijd
+                    <input type="number" name="age" placeholder="Enter your age">
+                </label>        
+                <label for="img">Profiel foto
+                    <input type="file" name="img" accept="image/*">  
+                </label>
+                <input type="submit" value="Submit">
+            </fieldset>
+            <fieldset class="genres">
+                <legend>Genres</legend>
+                <ul>
+                  <% genres.forEach(function(genre) { %>
+                    <li>
+                        <label for="<%= genre %>">
+                          <input type="checkbox" name="genres" value="<%= genre %>" id="<%= genre %>">
+                          <%= genre %>
+                        </label>
+                    </li>
+                  <% }); %>
+                </ul>
+              </fieldset>
+  
+            <fieldset id="artiesten"></fieldset>
+            
+            <fieldset id="matchVoorkeuren"></fieldset>
+        </form>
+    </main>
+    <%- include('../partials/header'); %>
+</body>

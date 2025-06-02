@@ -4,12 +4,110 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Document</title>
+    <link rel="stylesheet" href="/styles.css">
+    <link rel="stylesheet" href="/overview.css">
 </head>
 <body>
     <%- include('../partials/header'); %>
     <main>
-        
+
+    <!-- Zoekbalk -->
+    <div class="search-bar-container">
+      <form method="GET" action="/concerten" role="search" class="search-bar">
+        <input 
+          type="search" 
+          name="q" 
+          placeholder="Zoek concerten..." 
+          value="<%= typeof query !== 'undefined' ? query : '' %>"
+        />
+      </form>
+    </div>
+
+    <!-- Filter- en sorteerknoppen -->
+    <div class="controls-container">
+      <nav class="controls">
+        <div class="filter-wrapper">
+          <button class="filter" type="button">Filter</button>
+          <span class="filter-count hidden">0</span>
+        </div>
+        <button class="sort" type="button">Sorteren</button>
+      </nav>
+    </div>
+
+      <!-- Uitklapbaar filtermenu -->
+      <div class="filter-menu hidden">
+        <details open name="filter">
+          <summary>Locatie</summary>
+            <div class="filter-options" data-filter-group="locatie">
+                <% cities.forEach(function(city) { %>
+                <div class="filter-tag" data-value="<%= city %>"><%= city %></div>
+            <% }); %>
+          </div>
+        </details>
+        <details name="filter">
+          <summary>Datum</summary>
+            <div>
+                <label>Vanaf: <input type="date" class="date-filter" id="date-from"></label><br>
+                <label>Tot aan: <input type="date" class="date-filter" id="date-to"></label>
+            </div>
+        </details>
+        <details name="filter">
+          <summary>Genre</summary>
+          <ul>
+            <% genres.forEach(function(genre) { %>
+              <li>
+                  <label for="<%= genre %>">
+                    <input type="checkbox" name="genres" value="<%= genre %>" id="<%= genre %>">
+                    <%= genre %>
+                  </label>
+              </li>
+            <% }); %>
+          </ul>
+        </details>
+        <div class="filter-submit-container">
+          <button type="button" class="filter-submit" disabled>Bevestig filters</button>
+        </div>
+      </div>
+
+    <!-- Concert cards -->
+    <section>
+         <article>
+            <ul>
+                <% events.forEach(function(event) { %>
+                    <li>
+                        <img src="<%= event.images[1].url %>" alt="Foto van Event">
+                        <h1><%= event.name %></h1>
+                        
+                        <p><%= event.dates.start.localDate %></p>
+                        <p><%= event._embedded.venues[0].city.name %></p>
+                        
+                        <!-- niet elk concert heeft een genre of subgenre dus hier code om dit op te lossen -->
+                        <div>
+                          <% 
+                          const genre = event.classifications?.[0]?.genre?.name;
+                          const subgenre = event.classifications?.[0]?.subGenre?.name;
+                        %>
+                        
+                        <% if (genre) { %>
+                          <p><%= genre %></p>
+                        <% } else { %>
+                          <p>Niet beschikbaar</p>
+                        <% } %>
+                        
+                        <% if (subgenre && subgenre !== genre) { %>
+                          <p><%= subgenre %></p>
+                        <% } %>
+                        </div>
+                        
+
+                    </li>
+                <% }); %>
+            </ul>
+        </article>
+    </section>
     </main>
     <%- include('../partials/footer'); %>
+
+      <script src="/overview.js"></script>
 </body>
 </html>

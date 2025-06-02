@@ -1,0 +1,302 @@
+/* Algemene basis */
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+  font-family: 'Quicksand', Helvetica, Arial, sans-serif;
+}
+
+main{
+  padding: 1em;
+}
+
+main{
+  padding: 1em;
+}
+
+body {
+  background-color: var(--background);
+  padding: 1em;
+}
+
+/* Zoekbalk */
+.search-bar-container {
+  position: sticky;
+  top: 0;
+  margin-top: 2em;
+  margin-bottom: 1em;
+  z-index: 1000;
+  background-color: var(--background);
+  transition: transform 0.3s ease;
+}
+
+.search-bar {
+  width: 92%;
+  /* padding: ; */
+  margin: 1em auto auto auto;
+}
+
+.search-bar input[type="search"] {
+  width: 100%;
+  padding: 0.75em 0.75em 0.75em 1.5em;
+  border: none;
+  border-radius: 10em;
+  font-size: 1em;
+  background-color: var(--background);
+  border: 0.1em solid var(--tekst);
+  color: var(--tekst);
+}
+
+/* Filter & Sorteer knoppen */
+
+.controls-container {
+  position: sticky;
+  top: 0;
+  padding: 1em 0 1em 0;
+  z-index: 1100;
+  background-color: var(--background);
+  transition: transform 0.3s ease;
+}
+
+.controls {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.controls button {
+  padding: 0.5em 1em;
+  margin: 0 1em 0 1em;
+  border: none;
+  border-radius: 10em;
+  background-color: var(--paars);
+  color: white;
+  font-size: 0.9em;
+  cursor: pointer;
+}
+
+.controls .sort{
+  background-color: var(--background);
+  border: 0.1em solid var(--tekst);
+}
+
+.controls .filter{
+  margin-right: 0;
+}
+
+.filter:active {
+  background-color: var(--backgroundSecundary);
+}
+
+/* extra code voor concert cards */
+article ul{
+  overflow: clip;
+}
+
+article li{
+  position: relative;
+
+  background-color: var(--backgroundSecundary);
+  border-radius: 1em;
+  padding-bottom: 1em;
+  margin-bottom: 1em;
+  
+  display: grid;
+  grid-template-columns: 6em 1fr;
+  grid-template-rows: 13.9em 1fr repeat(2, 1.5em);
+  grid-column-gap: 0px;
+  grid-row-gap: 0px;
+  border: .075em solid var(--lichtBlauw);
+}
+article li img {
+  grid-area: 1 / 1 / 2 / 3;
+  max-height: 13em;
+  border-radius: 1em 1em 0 0;
+  width: 100%;
+}
+article li h1 {
+  grid-area: 2 / 1 / 3 / 3;
+  margin: 0 1em .5em 1em;
+  justify-self: start;
+  align-self: start;
+  font-size: 1.2em;
+}
+article li > p{
+  font-size: 0.95em;
+  margin-left: 1em;
+  justify-self: start;
+}
+article li > p:nth-of-type(1) {
+  color: var(--lichtBlauw);
+  grid-area: 3 / 1 / 4 / 2;
+  align-self: end;
+}
+article li > p:nth-of-type(2) {
+  grid-area: 4 / 1 / 5 / 2;
+  align-self: start;
+}
+article li > div{
+  height: 2.9em;
+  grid-area: 3 / 2 / 5 / 4;
+  align-self: center;
+  display: flex;
+  column-gap: .3em;
+  justify-content: flex-end;
+  margin-right: 1.5em;
+}
+
+article li > div p{
+  font-size: .85em;
+    display: block;
+    margin-top: 0.5em;
+    margin-bottom: 1em;
+    padding: 0.3em 0.75em;
+    border-radius: 999em;
+    /* font-size: 0.85em; */
+    color: #fff;
+}
+
+article li > div p:nth-of-type(1){
+  background-color: var(--roze);
+}
+article li > div p:nth-of-type(2){
+  background-color: var(--blauw); 
+}
+
+/* extra code van thomas voor animatie van de cards */
+@media (prefers-reduced-motion: no-preference){
+  article li:nth-child(even){
+      opacity: 0.2; 
+      transform: scale(0.8) rotate(-20deg) translate(15em, -5em);
+      animation: showConcert linear forwards;
+      animation-timeline: view(35em -15em);
+      animation-range: contain;
+  }
+  
+  article li:nth-child(odd){
+      opacity: 0.2; 
+      transform: scale(0.8) rotate(20deg) translate(-15em, -5em);
+      animation: showConcert linear forwards;
+      animation-timeline: view(35em -15em);
+      animation-range: contain;
+  }
+
+  @keyframes showConcert {
+      to{
+          opacity: 1; 
+          transform: scale(1) rotate(0deg) translate(0, 0);
+      }
+  }
+}
+
+.filter-menu {
+  margin: 1em;
+  margin-top: 0.5em;
+  height: 40em;
+  position: relative;
+}
+
+.filter-menu details {
+  margin-bottom: 2em;
+}
+
+.filter-menu summary {
+  cursor: pointer;
+  padding: 0.5em;
+  border-bottom: solid 0.075em var(--tekst);
+  color: white;
+  font-size: 1.5rem;
+}
+
+.filter-options {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5em;
+  margin-top: 1em;
+  margin-bottom: 2em;
+
+}
+
+.filter-tag {
+  padding: 0.4em 1em;
+  border-radius: 999em;
+  background-color: var(--background);
+  border: solid 0.075em var(--lichtBlauw);
+  color: white;
+  cursor: pointer;
+  user-select: none;
+  transition: background-color 0.2s;
+}
+
+.filter-tag.selected {
+  background-color: var(--roze);
+  border: solid 0.075em var(--background);
+}
+
+.filter-wrapper {
+  display: flex;
+  align-items: center;
+  gap: 0.4em;
+}
+
+.filter-count {
+  background-color: var(--roze);
+  color: white;
+  border-radius: 50%;
+  padding: 0.3em 0.7em;
+  font-size: 0.9em;
+  vertical-align: middle;
+}
+
+.hidden {
+  display: none;
+}
+
+.filter-submit-container {
+  position: absolute;
+  bottom: 4em;
+  left: 1em;
+  right: 1em;
+  display: flex;
+  justify-content: center;
+}
+
+.filter-submit {
+  padding: 1em 3em;
+  background-color: var(--paars);
+  color: white;
+  border: none;
+  border-radius: 10em;
+  font-size: 1em;
+  cursor: pointer;
+}
+
+.filter-submit:disabled {
+  background-color: grey;
+  cursor: not-allowed;
+  opacity: 0.6;
+}
+
+.date-filter {
+  background-color: var(--background);
+  color: var(--tekst);
+  border: 1px solid var(--lichtBlauw);
+  border-radius: 999em;
+  padding: 0.5em 1em;
+  margin-top: 1em;
+  font-size: 1em;
+  outline: none;
+  appearance: none; /* vermindert browser default styling */
+  -webkit-appearance: none; /* Safari */
+}
+
+/* Speciaal voor input type="date" in sommige browsers */
+input[type="date"]::-webkit-calendar-picker-indicator {
+  filter: invert(1); /* maakt icoontje wit op donkere achtergrond */
+  cursor: pointer;
+}
+
+.no-scroll {
+  overflow: hidden;
+  height: 100vh;
+}
