@@ -87,3 +87,40 @@ h1{
     width: 100%;
     background-color: var(--backgroundSecundary);
   }
+
+
+/**********/
+/* styling for genres */
+/**********/
+
+.genres ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: flex; 
+    flex-wrap: wrap;
+    gap: .5em;
+}
+  
+.genres li {
+    margin: 0;
+}
+
+.genres input[type="checkbox"] {
+    display: none;
+}
+  
+.genres label {
+    display: inline-block;
+    padding: .5em 1em;
+    background-color: var(--lichtBlauw);
+    color: var(--tekst);
+    cursor: pointer;
+    border-radius: 99em;
+    transition: all 0.3s ease;
+}
+  
+.genres label:has(input[type="checkbox"]:checked) {
+    background-color: var(--roze);
+
+}
