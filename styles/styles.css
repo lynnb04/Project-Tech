@@ -12,7 +12,9 @@
     --blauw:#4D37F6;
 	--lichtBlauw:#8E80FF;
 
-    --main-gradient: linear-gradient(to right, #B91BF4, #6B3AB4, #4D37F6 ,#8E80FF);
+  --main-gradient: linear-gradient(to right, #B91BF4, #6B3AB4, #4D37F6 ,#8E80FF);
+  --accentKleur: #7a4486;
+  --
 }
 
 /*********/
@@ -68,11 +70,7 @@ h1{
     text-decoration: none;
   }
 
-  footer li {
-    list-style: none;
-  }
-
-  footer ul{
+  footer nav{
     display: flex;
     flex-direction: row;
     align-items: center;
@@ -87,3 +85,10 @@ h1{
     width: 100%;
     background-color: var(--backgroundSecundary);
   }
+
+  footer a.active {
+    color: var(--accentKleur); /* bijv. blauw of oranje */
+  }
+  
+
+  
