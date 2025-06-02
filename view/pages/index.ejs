@@ -2,13 +2,10 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>EJS Is Fun</title>
+    <title>Login</title>
     
-    <!-- CSS (load bootstrap from a CDN) -->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.5.2/css/bootstrap.min.css">
-    <style>
-        body { padding-top:50px; }
-    </style>
+    <link rel="stylesheet" href="/login.css">
+    <link rel="stylesheet" href="/styles.css">
 </head>
 <body class="container">
 
@@ -17,14 +14,33 @@
 
 <main>
   <div class="jumbotron">
-    <h1>This is great</h1>
-    <p>Welcome to templating using EJS</p>
-
     <h2>Variable</h2>
 
-    <form action="/form" method="POST">
-      <label for="naam">Name</label>
-      <input type="text" name="naam" placeholder="Enter your name">
+    <form action="/form" method="POST" enctype="multipart/form-data">
+      <label for="firstName">Voornaam</label>
+      <input type="text" name="firstName" placeholder="Enter your name"> 
+      <label for="lastName">Achternaam</label>
+      <input type="text" name="lastName" placeholder="Enter your last name">
+      <label for="email">Email</label>
+      <input type="email" name="email" placeholder="Enter your email">
+      <label for="password">Wachtwoord</label>
+      <input type="password" name="password" placeholder="Enter your password">
+      <label for="age">Leeftijd</label>
+      <input type="number" name="age" placeholder="Enter your age">     
+      <label for="img">Profiel foto</label>
+      <input type="file" name="img" accept="image/*">
+      <input type="submit" value="Submit">
+    </form>
+  </div>
+  <div class="jumbotron">
+
+    <h2>Login</h2>
+
+    <form action="/login" method="POST">
+      <label for="email">Email</label>
+      <input type="email" name="email" placeholder="Enter your email">
+      <label for="password">Wachtwoord</label>
+      <input type="password" name="password" placeholder="Enter your password">
       <input type="submit" value="Submit">
     </form>
   </div>
