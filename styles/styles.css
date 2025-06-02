@@ -86,22 +86,25 @@ h1{
     background-color: var(--backgroundSecundary);
   }
 
+  footer a.active {
+    color: var(--accentKleur); 
+  }
 
-/**********/
+/**********************/
 /* styling for genres */
-/**********/
-
-.genres ul {
-    list-style: none;
-    padding: 0;
+/**********************/
+ul.genres {
+    /* list-style: none; */
+    padding: 1em 0;
     margin: 0;
     display: flex; 
     flex-wrap: wrap;
-    gap: .5em;
+    gap: .4em;
 }
   
 .genres li {
-    margin: 0;
+  list-style: none;
+  margin: 0;
 }
 
 .genres input[type="checkbox"] {
@@ -109,22 +112,21 @@ h1{
 }
   
 .genres label {
-    display: inline-block;
-    padding: .5em 1em;
-    background-color: var(--lichtBlauw);
-    color: var(--tekst);
-    cursor: pointer;
-    border-radius: 99em;
-    transition: all 0.3s ease;
+  display: block;
+  padding: 0.4em 1em;
+  border-radius: 999em;
+  background-color: var(--background);
+  border: solid 0.075em var(--lichtBlauw);
+  color: var(--tekst);
+  cursor: pointer;
+  border-radius: 99em;
+  transition: all 0.3s ease;
 }
   
 .genres label:has(input[type="checkbox"]:checked) {
-    background-color: var(--roze);
-
+  background-color: var(--roze);
+  border: solid 0.075em var(--background);
 }
-  footer a.active {
-    color: var(--accentKleur); /* bijv. blauw of oranje */
-  }
-  
+
 
   
