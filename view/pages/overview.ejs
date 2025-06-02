@@ -53,11 +53,16 @@
         </details>
         <details name="filter">
           <summary>Genre</summary>
-            <div class="filter-options" data-filter-group="genre">
-                <% genres.forEach(function(genre) { %>
-                <div class="filter-tag" data-value="<%= genre %>"><%= genre %></div>
-                <% }); %>
-            </div>
+          <ul>
+            <% genres.forEach(function(genre) { %>
+              <li>
+                  <label for="<%= genre %>">
+                    <input type="checkbox" name="genres" value="<%= genre %>" id="<%= genre %>">
+                    <%= genre %>
+                  </label>
+              </li>
+            <% }); %>
+          </ul>
         </details>
         <div class="filter-submit-container">
           <button type="button" class="filter-submit" disabled>Bevestig filters</button>

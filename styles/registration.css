@@ -1,6 +1,6 @@
 
-/* styling for genres */
-#genres ul {
+/* styling for genres
+.genres ul {
     list-style: none;
     padding: 0;
     margin: 0;
@@ -9,15 +9,15 @@
     gap: .5em;
 }
   
-#genres li {
+.genres li {
     margin: 0;
 }
 
-#genres input[type="checkbox"] {
+.genres input[type="checkbox"] {
     display: none;
 }
   
-#genres label {
+.genres label {
     display: inline-block;
     padding: .5em 1em;
     background-color: var(--lichtBlauw);
@@ -27,7 +27,7 @@
     transition: all 0.3s ease;
 }
   
-#genres label:has(input[type="checkbox"]:checked) {
+.genres label:has(input[type="checkbox"]:checked) {
     background-color: var(--roze);
 
-}
+} */
