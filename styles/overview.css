@@ -6,9 +6,17 @@
   font-family: 'Quicksand', Helvetica, Arial, sans-serif;
 }
 
+main{
+  padding: 1em;
+}
+
+main{
+  padding: 1em;
+}
+
 body {
   background-color: var(--background);
-  padding: 0 1em 1em 1em;
+  padding: 1em;
 }
 
 /* Zoekbalk */
