@@ -137,17 +137,18 @@ app.get('/matching', function(req, res) {
 
 // overview
 app.get('/overview', async function (req, res) {
-    // Get filter parameters from query string
-    const selectedGenres = req.query.genres ? req.query.genres.split(',') : [];
-    const selectedCities = req.query.cities ? req.query.cities.split(',') : [];
+    // Haal filters uit de query
+    const selectedGenres = req.query.genres || [];
+    const selectedCities = req.query.cities || [];
     const dateFrom = req.query.dateFrom;
     const dateTo = req.query.dateTo;
-
+  
     // API URLs
     const urlEvents = `${process.env.API_URL}?countryCode=NL&segmentName=Music&size=100&apikey=${process.env.API_KEY}`;
     const urlGenres = `${process.env.API_URL_GENRES}?apikey=${process.env.API_KEY}`;
   
     try {
+      // Genres ophalen
       const genresResponse = await fetch(urlGenres);
       const genresData = await genresResponse.json();
   
@@ -163,61 +164,56 @@ app.get('/overview', async function (req, res) {
         }
       });
   
-      const genres = Array.from(genresSet).sort(); // Sorteer genres alfabetisch
+      const genres = Array.from(genresSet).sort();
   
-      // === Stap 2: Haal evenementen op ===
+      // Evenementen ophalen
       const eventsResponse = await fetch(urlEvents);
       const eventsData = await eventsResponse.json();
       let events = eventsData._embedded?.events || [];
-
-      // Apply filters to events
-      if (selectedGenres.length > 0 || selectedCities.length > 0 || dateFrom || dateTo) {
+  
+      // Filters toepassen
+      if (selectedGenres.length || selectedCities.length || dateFrom || dateTo) {
         events = events.filter(event => {
-          let matches = true;
-
-          // Filter by genre
-          if (selectedGenres.length > 0) {
-            const eventGenre = event.classifications?.[0]?.genre?.name;
-            matches = matches && eventGenre && selectedGenres.includes(eventGenre);
+          const genre = event.classifications?.[0]?.genre?.name;
+          const city = event._embedded?.venues?.[0]?.city?.name;
+          const date = new Date(event.dates.start.localDate);
+  
+          // Genre filter
+          if (selectedGenres.length && (!genre || !selectedGenres.includes(genre))) {
+            return false;
           }
-
-          // Filter by city
-          if (selectedCities.length > 0) {
-            const eventCity = event._embedded?.venues?.[0]?.city?.name;
-            matches = matches && eventCity && selectedCities.includes(eventCity);
+  
+          // City filter
+          if (selectedCities.length && (!city || !selectedCities.includes(city))) {
+            return false;
           }
-
-          // Filter by date
-          if (dateFrom || dateTo) {
-            const eventDate = new Date(event.dates.start.localDate);
-            
-            if (dateFrom) {
-              const fromDate = new Date(dateFrom);
-              matches = matches && eventDate >= fromDate;
-            }
-            
-            if (dateTo) {
-              const toDate = new Date(dateTo);
-              matches = matches && eventDate <= toDate;
-            }
+  
+          // Date filters
+          if (dateFrom && date < new Date(dateFrom)) {
+            return false;
           }
-
-          return matches;
+  
+          if (dateTo && date > new Date(dateTo)) {
+            return false;
+          }
+  
+          return true;
         });
       }
   
-      // Verzamel unieke steden uit de events
+      // Unieke steden verzamelen uit de gefilterde events
       const citiesSet = new Set();
       events.forEach(event => {
         const city = event._embedded?.venues?.[0]?.city?.name;
         if (city) citiesSet.add(city);
       });
   
-      const cities = Array.from(citiesSet).sort(); // Sorteer steden alfabetisch
+      const cities = Array.from(citiesSet).sort();
   
-      res.render('pages/overview', { 
-        events, 
-        genres, 
+      // Pagina renderen
+      res.render('pages/overview', {
+        events,
+        genres,
         cities,
         selectedGenres,
         selectedCities,
@@ -228,8 +224,8 @@ app.get('/overview', async function (req, res) {
     } catch (error) {
       console.error("Fout bij ophalen data:", error);
       res.render('pages/overview', {
-        events: [], 
-        genres: [], 
+        events: [],
+        genres: [],
         cities: [],
         selectedGenres: [],
         selectedCities: [],
