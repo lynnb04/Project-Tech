@@ -187,66 +187,54 @@ app.get('/profile', function(req, res) {
 });
 
 // profile settings
-const multer = require('multer');
-const path = require('path');
-const fs = require('fs');
-const port = 3000;
+ const fs = require('fs');
+ const port = 3000;
 
 // zorgt dat de uploads folder altijd bestaat
-const uploadDir = path.join(__dirname, 'uploads');
-if (!fs.existsSync(uploadDir)) {
-  fs.mkdirSync(uploadDir);
-}
+ const uploadDir = path.join(__dirname, 'uploads');
+ if (!fs.existsSync(uploadDir)) {
+   fs.mkdirSync(uploadDir);
+ }
 
 // EJS view engine
-app.set('view engine', 'ejs');
+ app.set('view engine', 'ejs');
 
 // Middleware om URL-encoded form data te verwerken
-app.use(express.urlencoded({ extended: true }));
+ app.use(express.urlencoded({ extended: true }));
 
-app.use('/uploads', express.static(uploadDir));
-app.use('/public', express.static(path.join(__dirname, 'public')));
+ app.use('/uploads', express.static(uploadDir));
+ app.use('/public', express.static(path.join(__dirname, 'public')));
 
 // Multer storage configuratie
-const storage = multer.diskStorage({
-  destination: (req, file, cb) => {
-    cb(null, 'uploads/');
-  },
-  filename: (req, file, cb) => {
-    const ext = path.extname(file.originalname);
-    const uniqueName = Date.now() + '-' + Math.round(Math.random() * 1e9) + ext;
-    cb(null, uniqueName);
-  }
-});
-const upload = multer({ storage });
+
 
 // In-memory user data (vervang door database)
-let user = {
-  username: 'johndoe',
-  email: 'john@example.com',
-  profilePic: null
-};
+ let user = {
+   username: 'johndoe',
+   email: 'john@example.com',
+   profilePic: null
+ };
 
 // Render profile settings page
-app.get('/profile-settings', (req, res) => {
-  res.render('pages/profileSettings', { user });
-});
+ app.get('/profile-settings', (req, res) => {
+   res.render('pages/profileSettings', { user });
+ });
 
 // formulier uploaden
-app.post('/profile-settings', upload.single('profilePic'), (req, res) => {
-  const { username, email } = req.body;
-  user.username = username;
-  user.email = email;
-  if (req.file) {
-    user.profilePic = req.file.filename;
-  }
+ app.post('/profile-settings', upload.single('profilePic'), (req, res) => {
+   const { username, email } = req.body;
+   user.username = username;
+   user.email = email;
+   if (req.file) {
+     user.profilePic = req.file.filename;
+   }
   // terug naar profile settings page
-  res.redirect('/profile-settings');
-});
+   res.redirect('/profile-settings');
+ });
 
-app.listen(port, () => {
-  console.log(`Server running at http://localhost:${port}`);
-});
+ app.listen(port, () => {
+   console.log(`Server running at http://localhost:${port}`);
+ });
 
 // registration
 // --------------------
