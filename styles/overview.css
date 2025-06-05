@@ -10,13 +10,8 @@ main{
   padding: 1em;
 }
 
-main{
-  padding: 1em;
-}
-
 body {
   background-color: var(--background);
-  padding: 1em;
 }
 
 /* Zoekbalk */
@@ -147,13 +142,13 @@ article li > div{
 
 article li > div p{
   font-size: .85em;
-    display: block;
-    margin-top: 0.5em;
-    margin-bottom: 1em;
-    padding: 0.3em 0.75em;
-    border-radius: 999em;
-    /* font-size: 0.85em; */
-    color: #fff;
+  display: block;
+  margin-top: 0.5em;
+  margin-bottom: 1em;
+  padding: 0.3em 0.75em;
+  border-radius: 999em;
+  /* font-size: 0.85em; */
+  color: #fff;
 }
 
 article li > div p:nth-of-type(1){
