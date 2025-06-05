@@ -44,7 +44,7 @@ app.use(session({
     // secret key for session encryption 
     secret: process.env.SESSION_SECRET
 }))
-
+ 
 // ATLAS MONGDOB APPLICATIONC ODE
 const { MongoClient, Objectid} = require("mongodb");
 // Mango configuratie uit .env bestand
@@ -68,6 +68,7 @@ connectDB();
 
 
 // index
+// --------------------
 app.get('/', function(req, res) {
     res.render('pages/index');
   });
@@ -131,11 +132,13 @@ app.get('/detail', async function(req, res) {
 
 
 // matching pagina
+// --------------------
 app.get('/matching', function(req, res) {
     res.render('pages/matching');
 });
 
 // overview
+// --------------------
 app.get('/overview', async function (req, res) {
     // Haal filters uit de query
     const selectedGenres = req.query.genres || [];
@@ -176,27 +179,22 @@ app.get('/overview', async function (req, res) {
         events = events.filter(event => {
           const genre = event.classifications?.[0]?.genre?.name;
           const city = event._embedded?.venues?.[0]?.city?.name;
-          const date = new Date(event.dates.start.localDate);
-  
+          const date = new Date(event.dates.start.localDate); 
           // Genre filter
           if (selectedGenres.length && (!genre || !selectedGenres.includes(genre))) {
             return false;
-          }
-  
+          } 
           // City filter
           if (selectedCities.length && (!city || !selectedCities.includes(city))) {
             return false;
-          }
-  
+          }  
           // Date filters
           if (dateFrom && date < new Date(dateFrom)) {
             return false;
-          }
-  
+          }  
           if (dateTo && date > new Date(dateTo)) {
             return false;
-          }
-  
+          }  
           return true;
         });
       }
@@ -210,40 +208,26 @@ app.get('/overview', async function (req, res) {
   
       const cities = Array.from(citiesSet).sort();
   
-      // Pagina renderen
-      res.render('pages/overview', {
-        events,
-        genres,
-        cities,
-        selectedGenres,
-        selectedCities,
-        dateFrom,
-        dateTo
-      });
+      res.render('pages/overview', {events, genres, cities, selectedGenres, selectedCities, dateFrom, dateTo});
   
     } catch (error) {
       console.error("Fout bij ophalen data:", error);
-      res.render('pages/overview', {
-        events: [],
-        genres: [],
-        cities: [],
-        selectedGenres: [],
-        selectedCities: [],
-        dateFrom: null,
-        dateTo: null
-      });
+      res.render('pages/overview', {events: [], genres: [], cities: [], selectedGenres: [], selectedCities: [], dateFrom: null, dateTo: null});
     }
-  });
+});
 
 // profile
+// --------------------
 app.get('/profile', function(req, res) {
     res.render('pages/profile');
 });
 
 // profile settings
+// --------------------
 app.get('/profile-settings', function(req, res) {
     res.render('pages/profileSettings');
 });
+
 
 // registration
 // --------------------
@@ -383,3 +367,9 @@ async function compareData(plainTextData, hashedData) {
       throw error;
   }
 }
+
+// Footer link actief
+app.use((req, res, next) => {
+    res.locals.currentPath = req.path;
+    next();
+  });
