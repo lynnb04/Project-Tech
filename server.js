@@ -28,6 +28,13 @@ app.use(express.static('styles'));
 app.use(express.static('script'));
 app.use('/uploads', express.static('uploads'));
 
+// Footer link actief
+app.use((req, res, next) => {
+  res.locals.currentPath = req.path;
+  next();
+});
+
+
 // set the view engine to ejs
 app.set('view engine', 'ejs');
 
