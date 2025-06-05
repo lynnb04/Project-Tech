@@ -18,19 +18,23 @@
                   <div class="card-img-wrapper">
                     <img src="<%= event.images[2].url %>" alt="Foto van event" />
                     <% 
-                      const dateParts = event.dates.start.localDate.split("-");
-                      const day = dateParts[2];
-                      const month = new Date(event.dates.start.localDate).toLocaleString('nl-NL', { month: 'short' });
+                    const dateParts = event.dates.start.localDate.split("-");
+                    const day = parseInt(dateParts[2], 10);  // “06” → 6, “10” → 10
+                    const month = new Date(event.dates.start.localDate)
+                                    .toLocaleString('nl-NL', { month: 'short' });
                     %>
                     <div class="card-date">
                       <span class="day"><%= day %></span>
                       <span class="month"><%= month %></span>
                     </div>
+                    <a class="close-btn" href="">
+                        <img src="/static/close_button.svg" alt="Sluit detailpagina">
+                      </a>
                   </div>
       
                   <h1><%= event.name %></h1>
                   <p class="time-tag"><%= event.dates.start.localTime ? event.dates.start.localTime.slice(0, 5) : 'Tijd onbekend' %></p>
-                  <p><strong><%= event._embedded.venues[0].name %></strong>,</p>
+                  <p><strong><%= event._embedded.venues[0].name %></strong></p>
                   <p><%= event._embedded.venues[0].city.name %></p>
       
                   <div class="genre-container">

@@ -40,7 +40,7 @@ p {
     bottom: 0.75em;
     left: 0.75em;
     background-color: var(--backgroundSecundary);
-    padding: 0.5em 0.5em;
+    padding: 0.6em .75em;
     border-radius: 0.5em;
     display: flex;
     flex-direction: column;
@@ -69,6 +69,22 @@ p {
     border-radius: 0.25em;
     font-size: 1.2em;
     margin: 0 0 0.25em 1em;
+  }
+
+.close-btn {
+    position: fixed;
+    top: 2em;
+    right: 1em;
+    width: 2em;
+    height: 2em;
+    z-index: 1000;
+  }
+  
+.close-btn img {
+    width: 100%;
+    height: 100%;
+    display: block;
+    object-fit: contain;
   }
 
 .genre-container {
