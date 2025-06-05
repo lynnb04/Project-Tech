@@ -1,11 +1,108 @@
-img{
-    width: 100%;
-}
+main {
+    max-width: 900px;
+    margin: 0 auto;
+    font-family: 'Quicksand', sans-serif;
+  }
 
+ul{
+    padding-left: 0;
+}
+  
+h1 {
+    font-size: 1.2em;
+    color: var(--kop);
+    margin: 0.75em 0 0.5em 1em;
+  }
+  
 p {
-    color: var(--tekstSecundary);
-}
-
-p strong{
+    font-size: 1em;
+    margin: 0.25em 0;
     color: var(--tekst);
-}
+    margin-left: 1em;
+  }
+
+.card-img-wrapper {
+    position: relative;
+    display: grid;
+    width: 100%;
+    grid-template-areas: "image";
+  }
+  
+.card-img-wrapper img {
+    width: 100%;
+    height: auto;
+    display: block;
+  }
+  
+
+.card-date {
+    position: absolute;
+    bottom: 0.75em;
+    left: 0.75em;
+    background-color: var(--backgroundSecundary);
+    padding: 0.5em 0.5em;
+    border-radius: 0.5em;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    font-weight: bold;
+  }
+  
+.card-date .day {
+    font-size: 1.5em;
+    color: var(--lichtBlauw);
+    line-height: 1;
+  }
+  
+.card-date .month {
+    font-size: 0.75em;
+    color: var(--tekstSecundary);
+    text-transform: lowercase;
+    line-height: 1;
+  }
+
+.time-tag {
+    display: inline-block;
+    background-color: var(--backgroundSecundary);
+    color: var(--tekst);
+    padding: 0.25em;
+    border-radius: 0.25em;
+    font-size: 1.2em;
+    margin: 0 0 0.25em 1em;
+  }
+
+.genre-container {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5em;
+    margin: 1em 0 3em 1em;
+  }
+  
+.genre-tag {
+    background-color: var(--paars);
+    color: white;
+    padding: 0.25em 0.75em;
+    border-radius: 10em;
+    font-size: 0.9em;
+    font-weight: 500;
+  }
+
+.subgenre-tag{
+    background-color: var(--roze);
+    color: white;
+    padding: 0.25em 0.75em;
+    border-radius: 10em;
+    font-size: 0.9em;
+    font-weight: 500;
+  }
+  
+.tickets {
+    display: flex;
+    justify-content: center;
+    color: var(--tekst);
+    text-decoration: none;
+    border: 0.08em solid var(--tekst);
+    padding: 0.75em 1em;
+    border-radius: 2em;
+    margin: 0 4em 0 3em;
+  }
