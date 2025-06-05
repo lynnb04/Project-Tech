@@ -44,7 +44,7 @@ app.use(session({
     // secret key for session encryption 
     secret: process.env.SESSION_SECRET
 }))
-
+ 
 // ATLAS MONGDOB APPLICATIONC ODE
 const { MongoClient, Objectid} = require("mongodb");
 // Mango configuratie uit .env bestand
@@ -68,6 +68,7 @@ connectDB();
 
 
 // index
+// --------------------
 app.get('/', function(req, res) {
     res.render('pages/index');
   });
@@ -131,17 +132,26 @@ app.get('/detail', async function(req, res) {
 
 
 // matching pagina
+// --------------------
 app.get('/matching', function(req, res) {
     res.render('pages/matching');
 });
 
 // overview
+// --------------------
 app.get('/overview', async function (req, res) {
+    // Haal filters uit de query
+    const selectedGenres = req.query.genres || [];
+    const selectedCities = req.query.cities || [];
+    const dateFrom = req.query.dateFrom;
+    const dateTo = req.query.dateTo;
+  
     // API URLs
     const urlEvents = `${process.env.API_URL}?countryCode=NL&segmentName=Music&size=100&apikey=${process.env.API_KEY}`;
     const urlGenres = `${process.env.API_URL_GENRES}?apikey=${process.env.API_KEY}`;
   
     try {
+      // Genres ophalen
       const genresResponse = await fetch(urlGenres);
       const genresData = await genresResponse.json();
   
@@ -157,31 +167,57 @@ app.get('/overview', async function (req, res) {
         }
       });
   
-      const genres = Array.from(genresSet).sort(); // Sorteer genres alfabetisch
+      const genres = Array.from(genresSet).sort();
   
-      // === Stap 2: Haal evenementen op ===
+      // Evenementen ophalen
       const eventsResponse = await fetch(urlEvents);
       const eventsData = await eventsResponse.json();
-      const events = eventsData._embedded?.events || [];
+      let events = eventsData._embedded?.events || [];
   
-      // Verzamel unieke steden uit de events
+      // Filters toepassen
+      if (selectedGenres.length || selectedCities.length || dateFrom || dateTo) {
+        events = events.filter(event => {
+          const genre = event.classifications?.[0]?.genre?.name;
+          const city = event._embedded?.venues?.[0]?.city?.name;
+          const date = new Date(event.dates.start.localDate); 
+          // Genre filter
+          if (selectedGenres.length && (!genre || !selectedGenres.includes(genre))) {
+            return false;
+          } 
+          // City filter
+          if (selectedCities.length && (!city || !selectedCities.includes(city))) {
+            return false;
+          }  
+          // Date filters
+          if (dateFrom && date < new Date(dateFrom)) {
+            return false;
+          }  
+          if (dateTo && date > new Date(dateTo)) {
+            return false;
+          }  
+          return true;
+        });
+      }
+  
+      // Unieke steden verzamelen uit de gefilterde events
       const citiesSet = new Set();
       events.forEach(event => {
         const city = event._embedded?.venues?.[0]?.city?.name;
         if (city) citiesSet.add(city);
       });
   
-      const cities = Array.from(citiesSet).sort(); // Sorteer steden alfabetisch
+      const cities = Array.from(citiesSet).sort();
   
-      res.render('pages/overview', { events, genres, cities});
+      res.render('pages/overview', {events, genres, cities, selectedGenres, selectedCities, dateFrom, dateTo});
   
     } catch (error) {
       console.error("Fout bij ophalen data:", error);
-      res.render('pages/overview', {events: [], genres: [], cities: []});
+      res.render('pages/overview', {events: [], genres: [], cities: [], selectedGenres: [], selectedCities: [], dateFrom: null, dateTo: null});
     }
-  });
+});
 
 // profile
+// --------------------
 app.get('/profile', function(req, res) {
     res.render('pages/profile');
 });
@@ -235,6 +271,7 @@ app.get('/profile', function(req, res) {
  app.listen(port, () => {
    console.log(`Server running at http://localhost:${port}`);
  });
+
 
 // registration
 // --------------------
@@ -374,3 +411,9 @@ async function compareData(plainTextData, hashedData) {
       throw error;
   }
 }
+
+// Footer link actief
+app.use((req, res, next) => {
+    res.locals.currentPath = req.path;
+    next();
+  });

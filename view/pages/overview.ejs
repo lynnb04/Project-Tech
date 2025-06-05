@@ -35,39 +35,37 @@
     </div>
 
       <!-- Uitklapbaar filtermenu -->
-      <div class="filter-menu hidden">
+      <form class="filter-menu hidden" method="GET" action="/overview">
         <details open name="filter">
           <summary>Locatie</summary>
             <div class="filter-options" data-filter-group="locatie">
                 <% cities.forEach(function(city) { %>
-                <div class="filter-tag" data-value="<%= city %>"><%= city %></div>
+                <div class="filter-tag" data-value="<%= city %>" data-selected="<%= selectedCities.includes(city) ? 'true' : 'false' %>"><%= city %></div>
             <% }); %>
           </div>
         </details>
         <details name="filter">
           <summary>Datum</summary>
             <div>
-                <label>Vanaf: <input type="date" class="date-filter" id="date-from"></label><br>
-                <label>Tot aan: <input type="date" class="date-filter" id="date-to"></label>
+                <label>Vanaf: <input type="date" class="date-filter" id="date-from" name="dateFrom" value="<%= dateFrom || '' %>"></label><br>
+                <label>Tot aan: <input type="date" class="date-filter" id="date-to" name="dateTo" value="<%= dateTo || '' %>"></label>
             </div>
         </details>
         <details name="filter">
           <summary>Genre</summary>
-          <ul>
+          <ul class="genres">
             <% genres.forEach(function(genre) { %>
               <li>
                   <label for="<%= genre %>">
-                    <input type="checkbox" name="genres" value="<%= genre %>" id="<%= genre %>">
+                    <input type="checkbox" name="genres" value="<%= genre %>" id="<%= genre %>" <%= selectedGenres.includes(genre) ? 'checked' : '' %>>
                     <%= genre %>
                   </label>
               </li>
             <% }); %>
           </ul>
         </details>
-        <div class="filter-submit-container">
-          <button type="button" class="filter-submit" disabled>Bevestig filters</button>
-        </div>
-      </div>
+        <input type="submit" value="Apply Filters" class="filter-submit">
+    </form>
 
     <!-- Concert cards -->
     <section>
@@ -91,7 +89,7 @@
                         <% if (genre) { %>
                           <p><%= genre %></p>
                         <% } else { %>
-                          <p>Niet beschikbaar</p>
+                          <p>Other</p>
                         <% } %>
                         
                         <% if (subgenre && subgenre !== genre) { %>
