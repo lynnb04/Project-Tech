@@ -5,134 +5,197 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Profile Settings</title>
     <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="/profileSettings.css">
 </head>
+
+
 <body>
     <%- include('../partials/header'); %>
-    <h1>Mijn Profiel Instellingen</h1>
-     <button type="button" onclick="enableEditing()">Bewerk instellingen</button>
+
     <main>
-        <form action="/settings" method="POST" enctype="multipart/form-data">
-        
+
+        <section class="profiel">
+
+            <h1>Profiel</h1>
+
+            <!-- knop die instellingen ontgrendelt -->
+            <button type="button" onclick="enableEditing()">Bewerk instellingen</button>
+
+            <!-- formulier -->
+            <form action="/settings" method="POST" enctype="multipart/form-data">
+
+                <div class="profielfoto">
+                    <label>Profielfoto</label>
+                    <input type="file" name="profilePic" accept="image/*" disabled/>
+                    <% if (user.profilePic) { %>
+                    <img src="/uploads/<%= user.profilePic %>" alt="Profile Picture" width="150"><br>
+                    <% } %><br>
+                </div>
+
+                <div class="naam">
+                    <label>Naam</label>
+                    <input type="text" name="name" placeholder="Vul in" disabled /><br>
+                </div>
+
+                <div class="geboortedatum">
+                    <label>Geboortedatum</label>
+                    <input type="date" name="dateOfBirth" placeholder="Geboortedatum" disabled/><br>
+                </div>
+
+                <div class="geslacht">
+                    <label>Geslacht</label>
+                    <select name="gender" disabled>
+                    <option value="">Kies een optie</option>
+                    <option value="man">Man</option>
+                    <option value="vrouw">Vrouw</option>
+                    <option value="anders">Anders</option>
+                    <option value="geen_antwoord">Liever niet zeggen</option>
+                    </select><br>
+                </div>
+
+                <div class="provincie">
+                    <label>Provincie</label>
+                    <select name="province" disabled>
+                    <option value="">Kies een provincie</option>
+                    <option value="drenthe">Drenthe</option>
+                    <option value="flevoland">Flevoland</option>
+                    <option value="friesland">Friesland</option>
+                    <option value="gelderland">Gelderland</option>
+                    <option value="groningen">Groningen</option>
+                    <option value="limburg">Limburg</option>
+                    <option value="noord-brabant">Noord-Brabant</option>
+                    <option value="noord-holland">Noord-Holland</option>
+                    <option value="overijssel">Overijssel</option>
+                    <option value="utrecht">Utrecht</option>
+                    <option value="zeeland">Zeeland</option>
+                    <option value="zuid-holland">Zuid-Holland</option>
+                    </select><br>
+                </div>
+
+                <div class="bio">
+                    <label>Bio</label>
+                    <input type="text" name="bio" placeholder="Vul in" disabled/><br>
+                </div>
+            </form>
+
+            <script>
+                function enableEditing() {
+                const fields = document.querySelectorAll('input, select, textarea');
+                fields.forEach(field => field.disabled = false);
+            
+                document.querySelector('button[onclick="enableEditing()"]').style.display = "none";
+                }
+            </script>
+        </section>
+
+
+        <section class="accountmanagement">
+            <h1>Accountmanagement</h1>
+
             <label>Gebruikersnaam</label>
-            <input type="text" name="username" placeholder="Vul in" disabled /><br>
+                <div class="gebruikersnaam">
+                    <input type="text" name="username" placeholder="Vul in" disabled/>
+                </div>
 
             <label>E-mail</label>
-            <input type="email" name="email" placeholder="Vul in" disabled /><br>
+                <div class="email">
+                    <input type="email" name="email" placeholder="Vul In" disabled/>
+                </div>
 
-            <label>Profielfoto</label>
-            <input type="file" name="profilePic" accept="image/*" disabled/>
-            <% if (user.profilePic) { %>
-                <img src="/uploads/<%= user.profilePic %>" alt="Profile Picture" width="150"><br>
-              <% } %><br>
-              
-            <label>Geboortedatum</label>
-            <input type="date" name="dateOfBirth" placeholder="Geboortedatum" disabled/><br>
+            <label>Wachtwoord</label>
+                <div class="wachtwoord">
+                    <input type="password" name="password" placeholder="Pas aan" disabled/>
+                </div>
 
-            <label>Geslacht</label>
-            <!-- drop down menu -->
-            <select name="gender" disabled>
-                <option value="">Kies een optie</option>
-                <option value="man">Man</option>
-                <option value="vrouw">Vrouw</option>
-                <option value="anders">Anders</option>
-                <option value="geen_antwoord">Liever niet zeggen</option>
-            </select><br>
+            <label>Account verwijderen</label>
+                <div class="account-verwijderen">
+                    
+                </div>
+        </section>
 
-            <label>Provincie</label>
-            <!-- drop down menu -->
-            <select name="province" disabled>
-                <option value="">Kies een provincie</option>
-                <option value="drenthe">Drenthe</option>
-                <option value="flevoland">Flevoland</option>
-                <option value="friesland">Friesland</option>
-                <option value="gelderland">Gelderland</option>
-                <option value="groningen">Groningen</option>
-                <option value="limburg">Limburg</option>
-                <option value="noord-brabant">Noord-Brabant</option>
-                <option value="noord-holland">Noord-Holland</option>
-                <option value="overijssel">Overijssel</option>
-                <option value="utrecht">Utrecht</option>
-                <option value="zeeland">Zeeland</option>
-                <option value="zuid-holland">Zuid-Holland</option>
-            </select><br>
 
-            <label>Bio</label>
-            <input type="text" name="bio" placeholder="Vul in" disabled/><br>
+        <section class="concertvoorkeuren">
+            <h1>Concertvoorkeuren</h1>
 
-            <button type="submit">Instellingen opslaan</button>
-            <!-- enable editing toevoegen-->
-          </form>
-          <script>
-            function enableEditing() {
-            const fields = document.querySelectorAll('input, select, textarea');
-            fields.forEach(field => field.disabled = false);
-            
-            document.querySelector('button[onclick="enableEditing()"]').style.display = "none";
-            }
-</script>
-    </main>
+            <form id="concertForm">
+                <label>Genre's</label><br>
+                    <div class="genres"></div>
+                        <!-- vervangen door genre's uit overview -->
+                        <label><input type="checkbox" name="genre" value="Rock" disabled> Rock</label><br>
+                    </div>
 
-    <!-- mijn concertvoorkeuren: genre's, artiesten, sfeer, locatie -->
-    <h1>Mijn Concertvoorkeuren</h1>
+                <label>Artiesten</label><br>
+                    <div class="artiesten"></div>
+                        <!-- vervangen door artiesten uit overview + zoekbalk -->
+                        <label><input type="checkbox" name="artiest" value="Coldplay" disabled> Coldplay</label><br>
+                    </div>
 
-    <form id="concertForm">
-        <label>Genre's</label><br>
-            <label><input type="checkbox" name="genre" value="Rock"> Rock</label><br>
-            <label><input type="checkbox" name="genre" value="Pop"> Pop</label><br>
-            <label><input type="checkbox" name="genre" value="Jazz"> Jazz</label><br>
-            <label><input type="checkbox" name="genre" value="EDM"> EDM</label><br><br>
+                <label>Sfeer</label><br>
+                    <div class="sfeer"></div>
+                        <!-- vervangen door sferen uit overview -->
+                        <label><input type="checkbox" name="sfeer" value="Energiek" disabled> Energiek</label><br>
+                    </div>
 
-            <label>Artiesten</label><br>
-
-            <label><input type="checkbox" name="artiest" value="Coldplay"> Coldplay</label><br>
-            <label><input type="checkbox" name="artiest" value="Beyoncé"> Beyoncé</label><br>
-            <label><input type="checkbox" name="artiest" value="Arctic Monkeys"> Arctic Monkeys</label><br>
-            <label><input type="checkbox" name="artiest" value="Rihanna"> Rihanna</label><br><br>
-
-            <label>Sfeer</label><br>
-            <label><input type="checkbox" name="sfeer" value="Energiek"> Energiek</label><br>
-            <label><input type="checkbox" name="sfeer" value="Mysterieus"> Mysterieus</label><br>
-            <label><input type="checkbox" name="sfeer" value="Theater"> Theater</label><br>
-            <label><input type="checkbox" name="sfeer" value="Club"> Club</label><br><br>
-
-            <label>Provincie</label><br>
-            <label><input type="checkbox" name="locatie" value="Drenthe"> Drenthe</label><br>
-            <label><input type="checkbox" name="locatie" value="Flevoland"> Flevoland</label><br>
-            <label><input type="checkbox" name="locatie" value="Friesland"> Utrecht</label><br>
-            <label><input type="checkbox" name="locatie" value="Gelderland"> Gelderland</label><br>
-            <label><input type="checkbox" name="locatie" value="Groningen"> Groningen</label><br>
-            <label><input type="checkbox" name="locatie" value="Limburg"> Limburg</label><br>
-            <label><input type="checkbox" name="locatie" value="Noord-Brabant"> Noord-Brabant</label><br>
-            <label><input type="checkbox" name="locatie" value="Noord-Holland"> Noord-Holland</label><br>
-            <label><input type="checkbox" name="locatie" value="Overijsel"> Overijsel</label><br>
-            <label><input type="checkbox" name="locatie" value="Utrecht"> Utrecht</label><br>
-            <label><input type="checkbox" name="locatie" value="Zeeland"> Zeeland</label><br>
-            <label><input type="checkbox" name="locatie" value="Zuid-Holland"> Zuid-Holland</label><br><br>
-
-    <button type="button" onclick="toonVoorkeuren()">Instellingen opslaan</button>
-    </form>
+                <label>Locatie</label><br>
+                    <div class="locatie"></div>
+                        <!-- vervangen door locaties uit overview -->
+                        <label><input type="checkbox" name="locatie" value="Locatie" disabled> Locatie</label><br>
+                    </div>
+            </form>
+        </section>
        
         
-    <!-- mijn matchvoorkeuren: leeftijdsrange, geslachten, locaties -->
-    <h1>Mijn Matchvoorkeuren</h1>
-        <label>Leeftijd</label>
-        <label>Geslacht</label>
-        <label>Locatie</label>
+        <section class="matchvoorkeuren">
+            <h1>Matchvoorkeuren</h1>
+            <label>Leeftijd</label><br>
+            <!-- leeftijdscategorie slider -->
 
-    <!-- mijn chatvoorkeuren: geblokkeerde accounts -->
-    <h1>Mijn Chatvoorkeuren</h1>
-        <label>Geblokkeerde accounts</label>
+            <label>Geslacht</label><br>
+            <label><input type="checkbox" name="gender" value="Man" disabled> Man</label><br>
+            <label><input type="checkbox" name="gender" value="Vrouw" disabled> Vrouw</label><br>
+            <label><input type="checkbox" name="gender" value="Anders" disabled> Anders</label><br>
 
-    <!-- notificaties: chatnotificaties en concertnotificaties -->
-    <h1>Notificaties</h1>
-        <label>Chats</label>
-        <label>Concerten van je favoriete artiesten</label>
-        <label>Concerten van je favoriete genre's</label>
-        <label>Concerten van je favoriete sferen</label>
-        <label>Concerten op je favoriete locaties</label>
-    
-    <!-- uitloggen -->
-    <h1>Uitloggen</h1>
+            <div class="provincie">
+                <label>Provincie</label><br>
+                <label><input type="checkbox" name="provincie" value="Provincie" disabled> Provincie</label><br>
+                <label><input type="checkbox" name="provincie" value="Provincie" disabled> Provincie</label><br>
+                <label><input type="checkbox" name="provincie" value="Provincie" disabled> Provincie</label><br>
+                <label><input type="checkbox" name="provincie" value="Provincie" disabled> Provincie</label><br>
+                <label><input type="checkbox" name="provincie" value="Provincie" disabled> Provincie</label><br>
+                <label><input type="checkbox" name="provincie" value="Provincie" disabled> Provincie</label><br>
+                <label><input type="checkbox" name="provincie" value="Provincie" disabled> Provincie</label><br>
+                <label><input type="checkbox" name="provincie" value="Provincie" disabled> Provincie</label><br>
+                <label><input type="checkbox" name="provincie" value="Provincie" disabled> Provincie</label><br>
+                <label><input type="checkbox" name="provincie" value="Provincie" disabled> Provincie</label><br>
+                <label><input type="checkbox" name="provincie" value="Provincie" disabled> Provincie</label><br>
+                <label><input type="checkbox" name="provincie" value="Provincie" disabled> Provincie</label><br>
+            </div>
+        </section>
+
+
+        <section class="chatvoorkeuren">
+            <h1>Chatvoorkeuren</h1>
+            <label>Geblokkeerde accounts</label><br>
+            <!-- pop-up met lijst van accounts -->
+        </section>
+
+
+        <section class="notificaties">
+            <h1>Notificaties</h1>
+            <label>Chats</label>
+            <label>Concerten van je favoriete artiesten</label><br>
+            <label>Concerten van je favoriete genre's</label><br>
+            <label>Concerten van je favoriete sferen</label><br>
+            <label>Concerten op je favoriete locaties</label><br>
+        </section>
+
+
+        <section class="uitloggen">
+            <h1>Uitloggen</h1>
+        </section>
+
+
+    <button type="submit">Instellingen opslaan</button>
 
     <%- include('../partials/footer'); %>
 </body>
