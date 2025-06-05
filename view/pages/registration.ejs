@@ -10,8 +10,9 @@
 <body>
     <%- include('../partials/footer'); %>
     <main>
-        <form action="">
+        <form action="/registration" method="POST" enctype="multipart/form-data">
             <fieldset id="persoonsGegevens">
+                <legend>persoonsGegevens</legend>
                 <label for="firstName">Voornaam
                     <input type="text" name="firstName" placeholder="Enter your name"> 
                 </label>
@@ -48,8 +49,32 @@
   
             <fieldset id="artiesten"></fieldset>
             
-            <fieldset id="matchVoorkeuren"></fieldset>
+            <fieldset id="matchVoorkeuren">
+                <legend>Matching voorkeuren</legend>
+                    <h2>met welke leeftijd wil je matchen</h2>
+                    <div class="values">
+                      <span id="range1">
+                        0
+                      </span>
+                      <span> &dash; </span>
+                      <span id="range2">
+                        100
+                      </span>
+                    </div>
+                    <div class="container">
+                      <div class="slider-track"></div>
+                      <input type="range" min="18" max="100" value="30" id="slider-1" oninput="slideOne()">
+                      <input type="range" min="18" max="100" value="70" id="slider-2" oninput="slideTwo()">
+                    </div>
+
+                    <h2>met welke geslacht wil je matchen</h2>
+
+
+                <!-- https://codepen.io/alexpg96/pen/xxrBgbP -->
+            </fieldset>
         </form>
+
     </main>
     <%- include('../partials/header'); %>
+    <script src="/registration.js"></script>
 </body>
