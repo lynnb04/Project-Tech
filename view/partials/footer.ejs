@@ -1,25 +1,28 @@
 <footer>
-    <nav>
-        <ul>
-            <li><a href="/">
-                <span class="material-symbols-outlined">
-                    home
-                    </span>
-            </a></li>
-            <li><a href="/dashboard" class="active">
-                <span class="material-symbols-outlined">dashboard</span>
-              </a></li>              
-            <li><a href="/matching">
-                <span class="material-symbols-outlined">
-                    handshake
-                    </span>
-            </a></li>
-            <li><a href="/profile" class="active">
-                <span class="material-symbols-outlined">
-                    person
-                    </span>
-            </a></li>
-        </ul>
-    </nav>
-    
+  <nav>
+    <ul>
+      <li>
+        <a href="/" class="<%= currentPath === '/' ? 'active' : '' %>">
+          <span class="material-symbols-outlined">home</span>
+        </a>
+      </li>
+      <li>
+        <a href="/dashboard" class="<%= currentPath === '/dashboard' ? 'active' : '' %>">
+          <span class="material-symbols-outlined">dashboard</span>
+        </a>
+      </li>
+      <li>
+        <a href="/matching" class="<%= currentPath === '/matching' ? 'active' : '' %>">
+          <span class="material-symbols-outlined">handshake</span>
+        </a>
+      </li>
+      <li>
+        <a href="/profile" class="<%= currentPath === '/profile' ? 'active' : '' %>">
+          <span class="material-symbols-outlined">person</span>
+        </a>
+      </li>
+    </ul>
+  </nav>
+
+  <!-- DEBUG: <%= currentPath %> -->
 </footer>
