@@ -16,12 +16,15 @@
 
         <section class="profiel">
 
+            <!-- knop die instellingen ontgrendelt -->
+            <div class="center-wrapper">
+            <button type="button" class="fullscreen-button" onclick="enableEditing()">Bewerk instellingen</button>
+            </div>
+
             <h1>Profiel</h1>
 
-            <!-- knop die instellingen ontgrendelt -->
-            <button type="button" class="fullscreen-button" onclick="enableEditing()">Bewerk instellingen</button>
-
             <!-- formulier -->
+        <div class="form-wrapper">
             <form action="/settings" method="POST" enctype="multipart/form-data">
 
                 <div class="profielfoto">
@@ -70,6 +73,7 @@
                     <input type="text" name="bio" placeholder="Vertel iets over jezelf..." disabled/><br>
                 </div>
             </form>
+        </div>
 
             <script>
                 function enableEditing() {
@@ -111,29 +115,38 @@
             <h1>Concertvoorkeuren</h1>
 
             <form id="concertForm">
-                <label>Genre's</label><br>
-                    <div class="genres"></div>
-                        <!-- vervangen door genre's uit overview -->
-                        <label><input type="checkbox" name="genre" value="Genre" disabled> Genre</label><br>
-                    </div>
 
-                <label>Artiesten</label><br>
-                    <div class="artiesten"></div>
-                        <!-- vervangen door artiesten uit overview + zoekbalk -->
-                        <label><input type="checkbox" name="artiest" value="Artiest" disabled> Artiest</label><br>
-                    </div>
+                <fieldset>
+                    <legend>Genre's</legend><br>
+                        <div class="genres"></div>
+                            <!-- vervangen door genre's uit overview -->
+                            <label><input type="checkbox" name="genre" value="Genre" disabled> Genre</label><br>
+                        </div>
+                </fieldset>
 
-                <label>Sfeer</label><br>
-                    <div class="sfeer"></div>
-                        <!-- vervangen door sferen uit overview -->
-                        <label><input type="checkbox" name="sfeer" value="Sfeer" disabled> Sfeer</label><br>
-                    </div>
+                <fieldset>
+                    <legend>Artiesten</legend><br>
+                        <div class="artiesten"></div>
+                            <!-- vervangen door artiesten uit overview + zoekbalk -->
+                            <label><input type="checkbox" name="artiest" value="Artiest" disabled> Artiest</label><br>
+                        </div>
+                </fieldset>
 
-                <label>Locatie</label><br>
-                    <div class="locatie"></div>
-                        <!-- vervangen door locaties uit overview -->
-                        <label><input type="checkbox" name="locatie" value="Locatie" disabled> Locatie</label><br>
-                    </div>
+                <fieldset>
+                    <legend>Sfeer</legend><br>
+                        <div class="sfeer"></div>
+                            <!-- vervangen door sferen uit overview -->
+                            <label><input type="checkbox" name="sfeer" value="Sfeer" disabled> Sfeer</label><br>
+                        </div>
+                </fieldset>
+
+                <fieldset>
+                    <label>Locatie</label><br>
+                        <div class="locatie"></div>
+                            <!-- vervangen door locaties uit overview -->
+                            <label><input type="checkbox" name="locatie" value="Locatie" disabled> Locatie</label><br>
+                        </div>
+                </fieldset>
             </form>
         </section>
        
