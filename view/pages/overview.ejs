@@ -6,14 +6,14 @@
     <title>Document</title>
     <link rel="stylesheet" href="/styles.css">
     <link rel="stylesheet" href="/overview.css">
-    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined" rel="stylesheet">
 </head>
 <body>
     <%- include('../partials/header'); %>
     <main>
 
-            <!-- Zoekbalk -->
-    <form method="GET" action="/concerten" role="search" class="search-bar">
+    <!-- Zoekbalk -->
+    <div class="search-bar-container">
+      <form method="GET" action="/concerten" role="search" class="search-bar">
         <input 
           type="search" 
           name="q" 
@@ -21,40 +21,51 @@
           value="<%= typeof query !== 'undefined' ? query : '' %>"
         />
       </form>
-  
-            <!-- Filter en Sorteer knoppen -->
+    </div>
+
+    <!-- Filter- en sorteerknoppen -->
+    <div class="controls-container">
       <nav class="controls">
-        <button class="filter" type="button">Filter</button>
-        <span class="filter-count">0</span>
+        <div class="filter-wrapper">
+          <button class="filter" type="button">Filter</button>
+          <span class="filter-count hidden">0</span>
+        </div>
         <button class="sort" type="button">Sorteren</button>
       </nav>
+    </div>
 
       <!-- Uitklapbaar filtermenu -->
-      <div class="filter-menu hidden">
-        <details name="filter">
+      <form class="filter-menu hidden" method="GET" action="/overview">
+        <details open name="filter">
           <summary>Locatie</summary>
             <div class="filter-options" data-filter-group="locatie">
                 <% cities.forEach(function(city) { %>
-                <div class="filter-tag" data-value="<%= city %>"><%= city %></div>
+                <div class="filter-tag" data-value="<%= city %>" data-selected="<%= selectedCities.includes(city) ? 'true' : 'false' %>"><%= city %></div>
             <% }); %>
           </div>
         </details>
         <details name="filter">
           <summary>Datum</summary>
             <div>
-                <label>Vanaf: <input type="date" class="date-filter" id="date-from"></label><br>
-                <label>Tot aan: <input type="date" class="date-filter" id="date-to"></label>
+                <label>Vanaf: <input type="date" class="date-filter" id="date-from" name="dateFrom" value="<%= dateFrom || '' %>"></label><br>
+                <label>Tot aan: <input type="date" class="date-filter" id="date-to" name="dateTo" value="<%= dateTo || '' %>"></label>
             </div>
         </details>
         <details name="filter">
           <summary>Genre</summary>
-            <div class="filter-options" data-filter-group="genre">
-                <% genres.forEach(function(genre) { %>
-                <div class="filter-tag" data-value="<%= genre %>"><%= genre %></div>
-                <% }); %>
-            </div>
+          <ul class="genres">
+            <% genres.forEach(function(genre) { %>
+              <li>
+                  <label for="<%= genre %>">
+                    <input type="checkbox" name="genres" value="<%= genre %>" id="<%= genre %>" <%= selectedGenres.includes(genre) ? 'checked' : '' %>>
+                    <%= genre %>
+                  </label>
+              </li>
+            <% }); %>
+          </ul>
         </details>
-      </div>
+        <input type="submit" value="Apply Filters" class="filter-submit">
+    </form>
 
     <!-- Concert cards -->
     <section>
@@ -70,27 +81,20 @@
                         
                         <!-- niet elk concert heeft een genre of subgenre dus hier code om dit op te lossen -->
                         <div>
-                            <% if (
-                                event.classifications &&
-                                event.classifications.length > 0 &&
-                                event.classifications[0].genre &&
-                                event.classifications[0].genre.name
-                                ) { %>
-                                <p><%= event.classifications[0].genre.name %></p>
-                                <% } else { %>
-                                <p>Niet beschikbaar</p>
-                            <% } %>
-
-                            <% if (
-                                event.classifications &&
-                                event.classifications.length > 0 &&
-                                event.classifications[0].subGenre &&
-                                event.classifications[0].subGenre.name
-                                ) { %>
-                                <p><%= event.classifications[0].subGenre.name %></p>
-                                <% } else { %>
-                                <p>Niet beschikbaar</p>
-                            <% } %>
+                          <% 
+                          const genre = event.classifications?.[0]?.genre?.name;
+                          const subgenre = event.classifications?.[0]?.subGenre?.name;
+                        %>
+                        
+                        <% if (genre) { %>
+                          <p><%= genre %></p>
+                        <% } else { %>
+                          <p>Niet beschikbaar</p>
+                        <% } %>
+                        
+                        <% if (subgenre && subgenre !== genre) { %>
+                          <p><%= subgenre %></p>
+                        <% } %>
                         </div>
                         
 

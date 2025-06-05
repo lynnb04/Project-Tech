@@ -28,6 +28,13 @@ app.use(express.static('styles'));
 app.use(express.static('script'));
 app.use('/uploads', express.static('uploads'));
 
+// Footer link actief
+app.use((req, res, next) => {
+  res.locals.currentPath = req.path;
+  next();
+});
+
+
 // set the view engine to ejs
 app.set('view engine', 'ejs');
 
@@ -136,37 +143,104 @@ app.get('/matching', function(req, res) {
 });
 
 // overview
-app.get('/overview',async function(req, res) {
-    const url = `${process.env.API_URL}?countryCode=NL&segmentName=Music&size=100&apikey=${process.env.API_KEY}`;
+app.get('/overview', async function (req, res) {
+    // Haal filters uit de query
+    const selectedGenres = req.query.genres || [];
+    const selectedCities = req.query.cities || [];
+    const dateFrom = req.query.dateFrom;
+    const dateTo = req.query.dateTo;
+  
+    // API URLs
+    const urlEvents = `${process.env.API_URL}?countryCode=NL&segmentName=Music&size=100&apikey=${process.env.API_KEY}`;
+    const urlGenres = `${process.env.API_URL_GENRES}?apikey=${process.env.API_KEY}`;
   
     try {
-        const response = await fetch(url);
-        const data = await response.json();
-        const events = data._embedded?.events || [];
-    
-        // genres
-        const genresSet = new Set();
-        // cities
-        const citiesSet = new Set();
-    
-        events.forEach(event => {
+      // Genres ophalen
+      const genresResponse = await fetch(urlGenres);
+      const genresData = await genresResponse.json();
+  
+      const classifications = genresData._embedded?.classifications || [];
+      const genresSet = new Set();
+  
+      classifications.forEach(classification => {
+        const segment = classification.segment;
+        if (segment?.name === "Music" && segment._embedded?.genres) {
+          segment._embedded.genres.forEach(genre => {
+            if (genre.name) genresSet.add(genre.name);
+          });
+        }
+      });
+  
+      const genres = Array.from(genresSet).sort();
+  
+      // Evenementen ophalen
+      const eventsResponse = await fetch(urlEvents);
+      const eventsData = await eventsResponse.json();
+      let events = eventsData._embedded?.events || [];
+  
+      // Filters toepassen
+      if (selectedGenres.length || selectedCities.length || dateFrom || dateTo) {
+        events = events.filter(event => {
           const genre = event.classifications?.[0]?.genre?.name;
-          if (genre) genresSet.add(genre);
-    
           const city = event._embedded?.venues?.[0]?.city?.name;
-          if (city) citiesSet.add(city);
+          const date = new Date(event.dates.start.localDate);
+  
+          // Genre filter
+          if (selectedGenres.length && (!genre || !selectedGenres.includes(genre))) {
+            return false;
+          }
+  
+          // City filter
+          if (selectedCities.length && (!city || !selectedCities.includes(city))) {
+            return false;
+          }
+  
+          // Date filters
+          if (dateFrom && date < new Date(dateFrom)) {
+            return false;
+          }
+  
+          if (dateTo && date > new Date(dateTo)) {
+            return false;
+          }
+  
+          return true;
         });
-    
-        const genres = Array.from(genresSet);
-        const cities = Array.from(citiesSet);
-    
-        res.render('pages/overview', { events, genres, cities });
-
-      } catch (error) {
-        console.error("Fout bij ophalen data:", error);
-        res.render('pages/overview', { events: [], genres: [], cities: [] });
       }
-    });
+  
+      // Unieke steden verzamelen uit de gefilterde events
+      const citiesSet = new Set();
+      events.forEach(event => {
+        const city = event._embedded?.venues?.[0]?.city?.name;
+        if (city) citiesSet.add(city);
+      });
+  
+      const cities = Array.from(citiesSet).sort();
+  
+      // Pagina renderen
+      res.render('pages/overview', {
+        events,
+        genres,
+        cities,
+        selectedGenres,
+        selectedCities,
+        dateFrom,
+        dateTo
+      });
+  
+    } catch (error) {
+      console.error("Fout bij ophalen data:", error);
+      res.render('pages/overview', {
+        events: [],
+        genres: [],
+        cities: [],
+        selectedGenres: [],
+        selectedCities: [],
+        dateFrom: null,
+        dateTo: null
+      });
+    }
+  });
 
 // profile
 app.get('/profile', function(req, res) {
@@ -181,10 +255,10 @@ app.get('/profile-settings', function(req, res) {
 // registration
 // --------------------
 app.get('/registration', async function (req, res) {
-    const url = `${process.env.API_URL_GENRES}?apikey=${process.env.API_KEY}`;
+    const urlGenres = `${process.env.API_URL_GENRES}?apikey=${process.env.API_KEY}`;
   
     try {
-      const response = await fetch(url);
+      const response = await fetch(urlGenres);
       const data = await response.json();
   
       // Haal alle classificaties eruit
