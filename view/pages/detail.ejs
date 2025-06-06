@@ -8,51 +8,68 @@
   <link rel="stylesheet" href="/detail.css" />
 </head>
 <body>
-  <%- include('../partials/header'); %>
+    <%- include('../partials/header'); %>
 
-  <main>
-    <article>
-      <div class="card-img-wrapper">
-        <img src="<%= event.images[0].url %>" alt="Foto van event" />
-        <% 
-          const dateParts = event.dates.start.localDate.split("-");
-          const day = dateParts[2];
-          const month = new Date(event.dates.start.localDate).toLocaleString('nl-NL', { month: 'short' });
-        %>
-        <div class="card-date">
-          <span class="day"><%= day %></span>
-          <span class="month"><%= month %></span>
+    <main>
+      <article>
+        <div class="card-img-wrapper">
+          <!-- Afbeelding (pak eerst de derde afbeelding, anders de eerste) -->
+          <img src="<%= event.images[2]?.url || event.images[0].url %>" alt="Foto van event" />
+          
+          <% 
+            const dateParts = event.dates.start.localDate.split("-");
+            const day = parseInt(dateParts[2], 10);
+            const month = new Date(event.dates.start.localDate).toLocaleString('nl-NL', { month: 'short' });
+          %>
+          <div class="card-date">
+            <span class="day"><%= day %></span>
+            <span class="month"><%= month %></span>
+          </div>
+    
+          <!-- Close button toegevoegd (met link terug naar home of lijstpagina) -->
+          <a class="close-btn" href="/">
+            <img src="/static/close_button.svg" alt="Sluit detailpagina">
+          </a>
+        </div> 
+    
+        <h1><%= event.name %></h1>
+    
+        <!-- Tijd weergave met icoon en begin- & eindtijd -->
+        <div class="time-tag">
+          <img src="/static/time_icon.svg" alt="Begin- en eindtijd">
+          <p><%= event.dates.start.localTime ? event.dates.start.localTime.slice(0, 5) : 'Tijd onbekend' %></p>
+          <p>-</p>
+          <p><%= event.dates.start.localTime ? event.dates.start.localTime.slice(0, 5) : 'Tijd onbekend' %></p>
         </div>
-      </div>
-
-      <h1><%= event.name %></h1>
-
-      <p class="time-tag"><%= event.dates.start.localTime ? event.dates.start.localTime.slice(0, 5) : 'Tijd onbekend' %></p>
-
-      <p><strong><%= event._embedded.venues[0].name %></strong>,</p>
-      <p><%= event._embedded.venues[0].city.name %></p>
-
-      <div class="genre-container">
-        <% const genre = event.classifications?.[0]?.genre?.name; %>
-        <% const subgenre = event.classifications?.[0]?.subGenre?.name; %>
-
-        <% if (genre) { %>
-          <div class="genre-tag"><%= genre %></div>
+    
+        <p><strong><%= event._embedded.venues[0].name %></strong></p>
+        <p><%= event._embedded.venues[0].city.name %></p>
+    
+        <div class="genre-container">
+          <% const genre = event.classifications?.[0]?.genre?.name; %>
+          <% const subgenre = event.classifications?.[0]?.subGenre?.name; %>
+    
+          <% if (genre) { %>
+            <div class="genre-tag"><%= genre %></div>
+          <% } %>
+    
+          <% if (subgenre && subgenre !== genre) { %>
+            <div class="subgenre-tag"><%= subgenre %></div>
+          <% } %>
+        </div>
+    
+        <!-- Button “Ik ga naar dit Event!” zoals in oude code -->
+        <button class="btn">Ik ga naar dit Event!</button>
+    
+        <!-- Link naar tickets -->
+        <% if (event.url) { %>
+          <p>
+            <a class="tickets" href="<%= event.url %>" target="_blank" rel="noopener noreferrer">Bekijk beschikbare tickets</a>
+          </p>
         <% } %>
-
-        <% if (subgenre && subgenre !== genre) { %>
-          <div class="subgenre-tag"><%= subgenre %></div>
-        <% } %>
-      </div>
-
-      <% if (event.url) { %>
-        <p>
-          <a class="tickets" href="<%= event.url %>" target="_blank" rel="noopener noreferrer">Bekijk beschikbare tickets</a>
-        </p>
-      <% } %>
-    </article>
-  </main>
-
-  <%- include('../partials/footer'); %>
+      </article>
+    </main>
+    
+    <%- include('../partials/footer'); %>
 </body>
 </html>
