@@ -121,19 +121,19 @@ app.post('/form', upload.single('img'), async (req, res) => {
     }
 });
 
-app.get('/detail', async function(req, res) {
-    const url = `${process.env.API_URL}?countryCode=NL&segmentName=Music&apikey=${process.env.API_KEY}`;
+// app.get('/detail', async function(req, res) {
+//     const url = `${process.env.API_URL}?countryCode=NL&segmentName=Music&apikey=${process.env.API_KEY}`;
   
-    try {
-      const response = await fetch(url);
-      const data = await response.json();
-      const events = data._embedded?.events || [];
-      res.render('pages/detail', { events });
-    } catch (error) {
-      console.error("Fout bij ophalen data:", error);
-      res.render('pages/detail', { events: [] });
-    }
-  });
+//     try {
+//       const response = await fetch(url);
+//       const data = await response.json();
+//       const events = data._embedded?.events || [];
+//       res.render('pages/detail', { events });
+//     } catch (error) {
+//       console.error("Fout bij ophalen data:", error);
+//       res.render('pages/detail', { events: [] });
+//     }
+//   });
 
 
 
@@ -230,7 +230,8 @@ app.get('/profile', function(req, res) {
 });
 
 // profile settings
- const fs = require('fs');
+// --------------------
+const fs = require('fs');
  const port = 3000;
 
 // zorgt dat de uploads folder altijd bestaat
@@ -278,7 +279,6 @@ app.get('/profile', function(req, res) {
  app.listen(port, () => {
    console.log(`Server running at http://localhost:${port}`);
  });
-
 
 // registration
 // --------------------
@@ -423,4 +423,24 @@ async function compareData(plainTextData, hashedData) {
 app.use((req, res, next) => {
     res.locals.currentPath = req.path;
     next();
+  });
+
+  app.get('/detail/:id', async (req, res) => {
+    const eventId = req.params.id;
+    const url = `${process.env.API_URL_DETAIL}/${eventId}.json?apikey=${process.env.API_KEY}`;
+  
+    try {
+      const response = await fetch(url);
+  
+      if (!response.ok) {
+        throw new Error(`API error: ${response.status} ${response.statusText}`);
+      }
+  
+      const event = await response.json();
+  
+      res.render('pages/detail', { event });
+    } catch (error) {
+      console.error("Fout bij ophalen event detail:", error);
+      res.render('pages/detail', { event: null, error: 'Event niet gevonden.' });
+    }
   });

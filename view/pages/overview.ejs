@@ -11,22 +11,28 @@
     <%- include('../partials/header'); %>
     <main>
 
-    <!-- Zoekbalk (zonder extra div of class) -->
-    <form method="GET" action="/concerten" role="search">
-      <input 
-        type="search" 
-        name="q" 
-        placeholder="Zoek concerten..." 
-        value="<%= typeof query !== 'undefined' ? query : '' %>"
-      />
-    </form>
+    <!-- Zoekbalk -->
+    <div class="search-bar-container">
+      <form method="GET" action="/concerten" role="search" class="search-bar">
+        <input 
+          type="search" 
+          name="q" 
+          placeholder="Zoek concerten..." 
+          value="<%= typeof query !== 'undefined' ? query : '' %>"
+        />
+      </form>
+    </div>
 
-    <!-- Filter- en sorteerknoppen (zonder extra div-wrappers) -->
-    <nav class="controls">
-      <button class="filter" type="button">Filter</button>
-      <span class="filter-count hidden">0</span>
-      <button class="sort" type="button">Sorteren</button>
-    </nav>
+    <!-- Filter- en sorteerknoppen -->
+    <div class="controls-container">
+      <nav class="controls">
+        <div class="filter-wrapper">
+          <button class="filter" type="button">Filter</button>
+          <span class="filter-count hidden">0</span>
+        </div>
+        <button class="sort" type="button">Sorteren</button>
+      </nav>
+    </div>
 
       <!-- Uitklapbaar filtermenu -->
       <form class="filter-menu hidden" method="GET" action="/overview">
@@ -67,32 +73,27 @@
             <ul>
                 <% events.forEach(function(event) { %>
                     <li>
+                        <a class="card-link" href="/detail/<%= event.id %>"></a>
+                      
                         <img src="<%= event.images[1].url %>" alt="Foto van Event">
                         <h1><%= event.name %></h1>
-                        
                         <p><%= event.dates.start.localDate %></p>
                         <p><%= event._embedded.venues[0].city.name %></p>
-                        
-                        <!-- niet elk concert heeft een genre of subgenre dus hier code om dit op te lossen -->
                         <div>
-                          <% 
-                          const genre = event.classifications?.[0]?.genre?.name;
-                          const subgenre = event.classifications?.[0]?.subGenre?.name;
-                        %>
-                        
-                        <% if (genre) { %>
-                          <p><%= genre %></p>
-                        <% } else { %>
-                          <p>Other</p>
-                        <% } %>
-                        
-                        <% if (subgenre && subgenre !== genre) { %>
-                          <p><%= subgenre %></p>
-                        <% } %>
+                          <% const genre = event.classifications?.[0]?.genre?.name; %>
+                          <% const subgenre = event.classifications?.[0]?.subGenre?.name; %>
+                      
+                          <% if (genre) { %>
+                            <p><%= genre %></p>
+                          <% } else { %>
+                            <p>Other</p>
+                          <% } %>
+                      
+                          <% if (subgenre && subgenre !== genre) { %>
+                            <p><%= subgenre %></p>
+                          <% } %>
                         </div>
-                        
-
-                    </li>
+                      </li>
                 <% }); %>
             </ul>
         </article>
