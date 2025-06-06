@@ -10,8 +10,13 @@ main{
   padding: 1em;
 }
 
+main{
+  padding: 1em;
+}
+
 body {
   background-color: var(--background);
+  padding: 1em;
 }
 
 /* Zoekbalk */
@@ -142,13 +147,13 @@ article li > div{
 
 article li > div p{
   font-size: .85em;
-  display: block;
-  margin-top: 0.5em;
-  margin-bottom: 1em;
-  padding: 0.3em 0.75em;
-  border-radius: 999em;
-  /* font-size: 0.85em; */
-  color: #fff;
+    display: block;
+    margin-top: 0.5em;
+    margin-bottom: 1em;
+    padding: 0.3em 0.75em;
+    border-radius: 999em;
+    /* font-size: 0.85em; */
+    color: #fff;
 }
 
 article li > div p:nth-of-type(1){
@@ -156,6 +161,14 @@ article li > div p:nth-of-type(1){
 }
 article li > div p:nth-of-type(2){
   background-color: var(--blauw); 
+}
+
+.card-link {
+  position: absolute;
+  inset: 0; /* maakt de link zo groot als de <li> */
+  z-index: 10;
+  text-decoration: none;
+  color: inherit;
 }
 
 /* extra code van thomas voor animatie van de cards */

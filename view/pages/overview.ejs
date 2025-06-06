@@ -73,32 +73,27 @@
             <ul>
                 <% events.forEach(function(event) { %>
                     <li>
+                        <a class="card-link" href="/detail/<%= event.id %>"></a>
+                      
                         <img src="<%= event.images[1].url %>" alt="Foto van Event">
                         <h1><%= event.name %></h1>
-                        
                         <p><%= event.dates.start.localDate %></p>
                         <p><%= event._embedded.venues[0].city.name %></p>
-                        
-                        <!-- niet elk concert heeft een genre of subgenre dus hier code om dit op te lossen -->
                         <div>
-                          <% 
-                          const genre = event.classifications?.[0]?.genre?.name;
-                          const subgenre = event.classifications?.[0]?.subGenre?.name;
-                        %>
-                        
-                        <% if (genre) { %>
-                          <p><%= genre %></p>
-                        <% } else { %>
-                          <p>Other</p>
-                        <% } %>
-                        
-                        <% if (subgenre && subgenre !== genre) { %>
-                          <p><%= subgenre %></p>
-                        <% } %>
+                          <% const genre = event.classifications?.[0]?.genre?.name; %>
+                          <% const subgenre = event.classifications?.[0]?.subGenre?.name; %>
+                      
+                          <% if (genre) { %>
+                            <p><%= genre %></p>
+                          <% } else { %>
+                            <p>Other</p>
+                          <% } %>
+                      
+                          <% if (subgenre && subgenre !== genre) { %>
+                            <p><%= subgenre %></p>
+                          <% } %>
                         </div>
-                        
-
-                    </li>
+                      </li>
                 <% }); %>
             </ul>
         </article>
