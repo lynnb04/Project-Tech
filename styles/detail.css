@@ -9,16 +9,16 @@ ul{
 }
   
 h1 {
-    font-size: 1.2em;
+    font-size: 1.5em;
     color: var(--kop);
-    margin: 0.75em 0 0.5em 1em;
+    margin: 0.75em 0 0.5em 0.75em;
   }
   
 p {
     font-size: 1em;
     margin: 0.25em 0;
     color: var(--tekst);
-    margin-left: 1em;
+    margin: 0 1em 0 1em;
   }
 
 .card-img-wrapper {
@@ -40,7 +40,7 @@ p {
     bottom: 0.75em;
     left: 0.75em;
     background-color: var(--backgroundSecundary);
-    padding: 0.5em 0.5em;
+    padding: 0.6em .75em;
     border-radius: 0.5em;
     display: flex;
     flex-direction: column;
@@ -61,21 +61,46 @@ p {
     line-height: 1;
   }
 
-.time-tag {
-    display: inline-block;
+.time-tag{
+    display: inline-flex;
+    justify-items: center;
+    align-items: center;
     background-color: var(--backgroundSecundary);
     color: var(--tekst);
-    padding: 0.25em;
-    border-radius: 0.25em;
+    padding: 0.5em 0 0.5em 0;
+    border-radius: 5em;
     font-size: 1.2em;
-    margin: 0 0 0.25em 1em;
+    margin: 0 0 0.75em 0.75em;
+  }
+
+.time-tag img{
+    width: 1.2em;
+    height: 1.2em;
+    padding-left: 0.5em;
+}
+
+.time-tag p{
+    margin: 0 0.75em 0 0.75em;
+}
+
+.time-tag p:nth-last-of-type(2){
+    margin: 0;
+}
+
+.close-btn {
+    position: fixed;
+    top: 2em;
+    right: 1em;
+    width: 2em;
+    height: 2em;
+    z-index: 1000;
   }
 
 .genre-container {
     display: flex;
     flex-wrap: wrap;
     gap: 0.5em;
-    margin: 1em 0 3em 1em;
+    margin: 1em 0 1em 1em;
   }
   
 .genre-tag {
@@ -95,6 +120,20 @@ p {
     font-size: 0.9em;
     font-weight: 500;
   }
+
+.btn{
+    display: block;
+    margin: 3em auto 1em auto;
+    text-align: center;
+    font-family: 'Quicksand';
+    font-size: 1em;
+    color: var(--tekst);
+    background-color: var(--paars);
+    height: 2.875em;
+    width: 17.75em;
+    border: solid 0.0625em var(--paars);
+    border-radius: 2em;
+}
   
 .tickets {
     display: flex;
@@ -104,5 +143,5 @@ p {
     border: 0.08em solid var(--tekst);
     padding: 0.75em 1em;
     border-radius: 2em;
-    margin: 0 4em 0 3em;
+    margin: 0 3em 0 3em;
   }

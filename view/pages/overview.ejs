@@ -11,28 +11,22 @@
     <%- include('../partials/header'); %>
     <main>
 
-    <!-- Zoekbalk -->
-    <div class="search-bar-container">
-      <form method="GET" action="/concerten" role="search" class="search-bar">
-        <input 
-          type="search" 
-          name="q" 
-          placeholder="Zoek concerten..." 
-          value="<%= typeof query !== 'undefined' ? query : '' %>"
-        />
-      </form>
-    </div>
+    <!-- Zoekbalk (zonder extra div of class) -->
+    <form method="GET" action="/concerten" role="search">
+      <input 
+        type="search" 
+        name="q" 
+        placeholder="Zoek concerten..." 
+        value="<%= typeof query !== 'undefined' ? query : '' %>"
+      />
+    </form>
 
-    <!-- Filter- en sorteerknoppen -->
-    <div class="controls-container">
-      <nav class="controls">
-        <div class="filter-wrapper">
-          <button class="filter" type="button">Filter</button>
-          <span class="filter-count hidden">0</span>
-        </div>
-        <button class="sort" type="button">Sorteren</button>
-      </nav>
-    </div>
+    <!-- Filter- en sorteerknoppen (zonder extra div-wrappers) -->
+    <nav class="controls">
+      <button class="filter" type="button">Filter</button>
+      <span class="filter-count hidden">0</span>
+      <button class="sort" type="button">Sorteren</button>
+    </nav>
 
       <!-- Uitklapbaar filtermenu -->
       <form class="filter-menu hidden" method="GET" action="/overview">
