@@ -230,54 +230,10 @@ app.get('/profile', function(req, res) {
 });
 
 // profile settings
- const fs = require('fs');
- const port = 3000;
-
-// zorgt dat de uploads folder altijd bestaat
- const uploadDir = path.join(__dirname, 'uploads');
- if (!fs.existsSync(uploadDir)) {
-   fs.mkdirSync(uploadDir);
- }
-
-// EJS view engine
- app.set('view engine', 'ejs');
-
-// Middleware om URL-encoded form data te verwerken
- app.use(express.urlencoded({ extended: true }));
-
- app.use('/uploads', express.static(uploadDir));
- app.use('/public', express.static(path.join(__dirname, 'public')));
-
-// Multer storage configuratie
-
-
-// In-memory user data (vervang door database)
- let user = {
-   username: 'johndoe',
-   email: 'john@example.com',
-   profilePic: null
- };
-
-// Render profile settings page
- app.get('/profile-settings', (req, res) => {
-   res.render('pages/profileSettings', { user });
- });
-
-// formulier uploaden
- app.post('/profile-settings', upload.single('profilePic'), (req, res) => {
-   const { username, email } = req.body;
-   user.username = username;
-   user.email = email;
-   if (req.file) {
-     user.profilePic = req.file.filename;
-   }
-  // terug naar profile settings page
-   res.redirect('/profile-settings');
- });
-
- app.listen(port, () => {
-   console.log(`Server running at http://localhost:${port}`);
- });
+// --------------------
+app.get('/profile-settings', function(req, res) {
+    res.render('pages/profileSettings');
+});
 
 
 // registration
