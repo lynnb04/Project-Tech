@@ -106,6 +106,7 @@ input {
     bottom: 0;
     width: 100%;
     background-color: var(--backgroundSecundary);
+    z-index: 99;
   }
 
   footer a.active .material-symbols-outlined {

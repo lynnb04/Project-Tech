@@ -1,0 +1,91 @@
+main{
+    padding: 1em;
+}
+
+main ul{
+    padding: 0;
+}
+
+li.matches {
+    list-style: none;
+    font-family: 'Quicksand', sans-serif;
+}
+
+.matchFotoContainer{
+    position: relative;
+    width: 100%;
+    aspect-ratio: 1 / 1;
+    overflow: hidden;
+    border-radius: .5em;
+}
+
+.matchFotoContainer img{
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+}
+
+.matchNaam{
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    background: rgba(0, 0, 0, 0.2);
+    color: var(--tekst);
+    width: 100%;
+    padding: 0.5em;
+    box-sizing: border-box;
+    z-index: 5;
+}
+
+
+
+.matchGenres{
+    list-style: none;
+    display: flex;
+    flex-direction: column;
+}
+
+li.matchGenres {    
+    border: .1em solid var(--tekst);
+    border-radius: 999em;
+    padding: .3em;
+    display: inline-block; 
+    max-width: fit-content; 
+    margin: 0.1em;
+}
+
+
+.matchButtons{
+    display: flex;
+    justify-content: space-between;
+}
+
+.matches button{
+    width: 49%;
+    border-radius: .5em;
+    height: 2.8em;
+
+    border: none;
+	padding: 0;
+	font: inherit;
+	cursor: pointer;
+	outline: inherit;
+
+    font-family: 'Quicksand', sans-serif;
+    font-weight: 700;
+}
+
+.matches button:nth-of-type(1) {
+    color: var(--roze);
+    background-color: var(--backgroundSecundary);
+}
+
+.matches button:nth-of-type(2){
+    color: var(--background);
+    background-color: var(--roze);
+}
+
+.matches > li {
+    margin-bottom: 2em;
+  }

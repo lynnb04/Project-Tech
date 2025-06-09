@@ -165,7 +165,7 @@ article li > div p:nth-of-type(2){
 
 .card-link {
   position: absolute;
-  inset: 0; /* maakt de link zo groot als de <li> */
+  inset: 0; 
   z-index: 10;
   text-decoration: none;
   color: inherit;
