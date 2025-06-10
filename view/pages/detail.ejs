@@ -13,7 +13,6 @@
     <main>
       <article>
         <div class="card-img-wrapper">
-          <!-- Afbeelding (pak eerst de derde afbeelding, anders de eerste) -->
           <img src="<%= event.images[2]?.url || event.images[0].url %>" alt="Foto van event" />
           
           <% 
@@ -26,15 +25,18 @@
             <span class="month"><%= month %></span>
           </div>
     
-          <!-- Close button toegevoegd (met link terug naar home of lijstpagina) -->
           <a class="close-btn" href="/">
-            <img src="/static/close_button.svg" alt="Sluit detailpagina">
+            <img src="/static/close_button.svg" alt="Sluit pagina">
           </a>
         </div> 
     
-        <h1><%= event.name %></h1>
+        <div class="titel">
+          <h1><%= event.name %></h1>
+          <button class="favo-btn">
+            <img src="/static/heart_open.svg" alt="Toevoegen aan favorieten">
+          </button>
+        </div>
     
-        <!-- Tijd weergave met icoon en begin- & eindtijd -->
         <div class="time-tag">
           <img src="/static/time_icon.svg" alt="Begin- en eindtijd">
           <p><%= event.dates.start.localTime ? event.dates.start.localTime.slice(0, 5) : 'Tijd onbekend' %></p>
@@ -58,8 +60,7 @@
           <% } %>
         </div>
     
-        <!-- Button “Ik ga naar dit Event!” zoals in oude code -->
-        <button class="btn">Ik ga naar dit Event!</button>
+        <button>Ik ga naar dit Event!</button>
     
         <!-- Link naar tickets -->
         <% if (event.url) { %>
@@ -71,5 +72,6 @@
     </main>
     
     <%- include('../partials/footer'); %>
+    <script src="/detail.js"></script>
 </body>
 </html>
