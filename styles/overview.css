@@ -6,13 +6,18 @@ main * {
   font-family: 'Quicksand', Helvetica, Arial, sans-serif;
 }
 
-body {
-  background-color: var(--background);
+
+/* main{
   padding: 1em;
+} */
+
+main{
+  padding: 2em;
 }
 
-main {
-  padding: 1em;
+body {
+  background-color: var(--background);
+  /* padding: 1em; */
 }
 
 /* Zoekbalk (sticky) */

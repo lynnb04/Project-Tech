@@ -9,7 +9,7 @@
     <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined" rel="stylesheet">
 </head>
 <body>
-    <%- include('../partials/footer'); %>
+    <%- include('../partials/header'); %>
     <main>
         <form action="/registration" method="POST" enctype="multipart/form-data" class="persoonsGegevensWrapper">
             <fieldset id="persoonsGegevens">
@@ -55,7 +55,7 @@
             
             <fieldset id="matchVoorkeuren">
                 <legend>Matching voorkeuren</legend>
-                    <h2>met welke leeftijd wil je matchen</h2>
+                    <h2>Leeftijd</h2>
                     <div class="values">
                       <span id="range1">
                         0
@@ -71,14 +71,39 @@
                       <input type="range" min="18" max="100" value="70" id="slider-2" oninput="slideTwo()">
                     </div>
 
-                    <h2>met welke geslacht wil je matchen</h2>
+                    <h2>Geslacht</h2>
+                      <label for="man">man
+                        <input type="radio" name="geslacht" id="man">
+                      </label>
+                      <label for="vrouw">vrouw
+                        <input type="radio" name="geslacht" id="vrouw">
+                      </label>                      
+                      <label for="anders">anders
+                        <input type="radio" name="geslacht" id="anders">
+                      </label>        
+                      <label for="geenVoorkeur">geen voorkeur
+                        <input type="radio" name="geslacht" id="geenVoorkeur">
+                      </label>            
 
+                    <h2>taalvoorkeur</h2>
+                      <label for="nl">Nederlands
+                        <input type="radio" name="taal" id="nl">
+                      </label>
+                      <label for="en">English
+                        <input type="radio" name="taal" id="en">
+                      </label>
+                      <label for="nvt">Geen voorkeur
+                        <input type="radio" name="taal" id="nvt">
+                      </label>
+                      <label for="else">Anders
+                        <input type="text" name="taal" id="else">
+                      </label>
 
                 <!-- https://codepen.io/alexpg96/pen/xxrBgbP -->
             </fieldset>
         </form>
 
     </main>
-    <%- include('../partials/header'); %>
+    <%- include('../partials/footer'); %>
     <script src="/registration.js"></script>
 </body>
