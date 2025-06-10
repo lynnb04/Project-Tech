@@ -61,6 +61,29 @@ p {
     line-height: 1;
   }
 
+.titel{
+    display: grid;
+    grid-template-columns: 1fr auto;
+    align-items: start;
+    gap: 1em;  
+}
+  
+.favo-btn {
+    width: 3em;
+    height: 3em;
+    background: none;
+    border: none;
+    padding: 0;
+    margin: 1em 1em 0 0;
+}
+  
+.favo-btn img {
+    width: 100%;
+    height: 100%;
+    display: block;
+    object-fit: contain;
+}
+
 .time-tag{
     display: inline-flex;
     justify-items: center;
@@ -71,7 +94,7 @@ p {
     border-radius: 5em;
     font-size: 1.2em;
     margin: 0 0 0.75em 0.75em;
-  }
+}
 
 .time-tag img{
     width: 1.2em;
@@ -89,7 +112,7 @@ p {
 
 .close-btn {
     position: fixed;
-    top: 2em;
+    top: 1em;
     right: 1em;
     width: 2em;
     height: 2em;
@@ -121,7 +144,7 @@ p {
     font-weight: 500;
   }
 
-.btn{
+button{
     display: block;
     margin: 3em auto 1em auto;
     text-align: center;
