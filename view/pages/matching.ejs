@@ -4,12 +4,43 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Document</title>
+    <link rel="stylesheet" href="/styles.css" />
+    <link rel="stylesheet" href="/matching.css" />
     <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined" rel="stylesheet">
 </head>
 <body>
     <%- include('../partials/header'); %>
     <main>
-        
+        <h1>Gebruikers</h1>
+        <ul class="matches">
+            <% users.forEach(user => { %>
+                <li>
+                    <div class="matchFotoContainer">
+                        <% if (user.imagePath) { %>
+                        <img src="<%= user.imagePath %>" alt="User Image" width="100">
+                        <% } %>
+                        <div class="matchNaam">
+                            <h2><%= user.firstName %> <%= user.lastName %></h2>
+                            <p><%= user.age %></p>
+                        </div>
+                    </div>
+                    <% if (user.genres && user.genres.length) { %>
+                        <ul>
+                        <% user.genres.forEach(genre => { %>
+                            <li class="matchGenres"><%= genre %></li>
+                        <% }) %>
+                        </ul>
+                    <% } else { %>
+                        Geen genres gekozen
+                    <% } %>
+                    <div class="matchButtons">
+                        <button>Overslaan</button>
+                        <button>Toevoegen</button> 
+                    </div>
+                    
+                </li>
+            <% }) %>
+        </ul>
     </main>
     <%- include('../partials/footer'); %>
 </body>

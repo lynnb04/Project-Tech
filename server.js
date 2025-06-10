@@ -140,8 +140,15 @@ app.post('/form', upload.single('img'), async (req, res) => {
 
 // matching pagina
 // --------------------
-app.get('/matching', function(req, res) {
-    res.render('pages/matching');
+app.get('/matching', async (req, res) => {
+    console.log("Matching-pagina opgevraagd!");
+    try {
+        const users = await db.collection('users').find().toArray();
+        res.render('pages/matching', { users }); // matching.ejs of matching.pug, afhankelijk van je view engine
+    } catch (error) {
+        console.error('Error fetching users:', error);
+        res.status(500).send('Kan gebruikers niet ophalen.');
+    }
 });
 
 // overview
