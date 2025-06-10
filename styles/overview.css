@@ -6,17 +6,17 @@ main * {
   font-family: 'Quicksand', Helvetica, Arial, sans-serif;
 }
 
-main{
+/* main{
   padding: 1em;
-}
+} */
 
 main{
-  padding: 1em;
+  padding: 2em;
 }
 
 body {
   background-color: var(--background);
-  padding: 1em;
+  /* padding: 1em; */
 }
 
 /* Zoekbalk */
