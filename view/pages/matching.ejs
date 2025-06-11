@@ -24,9 +24,9 @@
                             <p><%= user.age %></p>
                         </div>
                     </div>
-                    <% if (user.genres && user.genres.length) { %>
+                    <% if (user.preferences && user.preferences.genres && user.preferences.genres.length) { %>
                         <ul>
-                        <% user.genres.forEach(genre => { %>
+                        <% user.preferences.genres.forEach(genre => { %>
                             <li class="matchGenres"><%= genre %></li>
                         <% }) %>
                         </ul>
