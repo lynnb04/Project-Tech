@@ -423,7 +423,9 @@ app.post("/login", async (req, res) => {
 
     if (match) {
       req.session.isLoggedIn = true; // Set session variable
-      req.session.user = { id: zoekBezoeker.id, email: zoekBezoeker.email }; // Store user info in session
+      req.session.user = {
+        id: zoekBezoeker._id.toString() // altijd als string opslaan
+      };
 
       return res.redirect("/account"); // Redirect to account page on successful login
     } else {
@@ -435,10 +437,41 @@ app.post("/login", async (req, res) => {
   }
 });
 
-app.get("/account", isLoggedIn, (req, res) => {
-  const user = req.session.user; // Retrieve user info from session
-  res.render("pages/account", { user }); // Pass user data to the view
+// app.get("/account", isLoggedIn, (req, res) => {
+//   const user = req.session.user; // Retrieve user info from session
+//   res.render("pages/account", { user }); // Pass user data to the view
+// });
+
+// app.get("/account", isLoggedIn, (req, res) => {
+//     const user = req.session.user;
+//     console.log("Gebruiker in sessie:", user);
+//     res.render("pages/account", { user });
+//   });
+const { ObjectId } = require('mongodb'); // bovenaan je bestand
+
+app.get("/account", isLoggedIn, async (req, res) => {
+  try {
+    const userId = req.session.user?.id;
+
+    if (!userId) {
+      return res.redirect("/");
+    }
+
+    const gebruiker = await db.collection('users').findOne({ _id: new ObjectId(userId) });
+
+    if (!gebruiker) {
+      return res.status(404).send("Gebruiker niet gevonden.");
+    }
+
+    res.render("pages/account", { user: gebruiker });
+  } catch (error) {
+    console.error("Fout bij ophalen gebruiker:", error);
+    res.status(500).send("Fout bij ophalen gebruiker");
+  }
 });
+
+
+
 
 app.post("/logout", (req, res) => {
   req.session.destroy((err) => {
