@@ -43,6 +43,7 @@ app
     .set('views','view')
 
 const session = require('express-session')
+
 app.use(session({
     //Sla de sessie niet opnieuw op als deze onveranderd is
     resave: false,
@@ -382,7 +383,7 @@ app.post('/registration', upload.single('img'), async (req, res) => {
 // Middleware for session management
 app.use(
   session({
-    secret: process.env.SESSION_KEY,
+    secret: process.env.SESSION_SECRET,
     resave: false, // Prevent unnecessary session saving
     saveUninitialized: false, // Do not save empty sessions
     cookie: {
