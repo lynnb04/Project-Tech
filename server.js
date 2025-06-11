@@ -2,6 +2,7 @@ const express = require("express")
 const multer  = require('multer')
 const path = require('path')
 const bcrypt = require('bcryptjs');
+const { ObjectId } = require('mongodb');
 
 // Configure multer storage
 const storage = multer.diskStorage({
@@ -43,6 +44,7 @@ app
     .set('views','view')
 
 const session = require('express-session')
+
 app.use(session({
     //Sla de sessie niet opnieuw op als deze onveranderd is
     resave: false,
@@ -53,7 +55,7 @@ app.use(session({
 }))
  
 // ATLAS MONGDOB APPLICATIONC ODE
-const { MongoClient, Objectid} = require("mongodb");
+const { MongoClient } = require("mongodb");
 // Mango configuratie uit .env bestand
 const uri = process.env.URI;
 // nieuwe MongoDB client
@@ -121,27 +123,45 @@ app.post('/form', upload.single('img'), async (req, res) => {
     }
 });
 
-app.get('/detail', async function(req, res) {
-    const url = `${process.env.API_URL}?countryCode=NL&segmentName=Music&apikey=${process.env.API_KEY}`;
+// app.get('/detail', async function(req, res) {
+//     const url = `${process.env.API_URL}?countryCode=NL&segmentName=Music&apikey=${process.env.API_KEY}`;
   
-    try {
-      const response = await fetch(url);
-      const data = await response.json();
-      const events = data._embedded?.events || [];
-      res.render('pages/detail', { events });
-    } catch (error) {
-      console.error("Fout bij ophalen data:", error);
-      res.render('pages/detail', { events: [] });
-    }
-  });
+//     try {
+//       const response = await fetch(url);
+//       const data = await response.json();
+//       const events = data._embedded?.events || [];
+//       res.render('pages/detail', { events });
+//     } catch (error) {
+//       console.error("Fout bij ophalen data:", error);
+//       res.render('pages/detail', { events: [] });
+//     }
+//   });
 
 
 
 
 // matching pagina
 // --------------------
-app.get('/matching', function(req, res) {
-    res.render('pages/matching');
+app.get('/matching', async (req, res) => {
+    try {
+        // Get the current user's ID from the session
+        const currentUserId = req.session.user?.id;
+        
+        // If user is not logged in, redirect to login page
+        if (!currentUserId) {
+            return res.redirect('/');
+        }
+
+        // Find all users except the current user
+        const users = await db.collection('users').find({
+            _id: { $ne: new ObjectId(currentUserId) }
+        }).toArray();
+
+        res.render('pages/matching', { users });
+    } catch (error) {
+        console.error('Error fetching users:', error);
+        res.status(500).send('Kan gebruikers niet ophalen.');
+    }
 });
 
 // overview
@@ -231,10 +251,54 @@ app.get('/profile', function(req, res) {
 
 // profile settings
 // --------------------
-app.get('/profile-settings', function(req, res) {
-    res.render('pages/profileSettings');
-});
+const fs = require('fs');
+ const port = 3000;
 
+// zorgt dat de uploads folder altijd bestaat
+ const uploadDir = path.join(__dirname, 'uploads');
+ if (!fs.existsSync(uploadDir)) {
+   fs.mkdirSync(uploadDir);
+ }
+
+// EJS view engine
+ app.set('view engine', 'ejs');
+
+// Middleware om URL-encoded form data te verwerken
+ app.use(express.urlencoded({ extended: true }));
+
+ app.use('/uploads', express.static(uploadDir));
+ app.use('/public', express.static(path.join(__dirname, 'public')));
+
+// Multer storage configuratie
+
+
+// In-memory user data (vervang door database)
+ let user = {
+   username: 'johndoe',
+   email: 'john@example.com',
+   profilePic: null
+ };
+
+// Render profile settings page
+ app.get('/profile-settings', (req, res) => {
+   res.render('pages/profileSettings', { user });
+ });
+
+// formulier uploaden
+ app.post('/profile-settings', upload.single('profilePic'), (req, res) => {
+   const { username, email } = req.body;
+   user.username = username;
+   user.email = email;
+   if (req.file) {
+     user.profilePic = req.file.filename;
+   }
+  // terug naar profile settings page
+   res.redirect('/profile-settings');
+ });
+
+ app.listen(port, () => {
+   console.log(`Server running at http://localhost:${port}`);
+ });
 
 // registration
 // --------------------
@@ -272,7 +336,55 @@ app.get('/registration', async function (req, res) {
     }
   });
 
+// post voor registration
+app.post('/registration', upload.single('img'), async (req, res) => {
+    try {
+        const {
+            firstName,
+            lastName,
+            email,
+            password,
+            age,
+            bio,
+            minAge,
+            maxAge,
+            geslacht,
+            taal,
+            genres
+        } = req.body;
 
+        // Controlle
+        if (!firstName || !email || !password) {
+            return res.status(400).send('Vul alle verplichte velden in.');
+        }
+
+        const newUser = {
+            firstName,
+            lastName,
+            email,
+            password: await hashData(password),
+            age: Number(age),
+            bio,
+            preferences: {
+                minAge: Number(minAge),
+                maxAge: Number(maxAge),
+                geslacht,
+                taal,
+                genres: Array.isArray(genres) ? genres : [genres]
+            },
+            imagePath: req.file ? `/uploads/${req.file.filename}` : null,
+            createdAt: new Date()
+        };
+
+        const result = await db.collection('users').insertOne(newUser);
+
+        console.log('Nieuwe registratie toegevoegd:', result.insertedId);
+        res.redirect('/');
+    } catch (error) {
+        console.error('Fout bij registratie:', error);
+        res.status(500).send('Er is iets fout gegaan bij het registreren');
+    }
+});
 
 
 // Login
@@ -283,7 +395,7 @@ app.get('/registration', async function (req, res) {
 // Middleware for session management
 app.use(
   session({
-    secret: process.env.SESSION_KEY,
+    secret: process.env.SESSION_SECRET,
     resave: false, // Prevent unnecessary session saving
     saveUninitialized: false, // Do not save empty sessions
     cookie: {
@@ -301,7 +413,7 @@ const isLoggedIn = (req, res, next) => {
   if (req.session && req.session.isLoggedIn) {
     next(); // User is logged in, proceed to the next middleware or route handler
   } else {
-    res.redirect("/login"); // Redirect to the login page if not authenticated
+    res.redirect("/"); // Redirect to the index page if not authenticated
   }
 };
 
@@ -323,7 +435,9 @@ app.post("/login", async (req, res) => {
 
     if (match) {
       req.session.isLoggedIn = true; // Set session variable
-      req.session.user = { id: zoekBezoeker.id, email: zoekBezoeker.email }; // Store user info in session
+      req.session.user = {
+        id: zoekBezoeker._id.toString() // altijd als string opslaan
+      };
 
       return res.redirect("/account"); // Redirect to account page on successful login
     } else {
@@ -335,10 +449,40 @@ app.post("/login", async (req, res) => {
   }
 });
 
-app.get("/account", isLoggedIn, (req, res) => {
-  const user = req.session.user; // Retrieve user info from session
-  res.render("pages/account", { user }); // Pass user data to the view
+// app.get("/account", isLoggedIn, (req, res) => {
+//   const user = req.session.user; // Retrieve user info from session
+//   res.render("pages/account", { user }); // Pass user data to the view
+// });
+
+// app.get("/account", isLoggedIn, (req, res) => {
+//     const user = req.session.user;
+//     console.log("Gebruiker in sessie:", user);
+//     res.render("pages/account", { user });
+//   });
+
+app.get("/account", isLoggedIn, async (req, res) => {
+  try {
+    const userId = req.session.user?.id;
+
+    if (!userId) {
+      return res.redirect("/");
+    }
+
+    const gebruiker = await db.collection('users').findOne({ _id: new ObjectId(userId) });
+
+    if (!gebruiker) {
+      return res.status(404).send("Gebruiker niet gevonden.");
+    }
+
+    res.render("pages/account", { user: gebruiker });
+  } catch (error) {
+    console.error("Fout bij ophalen gebruiker:", error);
+    res.status(500).send("Fout bij ophalen gebruiker");
+  }
 });
+
+
+
 
 app.post("/logout", (req, res) => {
   req.session.destroy((err) => {
@@ -379,4 +523,24 @@ async function compareData(plainTextData, hashedData) {
 app.use((req, res, next) => {
     res.locals.currentPath = req.path;
     next();
+  });
+
+  app.get('/detail/:id', async (req, res) => {
+    const eventId = req.params.id;
+    const url = `${process.env.API_URL_DETAIL}/${eventId}.json?apikey=${process.env.API_KEY}`;
+  
+    try {
+      const response = await fetch(url);
+  
+      if (!response.ok) {
+        throw new Error(`API error: ${response.status} ${response.statusText}`);
+      }
+  
+      const event = await response.json();
+  
+      res.render('pages/detail', { event });
+    } catch (error) {
+      console.error("Fout bij ophalen event detail:", error);
+      res.render('pages/detail', { event: null, error: 'Event niet gevonden.' });
+    }
   });

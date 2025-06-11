@@ -1,0 +1,19 @@
+.fullscreen-button {
+    width: 450px;
+    background-color: rgb(185,27,244);
+    color: white;
+    border: 10px;
+    border-radius: 12px;
+    padding: 16px;
+    font-size: 16px;
+    cursor: pointer;
+}
+
+
+
+
+
+/* Kleuren
+
+rgb(34,36,49)
+rgb(185,27,244)
