@@ -6,11 +6,12 @@
     <title>Document</title>
     <link rel="stylesheet" href="/styles.css">
     <link rel="stylesheet" href="/registration.css">
+    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined" rel="stylesheet">
 </head>
 <body>
-    <%- include('../partials/footer'); %>
+    <%- include('../partials/header'); %>
     <main>
-        <form action="/registration" method="POST" enctype="multipart/form-data">
+        <form action="/registration" method="POST" enctype="multipart/form-data" class="persoonsGegevensWrapper">
             <fieldset id="persoonsGegevens">
                 <legend>persoonsGegevens</legend>
                 <label for="firstName">Voornaam
@@ -31,6 +32,9 @@
                 <label for="img">Profiel foto
                     <input type="file" name="img" accept="image/*">  
                 </label>
+                <label for="bio">biografie
+                    <textarea id="bio" name="bio"></textarea>
+                </label>
                 <input type="submit" value="Submit">
             </fieldset>
             <fieldset class="genres">
@@ -39,7 +43,7 @@
                   <% genres.forEach(function(genre) { %>
                     <li>
                         <label for="<%= genre %>">
-                          <input type="checkbox" name="genres" value="<%= genre %>" id="<%= genre %>">
+                          <input type="checkbox" name="genres[]" value="<%= genre %>" id="<%= genre %>">
                           <%= genre %>
                         </label>
                     </li>
@@ -51,7 +55,7 @@
             
             <fieldset id="matchVoorkeuren">
                 <legend>Matching voorkeuren</legend>
-                    <h2>met welke leeftijd wil je matchen</h2>
+                    <h2>Leeftijd</h2>
                     <div class="values">
                       <span id="range1">
                         0
@@ -63,18 +67,43 @@
                     </div>
                     <div class="container">
                       <div class="slider-track"></div>
-                      <input type="range" min="18" max="100" value="30" id="slider-1" oninput="slideOne()">
-                      <input type="range" min="18" max="100" value="70" id="slider-2" oninput="slideTwo()">
+                      <input type="range" min="18" max="100" value="18" id="slider-1" name="minAge" oninput="slideOne()">
+                      <input type="range" min="18" max="100" value="100" id="slider-2" name="maxAge" oninput="slideTwo()">
                     </div>
 
-                    <h2>met welke geslacht wil je matchen</h2>
+                    <h2>Geslacht</h2>
+                      <label for="man">man
+                        <input type="radio" name="geslacht" id="man" value="man">
+                      </label>
+                      <label for="vrouw">vrouw
+                        <input type="radio" name="geslacht" id="vrouw" value="vrouw">
+                      </label>                      
+                      <label for="anders">anders
+                        <input type="radio" name="geslacht" id="anders" value="anders">
+                      </label>        
+                      <label for="geenVoorkeur">geen voorkeur
+                        <input type="radio" name="geslacht" id="geenVoorkeur" value="nvt">
+                      </label>            
 
+                    <h2>taalvoorkeur</h2>
+                      <label for="nl">Nederlands
+                        <input type="radio" name="taal" id="nl" value="nl">
+                      </label>
+                      <label for="en">English
+                        <input type="radio" name="taal" id="en" value="en">
+                      </label>
+                      <label for="nvt">Geen voorkeur
+                        <input type="radio" name="taal" id="nvt" value="nvt">
+                      </label>
+                      <label for="else">Anders
+                        <input type="text" name="taal" id="else">
+                      </label>
 
                 <!-- https://codepen.io/alexpg96/pen/xxrBgbP -->
             </fieldset>
         </form>
 
     </main>
-    <%- include('../partials/header'); %>
+    <%- include('../partials/footer'); %>
     <script src="/registration.js"></script>
 </body>
