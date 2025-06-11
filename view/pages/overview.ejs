@@ -33,7 +33,7 @@
     <!-- Uitklapbaar filtermenu -->
     <form class="filter-menu hidden" method="GET" action="/overview">
       <!-- Locatie -->
-      <details open>
+      <details open name="filters">
         <summary>Locatie</summary>
         <div class="filter-options" data-filter-group="locatie">
           <% cities.forEach(city => { %>
@@ -49,7 +49,7 @@
       </details>
 
       <!-- Datum -->
-      <details>
+      <details name="filters">
         <summary>Datum</summary>
         <div class="date-inputs">
           <label>
@@ -74,7 +74,7 @@
       </details>
 
       <!-- Genre -->
-      <details>
+      <details name="filters">
         <summary>Genre</summary>
         <ul class="genres">
           <% genres.forEach(genre => { %>

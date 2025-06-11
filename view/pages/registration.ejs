@@ -43,7 +43,7 @@
                   <% genres.forEach(function(genre) { %>
                     <li>
                         <label for="<%= genre %>">
-                          <input type="checkbox" name="genres" value="<%= genre %>" id="<%= genre %>">
+                          <input type="checkbox" name="genres[]" value="<%= genre %>" id="<%= genre %>">
                           <%= genre %>
                         </label>
                     </li>
@@ -67,8 +67,8 @@
                     </div>
                     <div class="container">
                       <div class="slider-track"></div>
-                      <input type="range" min="18" max="100" value="30" id="slider-1" oninput="slideOne()">
-                      <input type="range" min="18" max="100" value="70" id="slider-2" oninput="slideTwo()">
+                      <input type="range" min="18" max="100" value="18" id="slider-1" name="minAge" oninput="slideOne()">
+                      <input type="range" min="18" max="100" value="100" id="slider-2" name="maxAge" oninput="slideTwo()">
                     </div>
 
                     <h2>Geslacht</h2>

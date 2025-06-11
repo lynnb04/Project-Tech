@@ -323,7 +323,55 @@ app.get('/registration', async function (req, res) {
     }
   });
 
+// post voor registration
+app.post('/registration', upload.single('img'), async (req, res) => {
+    try {
+        const {
+            firstName,
+            lastName,
+            email,
+            password,
+            age,
+            bio,
+            minAge,
+            maxAge,
+            geslacht,
+            taal,
+            genres
+        } = req.body;
 
+        // Controlle
+        if (!firstName || !email || !password) {
+            return res.status(400).send('Vul alle verplichte velden in.');
+        }
+
+        const newUser = {
+            firstName,
+            lastName,
+            email,
+            password: await hashData(password),
+            age: Number(age),
+            bio,
+            preferences: {
+                minAge: Number(minAge),
+                maxAge: Number(maxAge),
+                geslacht,
+                taal,
+                genres: Array.isArray(genres) ? genres : [genres]
+            },
+            imagePath: req.file ? `/uploads/${req.file.filename}` : null,
+            createdAt: new Date()
+        };
+
+        const result = await db.collection('users').insertOne(newUser);
+
+        console.log('Nieuwe registratie toegevoegd:', result.insertedId);
+        res.redirect('/');
+    } catch (error) {
+        console.error('Fout bij registratie:', error);
+        res.status(500).send('Er is iets fout gegaan bij het registreren');
+    }
+});
 
 
 // Login
