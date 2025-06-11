@@ -1,64 +1,78 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
-    <link rel="stylesheet" href="/styles.css">
-    <link rel="stylesheet" href="/detail.css">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title><%= event.name %></title>
+  <link rel="stylesheet" href="/styles.css" />
+  <link rel="stylesheet" href="/detail.css" />
+  <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined" rel="stylesheet">
 </head>
 <body>
     <%- include('../partials/header'); %>
+
     <main>
-        <section>
-          <article>
-            <ul>
-              <% events.forEach(event => { %>
-                <li>
-                  <div class="card-img-wrapper">
-                    <img src="<%= event.images[2].url %>" alt="Foto van event" />
-                    <% 
-                      const dateParts = event.dates.start.localDate.split("-");
-                      const day = dateParts[2];
-                      const month = new Date(event.dates.start.localDate).toLocaleString('nl-NL', { month: 'short' });
-                    %>
-                    <div class="card-date">
-                      <span class="day"><%= day %></span>
-                      <span class="month"><%= month %></span>
-                    </div>
-                  </div>
-      
-                  <h1><%= event.name %></h1>
-                  <p class="time-tag"><%= event.dates.start.localTime ? event.dates.start.localTime.slice(0, 5) : 'Tijd onbekend' %></p>
-                  <p><strong><%= event._embedded.venues[0].name %></strong>,</p>
-                  <p><%= event._embedded.venues[0].city.name %></p>
-      
-                  <div class="genre-container">
-                    <% const genre = event.classifications?.[0]?.genre?.name; %>
-                    <% const subgenre = event.classifications?.[0]?.subGenre?.name; %>
-      
-                    <% if (genre) { %>
-                      <div class="genre-tag"><%= genre %></div>
-                    <% } %>
-      
-                    <% if (subgenre && subgenre !== genre) { %>
-                      <div class="subgenre-tag"><%= subgenre %></div>
-                    <% } %>
-                  </div>
-      
-                  <% if (event.url) { %>
-                    <p>
-                      <a class="tickets" href="<%= event.url %>" target="_blank">Bekijk beschikbare tickets</a>
-                    </p>
-                  <% } %>
-                </li>
-              <% }) %>
-            </ul>
-          </article>
-        </section>
-      </main>
-      
+      <article>
+        <div class="card-img-wrapper">
+          <img src="<%= event.images[2]?.url || event.images[0].url %>" alt="Foto van event" />
+          
+          <% 
+            const dateParts = event.dates.start.localDate.split("-");
+            const day = parseInt(dateParts[2], 10);
+            const month = new Date(event.dates.start.localDate).toLocaleString('nl-NL', { month: 'short' });
+          %>
+          <div class="card-date">
+            <span class="day"><%= day %></span>
+            <span class="month"><%= month %></span>
+          </div>
+    
+          <a class="close-btn" href="/overview">
+            <img src="/static/close_button.svg" alt="Sluit pagina">
+          </a>
+        </div> 
+    
+        <div class="titel">
+          <h1><%= event.name %></h1>
+          <button class="favo-btn">
+            <img src="/static/heart_open.svg" alt="Toevoegen aan favorieten">
+          </button>
+        </div>
+    
+        <div class="time-tag">
+          <img src="/static/time_icon.svg" alt="Begin- en eindtijd">
+          <p><%= event.dates.start.localTime ? event.dates.start.localTime.slice(0, 5) : 'Tijd onbekend' %></p>
+          <p>-</p>
+          <p><%= event.dates.start.localTime ? event.dates.start.localTime.slice(0, 5) : 'Tijd onbekend' %></p>
+        </div>
+    
+        <p><strong><%= event._embedded.venues[0].name %></strong></p>
+        <p><%= event._embedded.venues[0].city.name %></p>
+    
+        <div class="genre-container">
+          <% const genre = event.classifications?.[0]?.genre?.name; %>
+          <% const subgenre = event.classifications?.[0]?.subGenre?.name; %>
+    
+          <% if (genre) { %>
+            <div class="genre-tag"><%= genre %></div>
+          <% } %>
+    
+          <% if (subgenre && subgenre !== genre) { %>
+            <div class="subgenre-tag"><%= subgenre %></div>
+          <% } %>
+        </div>
+    
+        <button>Ik ga naar dit Event!</button>
+    
+        <!-- Link naar tickets -->
+        <% if (event.url) { %>
+          <p>
+            <a class="tickets" href="<%= event.url %>" target="_blank" rel="noopener noreferrer">Bekijk beschikbare tickets</a>
+          </p>
+        <% } %>
+      </article>
+    </main>
     
     <%- include('../partials/footer'); %>
+    <script src="/detail.js"></script>
 </body>
 </html>

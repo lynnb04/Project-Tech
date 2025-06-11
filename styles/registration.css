@@ -36,6 +36,9 @@
 /*********************/
 /* slider */
 /*********************/
+form{
+  margin-bottom: 4em;
+}
 
 .container {
   position: relative;

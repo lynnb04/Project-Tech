@@ -14,11 +14,44 @@
     <%- include('../partials/header'); %>
 
 <main>
-  <div class="jumbotron">
+  <!-- <div class="jumbotron">
+      <h2></h2> 
+  </div> -->
 
-    <h2>Mijn account</h2>
-    
-  </div>
+  <h2><%= user.firstName %> <%= user.lastName %></h2>
+<p>Email: <%= user.email %></p>
+
+
+<img src="<%= user.imagePath %>" alt="Profielfoto" style="max-width: 200px; border-radius: 8px;" />
+
+<ul>
+  <li><strong>Email:</strong> <%= user.email %></li>
+  <li><strong>Leeftijd:</strong> <%= user.age %></li>
+  <li><strong>Bio:</strong> <%= user.bio %></li>
+  <li><strong>Aangemaakt op:</strong> <%= user.createdAt.toLocaleDateString() %></li>
+</ul>
+
+<h2>Voorkeuren</h2>
+<ul>
+  <li><strong>Minimale leeftijd:</strong> <%= user.preferences.minAge %></li>
+  <li><strong>Maximale leeftijd:</strong> <%= user.preferences.maxAge %></li>
+  <li><strong>Geslacht:</strong> <%= user.preferences.geslacht %></li>
+  <li><strong>Talen:</strong>
+    <ul>
+      <% user.preferences.taal.forEach(function(taal) { %>
+        <% if (taal) { %><li><%= taal %></li><% } %>
+      <% }) %>
+    </ul>
+  </li>
+  <li><strong>Genres:</strong>
+    <ul>
+      <% user.preferences.genres.forEach(function(genre) { %>
+        <li><%= genre %></li>
+      <% }) %>
+    </ul>
+  </li>
+</ul>
+  
 
 </main>
 

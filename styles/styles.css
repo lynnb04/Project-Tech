@@ -74,8 +74,24 @@ input {
 /**********/
 /* HEADER */
 /**********/
+header{
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: space-between;
+  height: 5em;
+}
 
-
+header img{
+  width: 70%;
+  margin-top: 1.2em;
+}
+.gradient{
+  background: var(--main-gradient);
+  width: 100%;
+  height: .1em;
+  display: block;
+}
 
 /**********/
 /* FOOTER */
@@ -108,6 +124,7 @@ input {
     bottom: 0;
     width: 100%;
     background-color: var(--backgroundSecundary);
+    z-index: 99;
   }
 
   footer a.active .material-symbols-outlined {
