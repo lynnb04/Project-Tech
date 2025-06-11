@@ -2,6 +2,7 @@ const express = require("express")
 const multer  = require('multer')
 const path = require('path')
 const bcrypt = require('bcryptjs');
+const { ObjectId } = require('mongodb');
 
 // Configure multer storage
 const storage = multer.diskStorage({
@@ -54,7 +55,7 @@ app.use(session({
 }))
  
 // ATLAS MONGDOB APPLICATIONC ODE
-const { MongoClient, Objectid} = require("mongodb");
+const { MongoClient } = require("mongodb");
 // Mango configuratie uit .env bestand
 const uri = process.env.URI;
 // nieuwe MongoDB client
@@ -142,10 +143,21 @@ app.post('/form', upload.single('img'), async (req, res) => {
 // matching pagina
 // --------------------
 app.get('/matching', async (req, res) => {
-    console.log("Matching-pagina opgevraagd!");
     try {
-        const users = await db.collection('users').find().toArray();
-        res.render('pages/matching', { users }); // matching.ejs of matching.pug, afhankelijk van je view engine
+        // Get the current user's ID from the session
+        const currentUserId = req.session.user?.id;
+        
+        // If user is not logged in, redirect to login page
+        if (!currentUserId) {
+            return res.redirect('/');
+        }
+
+        // Find all users except the current user
+        const users = await db.collection('users').find({
+            _id: { $ne: new ObjectId(currentUserId) }
+        }).toArray();
+
+        res.render('pages/matching', { users });
     } catch (error) {
         console.error('Error fetching users:', error);
         res.status(500).send('Kan gebruikers niet ophalen.');
@@ -401,7 +413,7 @@ const isLoggedIn = (req, res, next) => {
   if (req.session && req.session.isLoggedIn) {
     next(); // User is logged in, proceed to the next middleware or route handler
   } else {
-    res.redirect("/login"); // Redirect to the login page if not authenticated
+    res.redirect("/"); // Redirect to the index page if not authenticated
   }
 };
 
@@ -447,7 +459,6 @@ app.post("/login", async (req, res) => {
 //     console.log("Gebruiker in sessie:", user);
 //     res.render("pages/account", { user });
 //   });
-const { ObjectId } = require('mongodb'); // bovenaan je bestand
 
 app.get("/account", isLoggedIn, async (req, res) => {
   try {
