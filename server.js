@@ -143,26 +143,57 @@ app.post('/form', upload.single('img'), async (req, res) => {
 // matching pagina
 // --------------------
 app.get('/matching', async (req, res) => {
-    try {
-        // Get the current user's ID from the session
-        const currentUserId = req.session.user?.id;
-        
-        // If user is not logged in, redirect to login page
-        if (!currentUserId) {
-            return res.redirect('/');
-        }
+  try {
+    const currentUserId = req.session.user.id;
+    const currentUser = await db.collection('users').findOne({ _id: new ObjectId(currentUserId) });
 
-        // Find all users except the current user
-        const users = await db.collection('users').find({
-            _id: { $ne: new ObjectId(currentUserId) }
-        }).toArray();
+    if (!currentUser) return res.redirect('/');
 
-        res.render('pages/matching', { users });
-    } catch (error) {
-        console.error('Error fetching users:', error);
-        res.status(500).send('Kan gebruikers niet ophalen.');
+    const prefs = currentUser.preferences;
+
+    // Eerste filter: gebruikers die voldoen aan JOUW voorkeuren
+    const initialQuery = {
+      _id: { $ne: new ObjectId(currentUserId) },
+      age: { $gte: prefs.minAge, $lte: prefs.maxAge }
+    };
+
+    if (prefs.geslacht !== 'nvt') {
+      initialQuery.gender = prefs.geslacht; // pas evt. veldnaam aan
     }
+
+    if (prefs.taal && prefs.taal.length > 0 && !prefs.taal.includes('nvt')) {
+      initialQuery['preferences.taal'] = { $in: prefs.taal };
+    }
+
+    if (prefs.genres && prefs.genres.length > 0) {
+      initialQuery['preferences.genres'] = { $in: prefs.genres };
+    }
+
+    const users = await db.collection('users').find(initialQuery).toArray();
+
+    // Tweede filter: jij moet ook binnen HUN voorkeuren vallen
+    const wederzijdseMatches = users.filter(user => {
+      const anderePrefs = user.preferences;
+
+      const jijValtInLeeftijd = currentUser.age >= anderePrefs.minAge && currentUser.age <= anderePrefs.maxAge;
+
+      const geslachtOk =
+        anderePrefs.geslacht === 'nvt' ||
+        anderePrefs.geslacht === currentUser.gender;
+
+      // eventueel taal en genre ook wederzijds controleren
+      return jijValtInLeeftijd && geslachtOk;
+    });
+
+    res.render('pages/matching', { users: wederzijdseMatches });
+
+  } catch (err) {
+    console.error("Fout bij ophalen wederzijdse matches:", err);
+    res.status(500).send("Fout bij het ophalen van matches.");
+  }
 });
+// https://www.mongodb.com/docs/manual/reference/operator/query/gte/
+// https://www.mongodb.com/docs/manual/reference/operator/query/ne/
 
 // overview
 // --------------------
