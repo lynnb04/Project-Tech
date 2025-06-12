@@ -27,11 +27,16 @@
         <div class="form-wrapper">
             <form action="/settings" method="POST" enctype="multipart/form-data">
 
-                <div class="profielfoto">
-                    <input type="file" name="profilePic" accept="image/*" disabled/>
-                    <% if (user.profilePic) { %>
-                    <img src="/uploads/<%= user.profilePic %>" alt="Profile Picture" width="150"><br>
-                    <% } %><br>
+                <div class="profielfoto-wrapper">
+                    <div class="profielfoto">
+                        <% if (user.profilePic) { %>
+                        <img src="/uploads/<%= user.profilePic %>" alt="Profile Picture">
+                        <% } else { %>
+                        <span class="placeholder"></span>
+                        <% } %>
+                        <input type="file" id="profileUpload" name="profilePic" accept="image/*" disabled>
+                    </div>
+                    <label for="profileUpload" class="plus-button">+</label>
                 </div>
 
                 <div class="naam">
@@ -89,19 +94,16 @@
         <section class="accountmanagement">
             <h1>Accountmanagement</h1>
 
-            <label>Gebruikersnaam</label>
                 <div class="gebruikersnaam">
-                    <input type="text" name="username" placeholder="Vul in" disabled/>
+                    <input type="text" name="username" placeholder="Gebruikersnaam" disabled/>
                 </div>
 
-            <label>E-mail</label>
                 <div class="email">
-                    <input type="email" name="email" placeholder="Vul In" disabled/>
+                    <input type="email" name="email" placeholder="E-mail" disabled/>
                 </div>
 
-            <label>Wachtwoord</label>
                 <div class="wachtwoord">
-                    <input type="password" name="password" placeholder="Pas aan" disabled/>
+                    <input type="password" name="password" placeholder="Wachtwoord" disabled/>
                 </div>
 
             <label>Account verwijderen</label>
