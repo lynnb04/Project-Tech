@@ -195,11 +195,22 @@
 
         <section class="notificaties">
             <h1>Notificaties</h1>
-            <label>Chats</label>
-            <label>Concerten van je favoriete artiesten</label><br>
-            <label>Concerten van je favoriete genre's</label><br>
-            <label>Concerten van je favoriete sferen</label><br>
-            <label>Concerten op je favoriete locaties</label><br>
+            <div class="toggle-group">
+                <input type="checkbox" id="chats" hidden disabled>
+                <label for="chats">Chats</label>
+
+                <input type="checkbox" id="artiesten" hidden disabled>
+                <label for="artiesten">Concerten van je favoriete artiesten</label><br>
+
+                <input type="checkbox" id="genres" hidden disabled>
+                <label for="genres">Concerten van je favoriete genre's</label><br>
+
+                <input type="checkbox" id="sferen" hidden disabled>
+                <label for="sferen">Concerten van je favoriete sferen</label><br>
+
+                <input type="checkbox" id="locaties" hidden disabled>
+                <label for="locaties">Concerten op je favoriete locaties</label>
+            </div>
         </section>
 
 
