@@ -27,6 +27,7 @@ app.use('/static', express.static('static'))
 app.use(express.urlencoded({extended: true}));
 app.use(express.static('styles'));
 app.use(express.static('script'));
+app.use(express.json());
 app.use('/uploads', express.static('uploads'));
 
 // Footer link actief
@@ -404,7 +405,8 @@ app.post('/registration', upload.single('img'), async (req, res) => {
                 genres: Array.isArray(genres) ? genres : [genres]
             },
             imagePath: req.file ? `/uploads/${req.file.filename}` : null,
-            createdAt: new Date()
+            createdAt: new Date(),
+            favorites: []
         };
 
         const result = await db.collection('users').insertOne(newUser);
@@ -556,11 +558,18 @@ app.use((req, res, next) => {
     next();
   });
 
-  app.get('/detail/:id', async (req, res) => {
+app.get('/detail/:id', async (req, res) => {
     const eventId = req.params.id;
     const url = `${process.env.API_URL_DETAIL}/${eventId}.json?apikey=${process.env.API_KEY}`;
   
     try {
+      const currentUserId = req.session.user ? req.session.user.id : null;
+      let currentUser = null;
+  
+      if (currentUserId) {
+        currentUser = await db.collection('users').findOne({ _id: new ObjectId(currentUserId) });
+      }
+
       const response = await fetch(url);
   
       if (!response.ok) {
@@ -569,9 +578,49 @@ app.use((req, res, next) => {
   
       const event = await response.json();
   
-      res.render('pages/detail', { event });
+      res.render('pages/detail', { event, currentUser });
     } catch (error) {
       console.error("Fout bij ophalen event detail:", error);
       res.render('pages/detail', { event: null, error: 'Event niet gevonden.' });
     }
   });
+
+// like van een event
+app.post('/favorites', async (req, res) => {
+  const { eventId } = req.body;
+  const userId = req.session.user ? req.session.user.id : null;
+
+  if (!userId) return res.status(401).json({ error: 'Niet ingelogd' });
+  if (!eventId) return res.status(400).json({ error: 'Geen eventId opgegeven' });
+
+  try {
+    await db.collection('users').updateOne(
+      { _id: new ObjectId(userId) },
+      { $addToSet: { favorites: eventId.toString() } } // toegevoegde favorite eventId als string
+    );
+    res.json({ success: true });
+  } catch (err) {
+    console.error('Fout bij toevoegen favoriet:', err);
+    res.status(500).json({ error: 'Fout bij toevoegen favoriet' });
+  }
+});
+
+// Favoriet verwijderen
+app.delete('/favorites', async (req, res) => {
+  const { eventId } = req.body;
+  const userId = req.session.user ? req.session.user.id : null;
+
+  if (!userId) return res.status(401).json({ error: 'Niet ingelogd' });
+  if (!eventId) return res.status(400).json({ error: 'Geen eventId opgegeven' });
+
+  try {
+    await db.collection('users').updateOne(
+      { _id: new ObjectId(userId) },
+      { $pull: { favorites: eventId.toString() } }
+    );
+    res.json({ success: true });
+  } catch (err) {
+    console.error('Fout bij verwijderen favoriet:', err);
+    res.status(500).json({ error: 'Fout bij verwijderen favoriet' });
+  }
+});
