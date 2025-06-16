@@ -7,27 +7,23 @@
     <link rel="stylesheet" href="styles.css">
     <link rel="stylesheet" href="/profileSettings.css">
 </head>
-
-
 <body>
     <%- include('../partials/header'); %>
 
     <main>
-
         <section class="profiel">
-
             <!-- knop die instellingen ontgrendelt -->
             <div class="center-wrapper">
-            <button type="button" class="fullscreen-button" onclick="enableEditing()">Bewerk instellingen</button>
+              <button type="button" class="fullscreen-button" onclick="enableEditing()">Bewerk instellingen</button>
             </div>
 
-            <h1>Profiel</h1>
+            <h2>Profiel</h2>
 
             <!-- formulier -->
-        <div class="form-wrapper">
-            <form action="/settings" method="POST" enctype="multipart/form-data">
+            <div class="form-wrapper">
+                <form action="/settings" method="POST" enctype="multipart/form-data">
 
-                <div class="profielfoto-wrapper">
+                    <div class="profielfoto-wrapper">
                     <div class="profielfoto">
                         <% if (user.profilePic) { %>
                         <img src="/uploads/<%= user.profilePic %>" alt="Profile Picture">
@@ -37,49 +33,54 @@
                         <input type="file" id="profileUpload" name="profilePic" accept="image/*" disabled>
                     </div>
                     <label for="profileUpload" class="plus-button">+</label>
-                </div>
+                    </div>
 
-                <div class="name-fields">
+                    <div class="name-fields">
                     <div class="firstName">
                         <input type="text" name="firstName" placeholder="Voornaam" disabled />
                     </div>
                     <div class="lastName">
                         <input type="text" name="lastName" placeholder="Achternaam" disabled />
                     </div>
-                </div>
+                    </div>
 
-                <div class="leeftijd">
-                    <input type="number" name="age" placeholder="Leeftijd" disabled/><br>
-                </div>
+                    <div class="leeftijd">
+                        <input type="number" name="age" placeholder="Leeftijd" disabled/><br>
+                    </div>
 
-                <div class="geslacht">
-                    <select name="gender" disabled>
-                        <option value="">Geslacht</option>
-                        <option value="man">Man</option>
-                        <option value="vrouw">Vrouw</option>
-                        <option value="anders">Anders</option>
-                    </select>
-                </div>
+                    <div class="geslacht">
+                        <select name="gender" disabled>
+                            <option value="">Geslacht</option>
+                            <option value="man">Man</option>
+                            <option value="vrouw">Vrouw</option>
+                            <option value="anders">Anders</option>
+                        </select>
+                    </div>
 
-                <div class="bio">
-                    <input type="text" name="bio" placeholder="Vertel iets over jezelf..." disabled/><br>
-                </div>
-            </form>
-        </div>
+                    <div class="bio">
+                        <input type="text" name="bio" placeholder="Vertel iets over jezelf..." disabled/><br>
+                    </div>
+                </form>
+            </div>
 
             <script>
-                function enableEditing() {
-                const fields = document.querySelectorAll('input, select, textarea');
+            function enableEditing() {
+                // Schakel alle invoervelden en select-elementen in
+                const fields = document.querySelectorAll('input, select, textarea, button');
                 fields.forEach(field => field.disabled = false);
-            
+
+                // Verberg de bewerk-knop
                 document.querySelector('button[onclick="enableEditing()"]').style.display = "none";
-                }
+
+                // Toon de opslaan-knop
+                document.getElementById('saveButton').style.display = "inline-block";
+            }
             </script>
         </section>
 
 
         <section class="accountmanagement">
-            <h1>Accountmanagement</h1>
+            <h2>Accountmanagement</h2>
 
                 <div class="email">
                     <input type="email" name="email" placeholder="E-mail" disabled/>
@@ -89,53 +90,41 @@
                     <input type="password" name="password" placeholder="Wachtwoord" disabled/>
                 </div>
 
-            <label>Account verwijderen</label>
-                <div class="account-verwijderen">
-                    <!-- button -->
-                </div>
+                <!-- account verwijderen -->
         </section>
 
 
         <section class="concertvoorkeuren">
-            <h1>Concertvoorkeuren</h1>
-
-            <form id="concertForm">
-
-                <fieldset>
-                    <legend>Genre's</legend><br>
-                        <div class="genres"></div>
-                            <!-- vervangen door genre's uit overview -->
-                            <label><input type="checkbox" name="genre" value="Genre" disabled> Genre</label><br>
-                        </div>
-                </fieldset>
-            </form>
+            <h2>Concertvoorkeuren</h2>
+                <form id="concertForm">
+                    <div class="genres"></div>
+                        <!-- vervangen door genre's uit registration -->
+                    </div>
+                </form>
         </section>
        
         
         <section class="matchvoorkeuren">
-            <h1>Matchvoorkeuren</h1>
-            <label>Leeftijd</label><br>
-
-            <label>Geslacht</label><br>
-            <div class="gender">
-                <label><input type="checkbox" name="gender" value="Man" disabled> Man</label>
-                <label><input type="checkbox" name="gender" value="Vrouw" disabled> Vrouw</label>
-                <label><input type="checkbox" name="gender" value="Anders" disabled> Anders</label><br>
-            </div>
-
-            <label>Taal</label>
+            <h2>Matchvoorkeuren</h2>
+                <h3>Leeftijd</h3>
+                    <!-- slider uit registration-->
+                <h3>Geslacht</h3>
+                    <!-- menu uit registration -->
+                <h3>Taal</h3>
+                    <!-- menu uit registration -->
         </section>
 
 
+   <!-- onderstaande instellingen zijn op dit moment niet nodig binnen de functies die we hebben
         <section class="chatvoorkeuren">
-            <h1>Chatvoorkeuren</h1>
+            <h2>Chatvoorkeuren</h2>
             <label>Geblokkeerde accounts</label><br>
-            <!-- pop-up met lijst van accounts -->
+            pop-up met lijst van accounts
         </section>
 
 
         <section class="notificaties">
-            <h1>Notificaties</h1>
+            <h2>Notificaties</h2>
             <div class="toggle-group">
                 <input type="checkbox" id="chats" hidden disabled>
                 <label for="chats">Chats</label>
@@ -152,15 +141,17 @@
                 <input type="checkbox" id="locaties" hidden disabled>
                 <label for="locaties">Concerten op je favoriete locaties</label>
             </div>
-        </section>
-
+        </section> -->
+    
 
         <section class="uitloggen">
-            <h1>Uitloggen</h1>
+            <button disabled>Uitloggen</button>
         </section>
 
 
-    <button type="submit">Instellingen opslaan</button>
+        <div class="center-wrapper">
+            <button type="submit" id="saveButton" style="display: none;">Instellingen opslaan</button>
+            </div>
 
     <%- include('../partials/footer'); %>
 </body>

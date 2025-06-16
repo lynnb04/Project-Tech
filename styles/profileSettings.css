@@ -193,28 +193,4 @@ input[type="radio"]:checked + label {
 
 
 
-
-/* Zoekvelden */
-input[type="search"],
-input[type="text"] {
-    background-color: #1A1B2E;
-    border-radius: 1.5625em;
-    padding: 0.625em 1.25em;
-    border: none;
-    color: white;
-}
-
-/* Notificaties */
-.notificaties label {
-    display: block;
-    background-color: #1A1B2E;
-    padding: 0.75em;
-    border-radius: 1.25em;
-    margin: 0.5em 0;
-}
-
 /* Uitlog section */
-.uitloggen h1 {
-    text-align: center;
-    color: #fff;
-}
