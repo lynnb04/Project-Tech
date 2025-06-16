@@ -34,8 +34,12 @@
                         Geen genres gekozen
                     <% } %>
                     <div class="matchButtons">
-                        <button>Overslaan</button>
-                        <button>Toevoegen</button> 
+                        <form action="/match/skip/<%= user._id %>" method="POST">
+                          <button type="submit">Overslaan</button>
+                        </form>
+                        <form action="/match/add/<%= user._id %>" method="POST">
+                          <button type="submit">Toevoegen</button>
+                        </form>
                     </div>
                     
                 </li>
