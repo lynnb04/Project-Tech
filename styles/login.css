@@ -34,7 +34,11 @@ form {
     font-size: 1em; 
     font-weight: 600;
   }
-  
+
+  input {
+    color: white;
+  }
+
   input[type="text"],
   input[type="email"],
   input[type="password"],
@@ -77,4 +81,16 @@ input::placeholder {
     border: 0.08em solid var(--tekst);
     padding: 0.75em 1em;
     border-radius: 2em;
+  }
+
+  .showPassword {
+    display: flex;
+    align-items: center;
+    margin-bottom: 1em;
+    font-size: .9em;
+    font-weight: 300;
+  }
+
+  .showPassword input {
+    margin-left: 1em;
   }
