@@ -22,7 +22,7 @@
       />
     </form>
 
-    <!-- Filter- en sorteerknoppen (zonder extra div-wrappers) -->
+    <!-- Filter- en sorteerknoppen -->
     <nav class="controls">
       <button class="filter" type="button">
         Filter <span class="filter-count hidden">0</span>
@@ -30,71 +30,61 @@
       <button class="sort" type="button">Sorteren</button>
     </nav>
 
-    <!-- Uitklapbaar filtermenu -->
-    <form class="filter-menu hidden" method="GET" action="/overview">
-      <!-- Locatie -->
-      <details open name="filters">
-        <summary>Locatie</summary>
-        <div class="filter-options" data-filter-group="locatie">
-          <% cities.forEach(city => { %>
-            <div 
-              class="filter-tag"
-              data-value="<%= city %>"
-              data-selected="<%= selectedCities.includes(city) ? 'true' : 'false' %>"
-            >
-              <%= city %>
+    <!-- Modal popup voor het filtermenu -->
+    <div id="filterModal" class="modal">
+      <div class="modal-content">
+        <h1>Filters</h1>
+        <button type="button" class="close-btn">
+          <img src="/static/close_button.svg" alt="Sluit filtermenu">
+        </button>
+        <form class="filter-menu" method="GET" action="/overview">
+          <!-- Locatie -->
+          <details open>
+            <summary>Locatie</summary>
+            <div class="filter-options" data-filter-group="locatie">
+              <% cities.forEach(city => { %>
+                <div 
+                  class="filter-tag"
+                  data-value="<%= city %>"
+                  data-selected="<%= selectedCities.includes(city) ? 'true' : 'false' %>"
+                ><%= city %></div>
+              <% }) %>
             </div>
-          <% }) %>
-        </div>
-      </details>
+          </details>
 
-      <!-- Datum -->
-      <details name="filters">
-        <summary>Datum</summary>
-        <div class="date-inputs">
-          <label>
-            Vanaf:
-            <input
-              type="date"
-              class="date-filter"
-              name="dateFrom"
-              value="<%= dateFrom || '' %>"
-            >
-          </label>
-          <label>
-            Tot aan:
-            <input
-              type="date"
-              class="date-filter"
-              name="dateTo"
-              value="<%= dateTo || '' %>"
-            >
-          </label>
-        </div>
-      </details>
-
-      <!-- Genre -->
-      <details name="filters">
-        <summary>Genre</summary>
-        <ul class="genres">
-          <% genres.forEach(genre => { %>
-            <li>
-              <label>
-                <input
-                  type="checkbox"
-                  name="genres"
-                  value="<%= genre %>"
-                  <%= selectedGenres.includes(genre) ? 'checked' : '' %>
-                >
-                <%= genre %>
+          <!-- Datum -->
+          <details>
+            <summary>Datum</summary>
+            <div class="date-inputs">
+              <label>Vanaf:
+                <input type="date" class="date-filter" name="dateFrom" value="<%= dateFrom||'' %>">
               </label>
-            </li>
-          <% }) %>
-        </ul>
-      </details>
+              <label>Tot aan:
+                <input type="date" class="date-filter" name="dateTo"   value="<%= dateTo||'' %>">
+              </label>
+            </div>
+          </details>
 
-      <input type="submit" value="Apply Filters" class="filter-submit" disabled>
-    </form>
+          <!-- Genre -->
+          <details>
+            <summary>Genre</summary>
+            <ul class="genres">
+              <% genres.forEach(genre => { %>
+                <li><label>
+                  <input type="checkbox" name="genres" value="<%= genre %>" 
+                    <%= selectedGenres.includes(genre)?'checked':'' %>>
+                  <%= genre %>
+                </label></li>
+              <% }) %>
+            </ul>
+          </details>
+
+          <div class="submitsection">
+            <button type="submit" class="filter-submit" disabled>Apply Filters</button>
+          </div>
+        </form>
+      </div>
+    </div>
 
     <!-- Concertcards -->
     <section>
