@@ -1,61 +1,84 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Login</title>
-    
-    <link rel="stylesheet" href="/login.css">
-    <link rel="stylesheet" href="/styles.css">
-    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined" rel="stylesheet">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Login</title>
+
+  <link rel="stylesheet" href="/styles.css">
+  <link rel="stylesheet" href="/account.css">
+  <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined" rel="stylesheet">
 </head>
+
 <body class="container">
 
-    <%- include('../partials/header'); %>
+  <%- include('../partials/header'); %>
 
-<main>
-  <!-- <div class="jumbotron">
-      <h2></h2> 
-  </div> -->
+    <main>
 
-  <h2><%= user.firstName %> <%= user.lastName %></h2>
-<p>Email: <%= user.email %></p>
+      <img src="<%= user.imagePath %>" alt="Profielfoto" />
+
+      <section>
+        <h2>
+          <%= user.firstName %>
+            <%= user.lastName %>
+        </h2>
+        <p>
+          <%= user.email %>
+        </p>
+      </section>
+
+      <article class="profiel-bio">
+        <div class="info-headings">
+          <h3>
+            <%= user.age %> jaar oud
+          </h3>
+          <h3>Buddy sinds <%= user.createdAt.toLocaleDateString() %>
+          </h3>
+        </div>
+        <p>
+          <%= user.bio %>
+        </p>
+      </article>
+
+      <section>
+        <h2>Mijn favoriete genres</h2>
+        <ol>
+          <% user.preferences.genres.forEach(function(genre) { %>
+            <li>
+              <%= genre %>
+            </li>
+            <% }) %>
+        </ol>
+      </section>
 
 
-<img src="<%= user.imagePath %>" alt="Profielfoto" style="max-width: 200px; border-radius: 8px;" />
+      <section>
+        <h2>Matching voorkeuren</h2>
+        <ul>
+          <li><strong>Leeftijd:</strong>
+            <%= user.preferences.minAge %> - <%= user.preferences.maxAge %>
+          </li>
+          <li><strong>Geslacht:</strong>
+            <%= user.preferences.geslacht %>
+          </li>
+          <li><strong>Talen:</strong></li>
+          <ul>
+            <% user.preferences.taal.forEach(function(taal) { %>
+              <% if (taal) { %>
+                <li><%= taal %></li>
+              <% } %>
+            <% }) %>
+          </ul>  
+        </ul>
+      </section>
 
-<ul>
-  <li><strong>Email:</strong> <%= user.email %></li>
-  <li><strong>Leeftijd:</strong> <%= user.age %></li>
-  <li><strong>Bio:</strong> <%= user.bio %></li>
-  <li><strong>Aangemaakt op:</strong> <%= user.createdAt.toLocaleDateString() %></li>
-</ul>
 
-<h2>Voorkeuren</h2>
-<ul>
-  <li><strong>Minimale leeftijd:</strong> <%= user.preferences.minAge %></li>
-  <li><strong>Maximale leeftijd:</strong> <%= user.preferences.maxAge %></li>
-  <li><strong>Geslacht:</strong> <%= user.preferences.geslacht %></li>
-  <li><strong>Talen:</strong>
-    <ul>
-      <% user.preferences.taal.forEach(function(taal) { %>
-        <% if (taal) { %><li><%= taal %></li><% } %>
-      <% }) %>
-    </ul>
-  </li>
-  <li><strong>Genres:</strong>
-    <ul>
-      <% user.preferences.genres.forEach(function(genre) { %>
-        <li><%= genre %></li>
-      <% }) %>
-    </ul>
-  </li>
-</ul>
-  
+    </main>
 
-</main>
-
-<%- include('../partials/footer'); %>
+    <%- include('../partials/footer'); %>
 
 </body>
+
 </html>
