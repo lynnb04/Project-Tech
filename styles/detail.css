@@ -144,20 +144,50 @@ p {
     font-weight: 500;
   }
 
-button{
-    display: block;
-    margin: 3em auto 1em auto;
-    text-align: center;
-    font-family: 'Quicksand';
-    font-size: 1em;
-    color: var(--tekst);
-    background-color: var(--paars);
-    height: 2.875em;
-    width: 17.75em;
-    border: solid 0.0625em var(--paars);
-    border-radius: 2em;
+.eventCheck{
+  display: flex;
+  margin: 1em;
+  align-content: center;
 }
+
+.eventCheck button{
+  width: 16em;
+  border-radius: 3em .4em .4em 3em;
   
+  display: block;
+  margin: .2em;
+  text-align: center;
+  font-family: 'Quicksand';
+  font-size: 1em;
+  color: var(--tekst);
+  background-color: var(--roze);
+  height: 2.875em;
+  border: 0;
+}
+
+.eventCheck a{
+  width: 9em;
+  border-radius: .4em 3em 3em .4em;
+
+  display: block;
+  margin: .2em;
+  /* text-align: center; */
+  font-family: 'Quicksand';
+  font-size: 1em;
+  color: var(--tekst);
+  background-color: var(--roze);
+  height: 2.875em;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.eventCheck a.disabled{
+  pointer-events: none;
+  background-color: var(--backgroundSecundary);
+}
+
 .tickets {
     display: flex;
     justify-content: center;

@@ -1,6 +1,11 @@
+fieldset {
+  border: none;
+  padding: 0;
+  margin: 0;
+}
 
-/* styling for genres
-.genres ul {
+/* styling for genres */
+/* .genres ul {
     list-style: none;
     padding: 0;
     margin: 0;
@@ -147,3 +152,134 @@ input[type="range"]:active::-webkit-slider-thumb {
   left: 0;
   right: 0;
 }
+
+/* styling form */
+
+/* Formulier container */
+.persoonsGegevensWrapper {
+  display: flex;
+  flex-direction: column;
+  gap: 2em;
+  padding: 2em;
+  max-width: 600px;
+  margin: 0 auto;
+}
+
+/* Fieldsets */
+fieldset {
+  border: none;
+  padding: 0;
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 1em;
+}
+
+legend {
+  font-family: 'Staatliches', sans-serif;
+  font-size: 2em;
+  margin-bottom: 0.5em;
+}
+
+main {
+  margin-bottom: 3em;
+}
+
+.persoonsGegevensWrapper fieldset {
+  margin-bottom: 2em;
+}
+
+
+
+/* Labels + inputs */
+label {
+  font-size: 0.95em;
+  font-weight: 600;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5em;
+}
+
+input[type="text"],
+input[type="email"],
+input[type="password"],
+input[type="number"],
+input[type="file"],
+textarea {
+  padding: 0.75em;
+  border-radius: 0.5em;
+  border: none;
+  background-color: var(--inputBackground);
+  color: white;
+}
+
+textarea {
+  min-height: 100px;
+  resize: vertical;
+}
+
+input::placeholder,
+textarea::placeholder {
+  color: white;
+  opacity: 0.8;
+}
+
+/* Submit knop */
+input[type="submit"] {
+  padding: 0.9em;
+  background-color: var(--lichtBlauw);
+  color: var(--backgroundSecundary);
+  font-weight: bold;
+  border: none;
+  border-radius: 0.5em;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+  margin-top: 2em;
+}
+
+input[type="submit"]:hover {
+  background-color: var(--blauw);
+}
+
+/* Genres */
+.genres ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5em;
+}
+
+.genres li {
+  margin: 0;
+}
+
+.genres input[type="checkbox"] {
+  display: none;
+}
+
+.genres label {
+  display: inline-block;
+  padding: 0.5em 1em;
+  background-color: var(--lichtBlauw);
+  color: var(--tekst);
+  cursor: pointer;
+  border-radius: 99em;
+  transition: all 0.3s ease;
+}
+
+.genres input[type="checkbox"]:checked + label,
+.genres label:has(input[type="checkbox"]:checked) {
+  background-color: var(--roze);
+}
+
+/* Alleen voor labels met radio-buttons */
+input[type="radio"] + label,
+#matchVoorkeuren label {
+  flex-direction: row;
+  align-items: center;
+  gap: 0.5em;
+}
+
+

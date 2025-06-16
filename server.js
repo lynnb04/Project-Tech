@@ -27,6 +27,7 @@ app.use('/static', express.static('static'))
 app.use(express.urlencoded({extended: true}));
 app.use(express.static('styles'));
 app.use(express.static('script'));
+app.use(express.json());
 app.use('/uploads', express.static('uploads'));
 
 // Footer link actief
@@ -194,6 +195,73 @@ app.get('/matching', async (req, res) => {
 });
 // https://www.mongodb.com/docs/manual/reference/operator/query/gte/
 // https://www.mongodb.com/docs/manual/reference/operator/query/ne/
+
+// match toevoegen of afwijzen
+// --------------------
+app.post('/match/add/:id', async (req, res) => {
+  try {
+    const currentUserId = req.session.user.id;
+    const targetUserId = req.params.id;
+
+    const dbUsers = db.collection('users');
+
+    const currentUser = await dbUsers.findOne({ _id: new ObjectId(currentUserId) });
+    const targetUser = await dbUsers.findOne({ _id: new ObjectId(targetUserId) });
+
+    if (!currentUser || !targetUser) return res.redirect('/matching');
+
+    const hasMatchedMe = targetUser.pendingMatch?.includes(currentUserId);
+
+    if (hasMatchedMe) {
+      // Wederzijdse match!
+      await dbUsers.updateOne(
+        { _id: new ObjectId(currentUserId) },
+        {
+          $addToSet: { matched: targetUserId },
+          $pull: { pendingMatch: targetUserId }
+        }
+      );
+
+      await dbUsers.updateOne(
+        { _id: new ObjectId(targetUserId) },
+        {
+          $addToSet: { matched: currentUserId },
+          $pull: { pendingMatch: currentUserId }
+        }
+      );
+    } else {
+      // Nog geen wederzijdse match, zet in afwachting
+      await dbUsers.updateOne(
+        { _id: new ObjectId(currentUserId) },
+        { $addToSet: { pendingMatch: targetUserId } }
+      );
+    }
+
+    res.redirect('/matching');
+  } catch (err) {
+    console.error("Fout bij toevoegen van match:", err);
+    res.status(500).send("Er ging iets mis bij het toevoegen.");
+  }
+});
+
+app.post('/match/skip/:id', async (req, res) => {
+  try {
+    const currentUserId = req.session.user.id;
+    const targetUserId = req.params.id;
+
+    await db.collection('users').updateOne(
+      { _id: new ObjectId(currentUserId) },
+      { $addToSet: { noMatch: targetUserId } }
+    );
+
+    res.redirect('/matching');
+  } catch (err) {
+    console.error("Fout bij overslaan:", err);
+    res.status(500).send("Er ging iets mis bij het overslaan.");
+  }
+});
+
+
 
 // overview
 // --------------------
@@ -404,7 +472,8 @@ app.post('/registration', upload.single('img'), async (req, res) => {
                 genres: Array.isArray(genres) ? genres : [genres]
             },
             imagePath: req.file ? `/uploads/${req.file.filename}` : null,
-            createdAt: new Date()
+            createdAt: new Date(),
+            favorites: []
         };
 
         const result = await db.collection('users').insertOne(newUser);
@@ -556,11 +625,18 @@ app.use((req, res, next) => {
     next();
   });
 
-  app.get('/detail/:id', async (req, res) => {
+app.get('/detail/:id', async (req, res) => {
     const eventId = req.params.id;
     const url = `${process.env.API_URL_DETAIL}/${eventId}.json?apikey=${process.env.API_KEY}`;
   
     try {
+      const currentUserId = req.session.user ? req.session.user.id : null;
+      let currentUser = null;
+  
+      if (currentUserId) {
+        currentUser = await db.collection('users').findOne({ _id: new ObjectId(currentUserId) });
+      }
+
       const response = await fetch(url);
   
       if (!response.ok) {
@@ -569,9 +645,49 @@ app.use((req, res, next) => {
   
       const event = await response.json();
   
-      res.render('pages/detail', { event });
+      res.render('pages/detail', { event, currentUser });
     } catch (error) {
       console.error("Fout bij ophalen event detail:", error);
       res.render('pages/detail', { event: null, error: 'Event niet gevonden.' });
     }
   });
+
+// like van een event
+app.post('/favorites', async (req, res) => {
+  const { eventId } = req.body;
+  const userId = req.session.user ? req.session.user.id : null;
+
+  if (!userId) return res.status(401).json({ error: 'Niet ingelogd' });
+  if (!eventId) return res.status(400).json({ error: 'Geen eventId opgegeven' });
+
+  try {
+    await db.collection('users').updateOne(
+      { _id: new ObjectId(userId) },
+      { $addToSet: { favorites: eventId.toString() } } // toegevoegde favorite eventId als string
+    );
+    res.json({ success: true });
+  } catch (err) {
+    console.error('Fout bij toevoegen favoriet:', err);
+    res.status(500).json({ error: 'Fout bij toevoegen favoriet' });
+  }
+});
+
+// Favoriet verwijderen
+app.delete('/favorites', async (req, res) => {
+  const { eventId } = req.body;
+  const userId = req.session.user ? req.session.user.id : null;
+
+  if (!userId) return res.status(401).json({ error: 'Niet ingelogd' });
+  if (!eventId) return res.status(400).json({ error: 'Geen eventId opgegeven' });
+
+  try {
+    await db.collection('users').updateOne(
+      { _id: new ObjectId(userId) },
+      { $pull: { favorites: eventId.toString() } }
+    );
+    res.json({ success: true });
+  } catch (err) {
+    console.error('Fout bij verwijderen favoriet:', err);
+    res.status(500).json({ error: 'Fout bij verwijderen favoriet' });
+  }
+});

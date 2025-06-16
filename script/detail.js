@@ -1,14 +1,72 @@
+// document.addEventListener('DOMContentLoaded', () => {
+//     const favBtn = document.querySelector('.favo-btn');
+//     const icon   = favBtn.querySelector('img');
+
+//     favBtn.addEventListener('click', () => {
+//       // toggle class voor styling of herkenning
+//       const active = favBtn.classList.toggle('active');
+
+//       // wissel het icoon
+//       icon.src = active
+//         ? '/static/heart_active.svg'
+//         : '/static/heart_open.svg';
+//     });
+//   });
+
+// document.addEventListener('DOMContentLoaded', () => {
+//   const favBtn = document.querySelector('.favo-btn');
+//   const icon = favBtn.querySelector('img');
+
+//   favBtn.addEventListener('click', async () => {
+//     const active = favBtn.classList.toggle('active');
+//     const eventId = favBtn.dataset.eventId;
+
+//     icon.src = active
+//       ? '/static/heart_active.svg'
+//       : '/static/heart_open.svg';
+
+//     try {
+//       await fetch('/favorites', {
+//         method: active ? 'POST' : 'DELETE',
+//         headers: { 'Content-Type': 'application/json' },
+//         body: JSON.stringify({ eventId }),
+//       });
+//     } catch (error) {
+//       console.error('Fout bij updaten favoriet:', error);
+//     }
+//   });
+// });
+
 document.addEventListener('DOMContentLoaded', () => {
-    const favBtn = document.querySelector('.favo-btn');
-    const icon   = favBtn.querySelector('img');
+  const likeButton = document.querySelector('.favo-btn');
 
-    favBtn.addEventListener('click', () => {
-      // toggle class voor styling of herkenning
-      const active = favBtn.classList.toggle('active');
+  if (likeButton) {
+    likeButton.addEventListener('click', async () => {
+      const eventId = likeButton.dataset.eventId;
 
-      // wissel het icoon
-      icon.src = active
-        ? '/static/heart_active.svg'
-        : '/static/heart_open.svg';
+      try {
+        const response = await fetch('/favorites', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify({ eventId })
+        });
+
+        const data = await response.json();
+
+        if (data.success) {
+          likeButton.classList.toggle('active');
+          const img = likeButton.querySelector('img');
+          img.src = likeButton.classList.contains('active')
+            ? '/static/heart_active.svg'
+            : '/static/heart_open.svg';
+        } else {
+          console.error('Fout bij liken:', data.error);
+        }
+      } catch (err) {
+        console.error('Fout bij verzoek:', err);
+      }
     });
-  });
+  }
+});

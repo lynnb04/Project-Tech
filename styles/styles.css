@@ -2,18 +2,20 @@
 /* CUSTOM PROPERTIES */
 /*********************/
 :root {
-    --background:#02061E;
-    --backgroundSecundary:#222431;
+  --background:#02061E;
+  --backgroundSecundary:#222431;
 	--tekst:#f5f5f7;
-    --tekstSecundary: #f5f5f7c1;
+  --tekstSecundary: #f5f5f7c1;
 
 	--roze:#B91BF4;
-    --paars:#6B3AB4;
-    --blauw:#4D37F6;
+  --paars:#6B3AB4;
+  --blauw:#4D37F6;
 	--lichtBlauw:#8E80FF;
 
   --main-gradient: linear-gradient(to right, #B91BF4, #6B3AB4, #4D37F6 ,#8E80FF);
-  --accentKleur: #7a4486;
+  --inputBackground: #1a1e4c;
+  
+  --secundaryButton: #9370c7;
 }
 
 /*********/
@@ -37,6 +39,8 @@
     unicode-range: U+0000-00FF;
   }
   
+
+
 
 
 /********************/
