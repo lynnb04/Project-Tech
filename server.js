@@ -196,6 +196,73 @@ app.get('/matching', async (req, res) => {
 // https://www.mongodb.com/docs/manual/reference/operator/query/gte/
 // https://www.mongodb.com/docs/manual/reference/operator/query/ne/
 
+// match toevoegen of afwijzen
+// --------------------
+app.post('/match/add/:id', async (req, res) => {
+  try {
+    const currentUserId = req.session.user.id;
+    const targetUserId = req.params.id;
+
+    const dbUsers = db.collection('users');
+
+    const currentUser = await dbUsers.findOne({ _id: new ObjectId(currentUserId) });
+    const targetUser = await dbUsers.findOne({ _id: new ObjectId(targetUserId) });
+
+    if (!currentUser || !targetUser) return res.redirect('/matching');
+
+    const hasMatchedMe = targetUser.pendingMatch?.includes(currentUserId);
+
+    if (hasMatchedMe) {
+      // Wederzijdse match!
+      await dbUsers.updateOne(
+        { _id: new ObjectId(currentUserId) },
+        {
+          $addToSet: { matched: targetUserId },
+          $pull: { pendingMatch: targetUserId }
+        }
+      );
+
+      await dbUsers.updateOne(
+        { _id: new ObjectId(targetUserId) },
+        {
+          $addToSet: { matched: currentUserId },
+          $pull: { pendingMatch: currentUserId }
+        }
+      );
+    } else {
+      // Nog geen wederzijdse match, zet in afwachting
+      await dbUsers.updateOne(
+        { _id: new ObjectId(currentUserId) },
+        { $addToSet: { pendingMatch: targetUserId } }
+      );
+    }
+
+    res.redirect('/matching');
+  } catch (err) {
+    console.error("Fout bij toevoegen van match:", err);
+    res.status(500).send("Er ging iets mis bij het toevoegen.");
+  }
+});
+
+app.post('/match/skip/:id', async (req, res) => {
+  try {
+    const currentUserId = req.session.user.id;
+    const targetUserId = req.params.id;
+
+    await db.collection('users').updateOne(
+      { _id: new ObjectId(currentUserId) },
+      { $addToSet: { noMatch: targetUserId } }
+    );
+
+    res.redirect('/matching');
+  } catch (err) {
+    console.error("Fout bij overslaan:", err);
+    res.status(500).send("Er ging iets mis bij het overslaan.");
+  }
+});
+
+
+
 // overview
 // --------------------
 app.get('/overview', async function (req, res) {
