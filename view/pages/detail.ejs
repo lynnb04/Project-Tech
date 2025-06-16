@@ -33,9 +33,21 @@
     
         <div class="titel">
           <h1><%= event.name %></h1>
-          <button class="favo-btn">
+          <!-- <button class="favo-btn">
             <img src="/static/heart_open.svg" alt="Toevoegen aan favorieten">
-          </button>
+          </button> -->
+          <% if (currentUser && Array.isArray(currentUser.favorites)) { %>
+            <% const isFavorite = currentUser.favorites.includes(event.id); %>
+            <button
+              class="favo-btn <%= isFavorite ? 'active' : '' %>"
+              data-event-id="<%= event.id %>">
+              <img
+                src="/static/<%= isFavorite ? 'heart_active' : 'heart_open' %>.svg"
+                alt="Toevoegen aan favorieten">
+            </button>
+          <% } else { %>
+            <p><a href="/">Log in om te liken</a></p>
+          <% } %>
         </div>
     
         <div class="time-tag">
@@ -61,8 +73,12 @@
           <% } %>
         </div>
     
-        <button>Ik ga naar dit Event!</button>
-    
+        <div class="eventCheck">
+          <button>Ik ga naar dit Event!</button>
+          <a class="disabled">Vind match</a>
+        </div>
+        
+  
         <!-- Link naar tickets -->
         <% if (event.url) { %>
           <p>

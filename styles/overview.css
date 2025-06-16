@@ -13,6 +13,7 @@ main * {
 
 main{
   padding: 2em;
+  overflow: clip;
 }
 
 body {
@@ -247,9 +248,9 @@ ul.genres {
 }
 
 /* Concertcards layout */
-article ul {
+/* article ul {
   overflow: clip;
-}
+} */
 
 article li {
   position: relative;
