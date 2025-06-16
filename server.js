@@ -146,20 +146,28 @@ app.post('/form', upload.single('img'), async (req, res) => {
 app.get('/matching', async (req, res) => {
   try {
     const currentUserId = req.session.user.id;
-    const currentUser = await db.collection('users').findOne({ _id: new ObjectId(currentUserId) });
 
+    // Haal de volledige gebruiker op vanuit de database
+    const currentUser = await db.collection('users').findOne({ _id: new ObjectId(currentUserId) });
     if (!currentUser) return res.redirect('/');
 
     const prefs = currentUser.preferences;
 
-    // Eerste filter: gebruikers die voldoen aan JOUW voorkeuren
+    // Verzamel uitgesloten gebruikers (already swiped/matched)
+    const excludedIds = [
+      ...(currentUser.pendingMatch || []),
+      ...(currentUser.noMatch || []),
+      ...(currentUser.match || [])
+    ].map(id => id.toString());
+
+    // Eerste filter: gebruikers die voldoen aan jouw voorkeuren
     const initialQuery = {
-      _id: { $ne: new ObjectId(currentUserId) },
+      _id: { $ne: new ObjectId(currentUserId) }, // Niet jezelf
       age: { $gte: prefs.minAge, $lte: prefs.maxAge }
     };
 
     if (prefs.geslacht !== 'nvt') {
-      initialQuery.gender = prefs.geslacht; // pas evt. veldnaam aan
+      initialQuery.gender = prefs.geslacht;
     }
 
     if (prefs.taal && prefs.taal.length > 0 && !prefs.taal.includes('nvt')) {
@@ -172,21 +180,24 @@ app.get('/matching', async (req, res) => {
 
     const users = await db.collection('users').find(initialQuery).toArray();
 
-    // Tweede filter: jij moet ook binnen HUN voorkeuren vallen
-    const wederzijdseMatches = users.filter(user => {
-      const anderePrefs = user.preferences;
+    // Tweede filter: wederzijdse voorkeuren én niet eerder geswipet
+    const mutualMatches = users.filter(user => {
+      const otherPrefs = user.preferences;
 
-      const jijValtInLeeftijd = currentUser.age >= anderePrefs.minAge && currentUser.age <= anderePrefs.maxAge;
+      const matchesTheirAgeRange =
+        currentUser.age >= otherPrefs.minAge &&
+        currentUser.age <= otherPrefs.maxAge;
 
-      const geslachtOk =
-        anderePrefs.geslacht === 'nvt' ||
-        anderePrefs.geslacht === currentUser.gender;
+      const genderMatches =
+        otherPrefs.geslacht === 'nvt' ||
+        otherPrefs.geslacht === currentUser.gender;
 
-      // eventueel taal en genre ook wederzijds controleren
-      return jijValtInLeeftijd && geslachtOk;
+      const notAlreadyHandled = !excludedIds.includes(user._id.toString());
+
+      return matchesTheirAgeRange && genderMatches && notAlreadyHandled;
     });
 
-    res.render('pages/matching', { users: wederzijdseMatches });
+    res.render('pages/matching', { users: mutualMatches });
 
   } catch (err) {
     console.error("Fout bij ophalen wederzijdse matches:", err);
@@ -473,7 +484,10 @@ app.post('/registration', upload.single('img'), async (req, res) => {
             },
             imagePath: req.file ? `/uploads/${req.file.filename}` : null,
             createdAt: new Date(),
-            favorites: []
+            favorites: [],
+            pendingMatch: [],
+            noMatch: [],
+            match: []
         };
 
         const result = await db.collection('users').insertOne(newUser);
