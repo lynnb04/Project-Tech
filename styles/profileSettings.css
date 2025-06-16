@@ -128,6 +128,7 @@ input[type="file"] {
 /* Input and select */
 input, select {
     width: 100%;
+    max-width: 400px;
     padding: 0.75em;
     margin: 0.5em 0;
     background-color: #1A1B2E;
@@ -135,12 +136,35 @@ input, select {
     border-radius: 1.25em;
     color: white;
     font-size: 0.9rem;
+    box-sizing: border-box;
 }
 
-/* Genre, geslacht, etc */
+.name-fields {
+    display: flex;
+    justify-content: center;
+    gap: 1em; /* Ruimte tussen voornaam en achternaam */
+    width: 90%; /* zodat het net zo breed is als inputs */
+    margin: 0 auto 0.5em;
+}
+
+.name-fields > div {
+    flex: 1; /* beide velden even breed */
+}
+
+.name-fields input {
+    width: 100%; /* input vult z’n container volledig */
+    box-sizing: border-box;
+}
+
+/* Geslacht */
 label input[type="checkbox"],
 label input[type="radio"] {
     display: none;
+}
+
+.geslacht {
+    width: 100%;
+    text-align: center;
 }
 
 label {
@@ -162,11 +186,13 @@ input[type="radio"]:checked + label {
 }
 
 /* Slider voor leeftijd */
-.leeftijd input[type="range"] {
-    width: 100%;
-    margin-top: 0.625em;
-    background: transparent;
-}
+
+
+
+
+
+
+
 
 /* Zoekvelden */
 input[type="search"],
