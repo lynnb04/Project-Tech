@@ -13,7 +13,7 @@
     <main>
         <form action="/registration" method="POST" enctype="multipart/form-data" class="persoonsGegevensWrapper">
             <fieldset id="persoonsGegevens">
-                <legend>persoonsGegevens</legend>
+                <legend>Registreer</legend>
                 <label for="firstName">Voornaam
                     <input type="text" name="firstName" placeholder="Enter your name"> 
                 </label>
@@ -32,10 +32,9 @@
                 <label for="img">Profiel foto
                     <input type="file" name="img" accept="image/*">  
                 </label>
-                <label for="bio">biografie
+                <label for="bio">Biografie
                     <textarea id="bio" name="bio"></textarea>
                 </label>
-                <input type="submit" value="Submit">
             </fieldset>
             <fieldset class="genres">
                 <legend>Genres</legend>
@@ -72,16 +71,16 @@
                     </div>
 
                     <h2>Geslacht</h2>
-                      <label for="man">man
+                      <label for="man">Man
                         <input type="radio" name="geslacht" id="man" value="man">
                       </label>
-                      <label for="vrouw">vrouw
+                      <label for="vrouw">Vrouw
                         <input type="radio" name="geslacht" id="vrouw" value="vrouw">
                       </label>                      
-                      <label for="anders">anders
+                      <label for="anders">Anders
                         <input type="radio" name="geslacht" id="anders" value="anders">
                       </label>        
-                      <label for="geenVoorkeur">geen voorkeur
+                      <label for="geenVoorkeur">Geen voorkeur
                         <input type="radio" name="geslacht" id="geenVoorkeur" value="nvt">
                       </label>            
 
@@ -98,6 +97,7 @@
                       <label for="else">Anders
                         <input type="text" name="taal" id="else">
                       </label>
+                      <input type="submit" value="Submit">
 
                 <!-- https://codepen.io/alexpg96/pen/xxrBgbP -->
             </fieldset>
