@@ -362,6 +362,7 @@ app.get('/concertMatching/:eventId', async (req, res) => {
     res.render('pages/concertMatching', {
       users: mutualMatches,
       eventTitle: event.name,
+      eventId
     });
 
   } catch (err) {
