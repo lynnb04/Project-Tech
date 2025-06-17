@@ -817,7 +817,7 @@ app.post('/api/going', async (req, res) => {
     const userId = req.session.user?.id;
     const { eventId } = req.body;
 
-    if (!userId) {
+    if (!userId) { 
       return res.status(401).json({ message: 'Niet ingelogd' });
     }
 
