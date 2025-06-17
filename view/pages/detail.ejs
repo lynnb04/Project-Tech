@@ -74,8 +74,12 @@
         </div>
     
         <div class="eventCheck">
-          <button>Ik ga naar dit Event!</button>
-          <a class="disabled">Vind match</a>
+          <button id="going-button" 
+            class="<%= isGoing ? 'active' : '' %>" 
+            data-event-id="<%= event.id %>">
+            <%= isGoing ? 'Je gaat naar dit Event!' : 'Ik ga naar dit Event!' %>
+          </button>
+          <a href="/concertMatching/<%= event.id %>" class="<%= isGoing ? '' : 'disabled' %>">Vind match</a>
         </div>
         
   

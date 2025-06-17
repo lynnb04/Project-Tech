@@ -209,10 +209,12 @@ app.get('/matching', async (req, res) => {
 
 // match toevoegen of afwijzen
 // --------------------
+// add match
 app.post('/match/add/:id', async (req, res) => {
   try {
     const currentUserId = req.session.user.id;
     const targetUserId = req.params.id;
+    const eventId = req.body.eventId || null; // ← komt vanuit hidden input in je EJS
 
     const dbUsers = db.collection('users');
 
@@ -221,40 +223,59 @@ app.post('/match/add/:id', async (req, res) => {
 
     if (!currentUser || !targetUser) return res.redirect('/matching');
 
-    const hasMatchedMe = targetUser.pendingMatch?.includes(currentUserId);
+    const hasMatchedMe = (targetUser.pendingMatch || []).some(match => {
+      if (typeof match === 'object' && match._id) {
+        return match._id.toString() === currentUserId &&
+               (!eventId || match.eventId === eventId); // match moet bij zelfde event horen
+      }
+      return match === currentUserId; // voor backward compatibility
+    });
 
     if (hasMatchedMe) {
       // Wederzijdse match!
       await dbUsers.updateOne(
         { _id: new ObjectId(currentUserId) },
         {
-          $addToSet: { matched: targetUserId },
-          $pull: { pendingMatch: targetUserId }
+          $addToSet: {
+            matched: { _id: new ObjectId(targetUserId), ...(eventId && { eventId }) }
+          },
+          $pull: {
+            pendingMatch: { _id: new ObjectId(targetUserId), ...(eventId && { eventId }) }
+          }
         }
       );
 
       await dbUsers.updateOne(
         { _id: new ObjectId(targetUserId) },
         {
-          $addToSet: { matched: currentUserId },
-          $pull: { pendingMatch: currentUserId }
+          $addToSet: {
+            matched: { _id: new ObjectId(currentUserId), ...(eventId && { eventId }) }
+          },
+          $pull: {
+            pendingMatch: { _id: new ObjectId(currentUserId), ...(eventId && { eventId }) }
+          }
         }
       );
     } else {
       // Nog geen wederzijdse match, zet in afwachting
+      const pendingEntry = { _id: new ObjectId(targetUserId) };
+      if (eventId) pendingEntry.eventId = eventId;
+
       await dbUsers.updateOne(
         { _id: new ObjectId(currentUserId) },
-        { $addToSet: { pendingMatch: targetUserId } }
+        { $addToSet: { pendingMatch: pendingEntry } }
       );
     }
 
-    res.redirect('/matching');
+    // Redirect naar juiste pagina
+    res.redirect(eventId ? `/concertMatching/${eventId}` : '/matching');
+
   } catch (err) {
     console.error("Fout bij toevoegen van match:", err);
     res.status(500).send("Er ging iets mis bij het toevoegen.");
   }
 });
-
+// skip match
 app.post('/match/skip/:id', async (req, res) => {
   try {
     const currentUserId = req.session.user.id;
@@ -272,6 +293,82 @@ app.post('/match/skip/:id', async (req, res) => {
   }
 });
 
+
+
+
+// concertMatching
+// --------------------
+app.get('/concertMatching/:eventId', async (req, res) => {
+  const currentUserId = req.session.user?.id;
+  const eventId = req.params.eventId;
+
+  if (!currentUserId) {
+    return res.status(401).send('Je moet ingelogd zijn.');
+  }
+
+  try {
+    const currentUser = await db.collection('users').findOne({ _id: new ObjectId(currentUserId) });
+    if (!currentUser) return res.redirect('/');
+
+    // Check of gebruiker dit event bezoekt
+    if (!currentUser.goingEvents || !currentUser.goingEvents.includes(eventId)) {
+      return res.status(403).send('Toegang geweigerd. Je hebt niet aangegeven dat je naar dit event gaat.');
+    }
+
+    // Haal eventtitel op via API
+    const eventUrl = `${process.env.API_URL_DETAIL}/${eventId}.json?apikey=${process.env.API_KEY}`;
+    const response = await fetch(eventUrl);
+    if (!response.ok) throw new Error('Event ophalen mislukt');
+    const event = await response.json();
+
+    const prefs = currentUser.preferences;
+
+    const excludedIds = [
+      ...(currentUser.pendingMatch || []),
+      ...(currentUser.noMatch || []),
+      ...(currentUser.match || [])
+    ].map(id => id.toString());
+
+    const initialQuery = {
+      _id: { $ne: new ObjectId(currentUserId) },
+      age: { $gte: prefs.minAge, $lte: prefs.maxAge }
+    };
+
+    if (prefs.geslacht !== 'nvt') {
+      initialQuery.gender = prefs.geslacht;
+    }
+
+    if (prefs.taal && prefs.taal.length > 0 && !prefs.taal.includes('nvt')) {
+      initialQuery['preferences.taal'] = { $in: prefs.taal };
+    }
+
+    const users = await db.collection('users').find(initialQuery).toArray();
+
+    const mutualMatches = users.filter(user => {
+      const otherPrefs = user.preferences;
+      const matchesTheirAgeRange =
+        currentUser.age >= otherPrefs.minAge &&
+        currentUser.age <= otherPrefs.maxAge;
+
+      const genderMatches =
+        otherPrefs.geslacht === 'nvt' || otherPrefs.geslacht === currentUser.gender;
+
+      const notAlreadyHandled = !excludedIds.includes(user._id.toString());
+
+      return matchesTheirAgeRange && genderMatches && notAlreadyHandled;
+    });
+
+    // Geef event name mee aan de EJS
+    res.render('pages/concertMatching', {
+      users: mutualMatches,
+      eventTitle: event.name,
+    });
+
+  } catch (err) {
+    console.error("Fout bij concert-matching:", err);
+    res.status(500).send("Interne serverfout");
+  }
+});
 
 
 // overview
@@ -639,32 +736,6 @@ app.use((req, res, next) => {
     next();
   });
 
-app.get('/detail/:id', async (req, res) => {
-    const eventId = req.params.id;
-    const url = `${process.env.API_URL_DETAIL}/${eventId}.json?apikey=${process.env.API_KEY}`;
-  
-    try {
-      const currentUserId = req.session.user ? req.session.user.id : null;
-      let currentUser = null;
-  
-      if (currentUserId) {
-        currentUser = await db.collection('users').findOne({ _id: new ObjectId(currentUserId) });
-      }
-
-      const response = await fetch(url);
-  
-      if (!response.ok) {
-        throw new Error(`API error: ${response.status} ${response.statusText}`);
-      }
-  
-      const event = await response.json();
-  
-      res.render('pages/detail', { event, currentUser });
-    } catch (error) {
-      console.error("Fout bij ophalen event detail:", error);
-      res.render('pages/detail', { event: null, error: 'Event niet gevonden.' });
-    }
-  });
 
 // like van een event
 app.post('/favorites', async (req, res) => {
@@ -703,5 +774,64 @@ app.delete('/favorites', async (req, res) => {
   } catch (err) {
     console.error('Fout bij verwijderen favoriet:', err);
     res.status(500).json({ error: 'Fout bij verwijderen favoriet' });
+  }
+});
+
+// Concert knop
+app.get('/detail/:id', async (req, res) => {
+  const eventId = req.params.id;
+  const url = `${process.env.API_URL_DETAIL}/${eventId}.json?apikey=${process.env.API_KEY}`;
+  
+
+  try {
+    const currentUserId = req.session.user ? req.session.user.id : null;
+    let currentUser = null;
+    let isGoing = false; // <-- nieuw toegevoegd
+
+    if (currentUserId) {
+      currentUser = await db.collection('users').findOne({ _id: new ObjectId(currentUserId) });
+
+      // Check of de user dit concert al heeft opgeslagen
+      if (currentUser && Array.isArray(currentUser.goingEvents)) {
+        isGoing = currentUser.goingEvents.includes(eventId);
+      }
+    }
+
+    const response = await fetch(url);
+    if (!response.ok) {
+      throw new Error(`API error: ${response.status} ${response.statusText}`);
+    }
+
+    const event = await response.json();
+
+    // Geef 'isGoing' ook mee aan de EJS
+    res.render('pages/detail', { event, currentUser, isGoing });
+  } catch (error) {
+    console.error("Fout bij ophalen event detail:", error);
+    res.render('pages/detail', { event: null, error: 'Event niet gevonden.', isGoing: false });
+  }
+});
+
+app.post('/api/going', async (req, res) => {
+  try {
+    const userId = req.session.user?.id;
+    const { eventId } = req.body;
+
+    if (!userId) { 
+      return res.status(401).json({ message: 'Niet ingelogd' });
+    }
+
+    const userCollection = db.collection('users');
+
+    // Voeg het event toe aan het 'goingEvents' veld van de gebruiker
+    await userCollection.updateOne(
+      { _id: new ObjectId(userId) },
+      { $addToSet: { goingEvents: eventId } }
+    );
+
+    res.status(200).json({ message: 'Event opgeslagen als going' });
+  } catch (error) {
+    console.error('Fout bij opslaan van going:', error);
+    res.status(500).json({ message: 'Serverfout' });
   }
 });
