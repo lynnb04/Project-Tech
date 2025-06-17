@@ -70,3 +70,38 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   }
 });
+
+console.log("JS geladen");
+
+// check deze code:
+document.addEventListener('DOMContentLoaded', () => {
+  const goingButton = document.getElementById('going-button');
+  const matchButton = document.querySelector('.eventCheck a'); // jouw match knop selector
+
+  if (goingButton && matchButton) {
+    goingButton.addEventListener('click', async () => {
+      const eventId = goingButton.dataset.eventId;
+      console.log("Going-button geklikt met eventId:", eventId);
+
+      try {
+        const response = await fetch('/api/going', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ eventId }),
+        });
+
+        if (response.ok) {
+          // Maak match knop klikbaar en haal disabled class weg
+          matchButton.classList.remove('disabled');
+          goingButton.classList.add('active');
+          goingButton.textContent = "Je gaat naar dit Event!";
+          console.log('Match knop geactiveerd');
+        } else {
+          alert('Je moet ingelogd zijn om dit te doen!');
+        }
+      } catch (error) {
+        console.error('Er ging iets mis:', error);
+      }
+    });
+  }
+});

@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link rel="stylesheet" href="/styles.css" />
+    <link rel="stylesheet" href="/matching.css" />
+    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined" rel="stylesheet">
+</head>
+<body>
+    <%- include('../partials/header'); %>
+    <main>
+        <h1>Mensen die naar <%= eventTitle %> gaan</h1>
+        <ul class="matches">
+            <% users.forEach(user => { %>
+                <li>
+                    <div class="matchFotoContainer">
+                        <% if (user.imagePath) { %>
+                        <img src="<%= user.imagePath %>" alt="User Image" width="100">
+                        <% } %>
+                        <div class="matchNaam">
+                            <h2><%= user.firstName %> <%= user.lastName %></h2>
+                            <p><%= user.age %></p>
+                        </div>
+                    </div>
+                    <% if (user.preferences && user.preferences.genres && user.preferences.genres.length) { %>
+                        <ul>
+                        <% user.preferences.genres.forEach(genre => { %>
+                            <li class="matchGenres"><%= genre %></li>
+                        <% }) %>
+                        </ul>
+                    <% } else { %>
+                        Geen genres gekozen
+                    <% } %>
+                    <div class="matchButtons">
+                        <form action="/match/skip/<%= user._id %>" method="POST">
+                            <button type="submit">Overslaan</button>
+                        </form>
+                        <form action="/match/add/<%= user._id %>" method="POST">
+                            <input type="hidden" name="eventId" value="<%= eventId %>">
+                            <button type="submit">Toevoegen</button>
+                        </form>
+                    </div>
+                    
+                </li>
+            <% }) %>
+        </ul>
+    </main>
+    <%- include('../partials/footer'); %>
+    <script src="/matching.js"></script>
+</body>
+</html>
