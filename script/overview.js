@@ -32,6 +32,37 @@ document.addEventListener("DOMContentLoaded", function () {
     }
   });
 
+    // === List.js initialisatie ===
+  // 1) Options: we sorteren op data-attribuut "date" en op .name
+  var listOptions = {
+    valueNames: [
+      'name',
+      { attr: 'data-date', name: 'date' }
+    ],
+    listClass: 'list'
+  };
+  // 2) Instantie aanmaken
+  var concertList = new List('concert-list', listOptions);
+
+  // 3) Hook de sort-select
+  var sortSelect = document.getElementById('sort-select');
+  sortSelect.addEventListener('change', function() {
+    var [field, order] = this.value.split('-');
+    concertList.sort(field, { order: order });
+  });
+
+  const searchInput = document.getElementById('search-input');
+  if (searchInput) {
+  searchInput.addEventListener('input', function() {
+    // Zoek in alle velden (of specificeer ['name','locatie'] indien gewenst):
+    concertList.search(this.value);
+  });
+  }
+
+  document.querySelector('form[role="search"]').addEventListener('submit', e => {
+    e.preventDefault();
+  });  
+
   // Bestaande logica voor tags, dates & genres:
   document.querySelectorAll(".filter-tag").forEach(tag => {
     if (tag.dataset.selected === "true") tag.classList.add("selected");
@@ -64,9 +95,7 @@ document.addEventListener("DOMContentLoaded", function () {
     }
   }
 
-  // Sluit modal bij form‐submit
   document.querySelector(".filter-menu").addEventListener("submit", (e) => {
-    // voeg hidden inputs… zoals voorheen
     closeModal();
   });
 });

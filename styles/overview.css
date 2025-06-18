@@ -60,23 +60,20 @@ nav.controls button.filter + .filter-count {
 }
 
 /* Sorteerknop naar rechts duwen */
-nav.controls button.sort {
+nav.controls select.sort {
   margin-left: auto;
+  background-color: var(--background);
+  border: 0.1em solid var(--tekst);
 }
 
 /* Standaard styling voor beide knoppen */
-nav.controls button {
+nav.controls button, nav.controls select {
   padding: 0.5em 1em;
   border: none;
   border-radius: 10em;
   background-color: var(--paars);
   color: var(--tekst);
   font-size: 0.9em;
-}
-
-nav.controls button.sort {
-  background-color: var(--background);
-  border: 0.1em solid var(--tekst);
 }
 
 nav.controls button.filter:active {
