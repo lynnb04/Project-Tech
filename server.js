@@ -158,7 +158,14 @@ app.get('/matching', async (req, res) => {
       ...(currentUser.pendingMatch || []),
       ...(currentUser.noMatch || []),
       ...(currentUser.match || [])
-    ].map(id => id.toString());
+    ];
+    
+    const excludedIdStrings = excludedIds.map(item => {
+      if (typeof item === 'object' && item !== null && item._id) {
+        return item._id.toString();
+      }
+      return item.toString();
+    });
 
     // Eerste filter: gebruikers die voldoen aan jouw voorkeuren
     const initialQuery = {
@@ -192,7 +199,7 @@ app.get('/matching', async (req, res) => {
         otherPrefs.geslacht === 'nvt' ||
         otherPrefs.geslacht === currentUser.gender;
 
-      const notAlreadyHandled = !excludedIds.includes(user._id.toString());
+      const notAlreadyHandled = !excludedIdStrings.includes(user._id.toString());
 
       return matchesTheirAgeRange && genderMatches && notAlreadyHandled;
     });
@@ -275,6 +282,7 @@ app.post('/match/add/:id', async (req, res) => {
     res.status(500).send("Er ging iets mis bij het toevoegen.");
   }
 });
+
 // skip match
 app.post('/match/skip/:id', async (req, res) => {
   try {
@@ -327,7 +335,14 @@ app.get('/concertMatching/:eventId', async (req, res) => {
       ...(currentUser.pendingMatch || []),
       ...(currentUser.noMatch || []),
       ...(currentUser.match || [])
-    ].map(id => id.toString());
+    ];
+    
+    const excludedIdStrings = excludedIds.map(item => {
+      if (typeof item === 'object' && item !== null && item._id) {
+        return item._id.toString();
+      }
+      return item.toString();
+    });
 
     const initialQuery = {
       _id: { $ne: new ObjectId(currentUserId) },
@@ -353,7 +368,7 @@ app.get('/concertMatching/:eventId', async (req, res) => {
       const genderMatches =
         otherPrefs.geslacht === 'nvt' || otherPrefs.geslacht === currentUser.gender;
 
-      const notAlreadyHandled = !excludedIds.includes(user._id.toString());
+      const notAlreadyHandled = !excludedIdStrings.includes(user._id.toString());
 
       return matchesTheirAgeRange && genderMatches && notAlreadyHandled;
     });
@@ -362,6 +377,7 @@ app.get('/concertMatching/:eventId', async (req, res) => {
     res.render('pages/concertMatching', {
       users: mutualMatches,
       eventTitle: event.name,
+      eventId
     });
 
   } catch (err) {
