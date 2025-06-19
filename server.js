@@ -893,3 +893,35 @@ app.post('/api/going', async (req, res) => {
     res.status(500).json({ message: 'Serverfout' });
   }
 });
+
+
+// matches
+// ---------------------
+app.get("/matches", isLoggedIn, async (req, res) => {
+  try {
+    const userId = req.session.user?.id;
+    if (!userId) return res.redirect("/");
+
+    const gebruiker = await db.collection("users").findOne({ _id: new ObjectId(userId) });
+
+    if (!gebruiker || !gebruiker.matched) {
+      return res.render("pages/matches", { matches: [] });
+    }
+
+    const matchedIds = gebruiker.matched
+      .map(item => item._id?.toString())
+      .filter(id => id && ObjectId.isValid(id))
+      .map(id => new ObjectId(id));
+
+    const matches = await db.collection("users")
+      .find({ _id: { $in: matchedIds } })
+      .project({ firstName: 1, lastName: 1, age: 1, imagePath: 1, favorites: 1 })
+      .toArray();
+
+    res.render("pages/matches", { matches });
+
+  } catch (error) {
+    console.error("Fout bij ophalen matches:", error);
+    res.status(500).send("Fout bij ophalen matches");
+  }
+});
