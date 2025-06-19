@@ -681,37 +681,78 @@ app.post("/login", async (req, res) => {
   }
 });
 
-// app.get("/account", isLoggedIn, (req, res) => {
-//   const user = req.session.user; // Retrieve user info from session
-//   res.render("pages/account", { user }); // Pass user data to the view
-// });
-
-// app.get("/account", isLoggedIn, (req, res) => {
-//     const user = req.session.user;
-//     console.log("Gebruiker in sessie:", user);
-//     res.render("pages/account", { user });
-//   });
 
 app.get("/account", isLoggedIn, async (req, res) => {
   try {
     const userId = req.session.user?.id;
+    console.log('User ID from session:', userId);
 
-    if (!userId) {
+    if (!userId || !ObjectId.isValid(userId)) {
       return res.redirect("/");
     }
 
     const gebruiker = await db.collection('users').findOne({ _id: new ObjectId(userId) });
+    console.log('User found:', gebruiker);
 
-    if (!gebruiker) {
-      return res.status(404).send("Gebruiker niet gevonden.");
+    if (!gebruiker) return res.status(404).send("Gebruiker niet gevonden.");
+
+    // Variabelen alvast definiëren
+    let matchedUsers = [];
+    let favoriteEvents = [];
+    let goingEvents = [];
+
+    // Matched users ophalen
+    if (Array.isArray(gebruiker.matched) && gebruiker.matched.length > 0) {
+      const matchedIds = gebruiker.matched
+        .map(item => (item._id ? item._id.toString() : null))
+        .filter(id => id && ObjectId.isValid(id))
+        .map(id => new ObjectId(id));
+
+      if (matchedIds.length > 0) {
+        matchedUsers = await db.collection('users')
+          .find({ _id: { $in: matchedIds } })
+          .project({ firstName: 1, lastName: 1, imagePath: 1 })
+          .toArray();
+      }
     }
 
-    res.render("pages/account", { user: gebruiker });
+    // Favoriete events ophalen via API
+    if (Array.isArray(gebruiker.favorites) && gebruiker.favorites.length > 0) {
+      const eventPromises = gebruiker.favorites.map(eventId => {
+        const url = `${process.env.API_URL_DETAIL}/${eventId}.json?apikey=${process.env.API_KEY}`;
+        return fetch(url)
+          .then(res => (res.ok ? res.json() : null))
+          .catch(() => null);
+      });
+      const results = await Promise.all(eventPromises);
+      favoriteEvents = results.filter(event => event !== null);
+    }
+
+    // Events waar user naartoe gaat ophalen
+    if (Array.isArray(gebruiker.goingEvents) && gebruiker.goingEvents.length > 0) {
+      const eventPromises = gebruiker.goingEvents.map(eventId => {
+        const url = `${process.env.API_URL_DETAIL}/${eventId}.json?apikey=${process.env.API_KEY}`;
+        return fetch(url)
+          .then(res => (res.ok ? res.json() : null))
+          .catch(() => null);
+      });
+      const results = await Promise.all(eventPromises);
+      goingEvents = results.filter(event => event !== null);
+    }
+
+    res.render("pages/account", {
+      user: gebruiker,
+      matchedUsers,
+      favoriteEvents,
+      goingEvents
+    });
+
   } catch (error) {
     console.error("Fout bij ophalen gebruiker:", error);
     res.status(500).send("Fout bij ophalen gebruiker");
   }
 });
+
 
 
 
@@ -798,38 +839,39 @@ app.delete('/favorites', async (req, res) => {
   }
 });
 
-// Concert knop
-app.get('/detail/:id', async (req, res) => {
-  const eventId = req.params.id;
-  const url = `${process.env.API_URL_DETAIL}/${eventId}.json?apikey=${process.env.API_KEY}`;
-  
-
+app.get("/account", isLoggedIn, async (req, res) => {
   try {
-    const currentUserId = req.session.user ? req.session.user.id : null;
-    let currentUser = null;
-    let isGoing = false; // <-- nieuw toegevoegd
+    const userId = req.session.user?.id;
+    if (!userId) return res.redirect("/");
 
-    if (currentUserId) {
-      currentUser = await db.collection('users').findOne({ _id: new ObjectId(currentUserId) });
+    const gebruiker = await db.collection('users').findOne({ _id: new ObjectId(userId) });
+    if (!gebruiker) return res.status(404).send("Gebruiker niet gevonden.");
 
-      // Check of de user dit concert al heeft opgeslagen
-      if (currentUser && Array.isArray(currentUser.goingEvents)) {
-        isGoing = currentUser.goingEvents.includes(eventId);
+    // -------------------
+    // Voeg hier de matchedUsers code toe:
+    let matchedUsers = [];
+    if (Array.isArray(gebruiker.matched) && gebruiker.matched.length > 0) {
+      const matchedIds = gebruiker.matched
+        .map(item => item._id ? item._id.toString() : null)
+        .filter(id => id && ObjectId.isValid(id))
+        .map(id => new ObjectId(id));
+
+      if (matchedIds.length > 0) {
+        matchedUsers = await db.collection('users')
+          .find({ _id: { $in: matchedIds } })
+          .project({ firstName: 1, lastName: 1, imagePath: 1 })
+          .toArray();
       }
     }
+    // -------------------
 
-    const response = await fetch(url);
-    if (!response.ok) {
-      throw new Error(`API error: ${response.status} ${response.statusText}`);
-    }
+    // Later kun je hier ook favoriteEvents en goingEvents ophalen...
 
-    const event = await response.json();
+    res.render("pages/account", { user: gebruiker, matchedUsers /*, favoriteEvents, goingEvents */ });
 
-    // Geef 'isGoing' ook mee aan de EJS
-    res.render('pages/detail', { event, currentUser, isGoing });
   } catch (error) {
-    console.error("Fout bij ophalen event detail:", error);
-    res.render('pages/detail', { event: null, error: 'Event niet gevonden.', isGoing: false });
+    console.error("Fout bij ophalen gebruiker:", error);
+    res.status(500).send("Fout bij ophalen gebruiker");
   }
 });
 
