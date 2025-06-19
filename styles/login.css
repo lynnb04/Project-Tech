@@ -4,6 +4,7 @@ main {
     justify-content: space-between;
     padding: 2em;
     height: calc(100vh - (9em + 62px));
+    margin-bottom: 0;
 }
 
 form {
