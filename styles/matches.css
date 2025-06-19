@@ -1,0 +1,46 @@
+/* Algemene basis */
+main * {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+    font-family: 'Quicksand', Helvetica, Arial, sans-serif;
+}
+  
+main{
+    padding: 2em;
+    overflow: clip;
+}
+
+h1{
+    font-family: 'Staatliches', 'Quicksand', Helvetica, Arial, sans-serif;;
+    margin-bottom: 1em;
+}
+
+h2{
+    font-size: 1em;
+}
+
+li{
+    display: flex;
+    background-color: var(--backgroundSecundary);
+    padding: 1em;
+    border-radius: 1.5em;
+    margin-bottom: 1em;
+}
+
+img{
+    width: 4em;
+    height: 4em;
+    border-radius: 10em;
+    margin-right: 1em;
+}
+
+li div{
+    align-self: center;
+}
+
+a .more-matches{
+    color: var(--tekst);
+    background-color: var(--roze);
+    text-decoration: none;
+}
