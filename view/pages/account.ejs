@@ -24,9 +24,9 @@
           <%= user.firstName %>
             <%= user.lastName %>
         </h2>
-        <p>
+        <!-- <p>
           <%= user.email %>
-        </p>
+        </p> -->
       </section>
 
       <article class="profiel-bio">
@@ -52,6 +52,7 @@
             <% }) %>
         </ol>
       </section>
+      
 
 
       <section>
@@ -89,7 +90,6 @@
             <li><a href="/matching">Nog geen matches – vind jouw match</a></li>
           <% } %>
         </ul>
-      </section>
 
       <section>
         <h2>Favorieten</h2>
@@ -177,6 +177,10 @@
             <li><a href="/overview">Nog geen events – bekijk het aanbod</a></li>
           <% } %>
         </ul>
+        
+        
+        <a href="/registration">Uitloggen</a>
+        
     </main>
 
     <%- include('../partials/footer'); %>
