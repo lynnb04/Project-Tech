@@ -11,7 +11,7 @@ ul{
 h1 {
     font-size: 1.5em;
     color: var(--kop);
-    margin: 0.75em 0 0.5em 0.75em;
+    margin: 0.75em 0 1em 0.75em;
   }
   
 p {
@@ -69,12 +69,12 @@ p {
 }
   
 .favo-btn {
-    width: 3em;
-    height: 3em;
+    width: 3.5em;
+    height: 3.5em;
     background: none;
     border: none;
     padding: 0;
-    margin: 1em 1em 0 0;
+    margin: 1.5em 1.5em 0 0;
 }
   
 .favo-btn img {
@@ -82,6 +82,20 @@ p {
     height: 100%;
     display: block;
     object-fit: contain;
+}
+
+@keyframes pulse {
+  0%, 100% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(1.2);
+  }
+}
+
+/* Pulse-klasse voor één enkele puls */
+.favo-btn.pulse {
+  animation: pulse 0.3s ease-out;
 }
 
 .time-tag{
@@ -112,7 +126,7 @@ p {
 
 .close-btn {
     position: fixed;
-    top: 1em;
+    top: 6em;
     right: 1em;
     width: 2em;
     height: 2em;
@@ -146,7 +160,7 @@ p {
 
 .eventCheck{
   display: flex;
-  margin: 1em;
+  margin: 2em 1em 1em 1em;
   align-content: center;
 }
 
@@ -200,11 +214,8 @@ a {
     display: flex;
     justify-content: center;
     color: var(--tekst);
-    text-decoration: none;
-    border: 0.08em solid var(--tekst);
-    padding: 0.75em 1em;
-    border-radius: 2em;
-    margin: 0 3em 0 3em;
+    text-decoration: underline;
+    margin: 4em 3em 0 3em;
   }
 
 .eventCheck button.active {
