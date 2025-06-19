@@ -53,6 +53,10 @@ body {
     color: var(--tekst);
 }
 
+main {
+  margin-bottom: 5em;
+}
+
 p {
     font-family: 'Quicksand', sans-serif;
 }

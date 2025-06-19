@@ -4,8 +4,6 @@ const path = require('path')
 const bcrypt = require('bcryptjs');
 const { ObjectId } = require('mongodb');
 
-
-
 // Configure multer storage
 const storage = multer.diskStorage({
     destination: function (req, file, cb) {
@@ -206,7 +204,11 @@ app.get('/matching', async (req, res) => {
       return matchesTheirAgeRange && genderMatches && notAlreadyHandled;
     });
 
-    res.render('pages/matching', { users: mutualMatches });
+    let match = null;
+    if (req.query.matchId) {
+      match = await db.collection('users').findOne({ _id: new ObjectId(req.query.matchId) });
+    }
+    res.render('pages/matching', { users: mutualMatches, match });
 
   } catch (err) {
     console.error("Fout bij ophalen wederzijdse matches:", err);
@@ -265,6 +267,8 @@ app.post('/match/add/:id', async (req, res) => {
           }
         }
       );
+
+      res.redirect(`/matching?matchId=${targetUserId}`);
     } else {
       // Nog geen wederzijdse match, zet in afwachting
       const pendingEntry = { _id: new ObjectId(targetUserId) };
@@ -274,10 +278,9 @@ app.post('/match/add/:id', async (req, res) => {
         { _id: new ObjectId(currentUserId) },
         { $addToSet: { pendingMatch: pendingEntry } }
       );
-    }
 
-    // Redirect naar juiste pagina
-    res.redirect(eventId ? `/concertMatching/${eventId}` : '/matching');
+      res.redirect('/matching');
+    }
 
   } catch (err) {
     console.error("Fout bij toevoegen van match:", err);
@@ -474,6 +477,7 @@ app.get('/profile', function(req, res) {
     res.render('pages/profile');
 });
 
+
 // registration
 // --------------------
 app.get('/registration', async function (req, res) {
@@ -630,16 +634,6 @@ app.post("/login", async (req, res) => {
   }
 });
 
-app.get("/account", isLoggedIn, (req, res) => {
-  const user = req.session.user; // Retrieve user info from session
-  res.render("pages/account", { user }); // Pass user data to the view
-});
-
-app.get("/account", isLoggedIn, (req, res) => {
-    const user = req.session.user;
-    console.log("Gebruiker in sessie:", user);
-    res.render("pages/account", { user });
-  });
 
 app.get("/account", isLoggedIn, async (req, res) => {
   try {
@@ -711,6 +705,7 @@ app.get("/account", isLoggedIn, async (req, res) => {
     res.status(500).send("Fout bij ophalen gebruiker");
   }
 });
+
 
 
 
@@ -1024,3 +1019,35 @@ app.get('/profile-settings', async (req, res) => {
  app.listen(port, () => {
    console.log(`Server running at http://localhost:${port}`);
  });
+
+
+// matches
+// ---------------------
+app.get("/matches", isLoggedIn, async (req, res) => {
+  try {
+    const userId = req.session.user?.id;
+    if (!userId) return res.redirect("/");
+
+    const gebruiker = await db.collection("users").findOne({ _id: new ObjectId(userId) });
+
+    if (!gebruiker || !gebruiker.matched) {
+      return res.render("pages/matches", { matches: [] });
+    }
+
+    const matchedIds = gebruiker.matched
+      .map(item => item._id?.toString())
+      .filter(id => id && ObjectId.isValid(id))
+      .map(id => new ObjectId(id));
+
+    const matches = await db.collection("users")
+      .find({ _id: { $in: matchedIds } })
+      .project({ firstName: 1, lastName: 1, age: 1, imagePath: 1, favorites: 1 })
+      .toArray();
+
+    res.render("pages/matches", { matches });
+
+  } catch (error) {
+    console.error("Fout bij ophalen matches:", error);
+    res.status(500).send("Fout bij ophalen matches");
+  }
+});
