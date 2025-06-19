@@ -5,8 +5,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Login</title>
     
-    <link rel="stylesheet" href="/login.css">
     <link rel="stylesheet" href="/styles.css">
+    <link rel="stylesheet" href="/login.css">
     <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined" rel="stylesheet">
 </head>
 <body class="container">
@@ -14,39 +14,24 @@
   <%- include('../partials/header'); %>
 
 <main>
-  <div class="jumbotron">
-    <!-- <img src="/uploads/1747662803979-401021079.jpg" alt="Variable"> -->
-    <h2>Registreer</h2>
-
-    <form action="/form" method="POST" enctype="multipart/form-data">
-      <label for="firstName">Voornaam</label>
-      <input type="text" name="firstName" placeholder="Enter your name"> 
-      <label for="lastName">Achternaam</label>
-      <input type="text" name="lastName" placeholder="Enter your last name">
-      <label for="email">Email</label>
-      <input type="email" name="email" placeholder="Enter your email">
-      <label for="password">Wachtwoord</label>
-      <input type="password" name="password" placeholder="Enter your password">
-      <label for="age">Leeftijd</label>
-      <input type="number" name="age" placeholder="Enter your age">     
-      <label for="img">Profiel foto</label>
-      <input type="file" name="img" accept="image/*">
-      <input type="submit" value="Submit">
-    </form>
-  </div>
-  <div class="jumbotron">
-
+  <section class="login">
     <h2>Login</h2>
 
     <form action="/login" method="POST">
       <label for="email">Email</label>
-      <input type="email" name="email" placeholder="Enter your email">
+      <input type="email" name="email" placeholder="voorbeeld@email.nl">
       <label for="password">Wachtwoord</label>
-      <input type="password" name="password" placeholder="Enter your password">
+      <input id="password" type="password" name="password" placeholder="Vul hier je wachtwoord in">
+      <label class="showPassword" for="showPassword">Wachtwoord weergeven
+        <input type="checkbox" id="showPassword" onclick="togglePassword()"></label>
       <input type="submit" value="Submit">
     </form>
-  </div>
+    <p>Nog geen account? <a href="/registration">Registreer hier</a></p>
+  </section>
+  <a href="/overview" class="button">Kijk even rond</a>
 </main>
+
+<script src="/login.js"></script>
 
 <%- include('../partials/footer'); %>
 

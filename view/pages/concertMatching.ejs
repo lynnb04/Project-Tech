@@ -11,7 +11,7 @@
 <body>
     <%- include('../partials/header'); %>
     <main>
-        <h1>Gebruikers</h1>
+        <h1>Mensen die naar <%= eventTitle %> gaan</h1>
         <ul class="matches">
             <% users.forEach(user => { %>
                 <li>
@@ -35,26 +35,17 @@
                     <% } %>
                     <div class="matchButtons">
                         <form action="/match/skip/<%= user._id %>" method="POST">
-                          <button type="submit">Overslaan</button>
+                            <button type="submit">Overslaan</button>
                         </form>
                         <form action="/match/add/<%= user._id %>" method="POST">
-                          <button type="submit">Toevoegen</button>
+                            <input type="hidden" name="eventId" value="<%= eventId %>">
+                            <button type="submit">Toevoegen</button>
                         </form>
                     </div>
                     
                 </li>
             <% }) %>
         </ul>
-        <% if (match) { %>
-        <section class="matchPopUp" style="display:block;">
-            <button id="closePopup">Sluiten</button>
-            <h2>Je hebt een match!</h2>
-            <p>Je hebt een match met <%= match.firstName %> <%= match.lastName %></p>
-            <img src="<%= match.imagePath %>" alt="Match Image" width="100">
-            <!-- current user image -->
-            
-        </section>
-        <% } %>
     </main>
     <%- include('../partials/footer'); %>
     <script src="/matching.js"></script>

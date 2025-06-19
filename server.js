@@ -27,6 +27,7 @@ app.use('/static', express.static('static'))
 app.use(express.urlencoded({extended: true}));
 app.use(express.static('styles'));
 app.use(express.static('script'));
+app.use(express.json());
 app.use('/uploads', express.static('uploads'));
 
 // Footer link actief
@@ -143,26 +144,253 @@ app.post('/form', upload.single('img'), async (req, res) => {
 // matching pagina
 // --------------------
 app.get('/matching', async (req, res) => {
-    try {
-        // Get the current user's ID from the session
-        const currentUserId = req.session.user?.id;
-        
-        // If user is not logged in, redirect to login page
-        if (!currentUserId) {
-            return res.redirect('/');
-        }
+  try {
+    const currentUserId = req.session.user.id;
 
-        // Find all users except the current user
-        const users = await db.collection('users').find({
-            _id: { $ne: new ObjectId(currentUserId) }
-        }).toArray();
+    // Haal de volledige gebruiker op vanuit de database
+    const currentUser = await db.collection('users').findOne({ _id: new ObjectId(currentUserId) });
+    if (!currentUser) return res.redirect('/');
 
-        res.render('pages/matching', { users });
-    } catch (error) {
-        console.error('Error fetching users:', error);
-        res.status(500).send('Kan gebruikers niet ophalen.');
+    const prefs = currentUser.preferences;
+
+    // Verzamel uitgesloten gebruikers (already swiped/matched)
+    const excludedIds = [
+      ...(currentUser.pendingMatch || []),
+      ...(currentUser.noMatch || []),
+      ...(currentUser.match || [])
+    ];
+    
+    const excludedIdStrings = excludedIds.map(item => {
+      if (typeof item === 'object' && item !== null && item._id) {
+        return item._id.toString();
+      }
+      return item.toString();
+    });
+
+    // Eerste filter: gebruikers die voldoen aan jouw voorkeuren
+    const initialQuery = {
+      _id: { $ne: new ObjectId(currentUserId) }, // Niet jezelf
+      age: { $gte: prefs.minAge, $lte: prefs.maxAge }
+    };
+
+    if (prefs.geslacht !== 'nvt') {
+      initialQuery.gender = prefs.geslacht;
     }
+
+    if (prefs.taal && prefs.taal.length > 0 && !prefs.taal.includes('nvt')) {
+      initialQuery['preferences.taal'] = { $in: prefs.taal };
+    }
+
+    if (prefs.genres && prefs.genres.length > 0) {
+      initialQuery['preferences.genres'] = { $in: prefs.genres };
+    }
+
+    const users = await db.collection('users').find(initialQuery).toArray();
+
+    // Tweede filter: wederzijdse voorkeuren én niet eerder geswipet
+    const mutualMatches = users.filter(user => {
+      const otherPrefs = user.preferences;
+
+      const matchesTheirAgeRange =
+        currentUser.age >= otherPrefs.minAge &&
+        currentUser.age <= otherPrefs.maxAge;
+
+      const genderMatches =
+        otherPrefs.geslacht === 'nvt' ||
+        otherPrefs.geslacht === currentUser.gender;
+
+      const notAlreadyHandled = !excludedIdStrings.includes(user._id.toString());
+
+      return matchesTheirAgeRange && genderMatches && notAlreadyHandled;
+    });
+
+    let match = null;
+    if (req.query.matchId) {
+      match = await db.collection('users').findOne({ _id: new ObjectId(req.query.matchId) });
+    }
+    res.render('pages/matching', { users: mutualMatches, match });
+
+  } catch (err) {
+    console.error("Fout bij ophalen wederzijdse matches:", err);
+    res.status(500).send("Fout bij het ophalen van matches.");
+  }
 });
+// https://www.mongodb.com/docs/manual/reference/operator/query/gte/
+// https://www.mongodb.com/docs/manual/reference/operator/query/ne/
+
+// match toevoegen of afwijzen
+// --------------------
+// add match
+app.post('/match/add/:id', async (req, res) => {
+  try {
+    const currentUserId = req.session.user.id;
+    const targetUserId = req.params.id;
+    const eventId = req.body.eventId || null; // ← komt vanuit hidden input in je EJS
+
+    const dbUsers = db.collection('users');
+
+    const currentUser = await dbUsers.findOne({ _id: new ObjectId(currentUserId) });
+    const targetUser = await dbUsers.findOne({ _id: new ObjectId(targetUserId) });
+
+    if (!currentUser || !targetUser) return res.redirect('/matching');
+
+    const hasMatchedMe = (targetUser.pendingMatch || []).some(match => {
+      if (typeof match === 'object' && match._id) {
+        return match._id.toString() === currentUserId &&
+               (!eventId || match.eventId === eventId); // match moet bij zelfde event horen
+      }
+      return match === currentUserId; // voor backward compatibility
+    });
+
+    if (hasMatchedMe) {
+      // Wederzijdse match!
+      await dbUsers.updateOne(
+        { _id: new ObjectId(currentUserId) },
+        {
+          $addToSet: {
+            matched: { _id: new ObjectId(targetUserId), ...(eventId && { eventId }) }
+          },
+          $pull: {
+            pendingMatch: { _id: new ObjectId(targetUserId), ...(eventId && { eventId }) }
+          }
+        }
+      );
+
+      await dbUsers.updateOne(
+        { _id: new ObjectId(targetUserId) },
+        {
+          $addToSet: {
+            matched: { _id: new ObjectId(currentUserId), ...(eventId && { eventId }) }
+          },
+          $pull: {
+            pendingMatch: { _id: new ObjectId(currentUserId), ...(eventId && { eventId }) }
+          }
+        }
+      );
+
+      res.redirect(`/matching?matchId=${targetUserId}`);
+    } else {
+      // Nog geen wederzijdse match, zet in afwachting
+      const pendingEntry = { _id: new ObjectId(targetUserId) };
+      if (eventId) pendingEntry.eventId = eventId;
+
+      await dbUsers.updateOne(
+        { _id: new ObjectId(currentUserId) },
+        { $addToSet: { pendingMatch: pendingEntry } }
+      );
+
+      res.redirect('/matching');
+    }
+
+  } catch (err) {
+    console.error("Fout bij toevoegen van match:", err);
+    res.status(500).send("Er ging iets mis bij het toevoegen.");
+  }
+});
+
+// skip match
+app.post('/match/skip/:id', async (req, res) => {
+  try {
+    const currentUserId = req.session.user.id;
+    const targetUserId = req.params.id;
+
+    await db.collection('users').updateOne(
+      { _id: new ObjectId(currentUserId) },
+      { $addToSet: { noMatch: targetUserId } }
+    );
+
+    res.redirect('/matching');
+  } catch (err) {
+    console.error("Fout bij overslaan:", err);
+    res.status(500).send("Er ging iets mis bij het overslaan.");
+  }
+});
+
+
+
+
+// concertMatching
+// --------------------
+app.get('/concertMatching/:eventId', async (req, res) => {
+  const currentUserId = req.session.user?.id;
+  const eventId = req.params.eventId;
+
+  if (!currentUserId) {
+    return res.status(401).send('Je moet ingelogd zijn.');
+  }
+
+  try {
+    const currentUser = await db.collection('users').findOne({ _id: new ObjectId(currentUserId) });
+    if (!currentUser) return res.redirect('/');
+
+    // Check of gebruiker dit event bezoekt
+    if (!currentUser.goingEvents || !currentUser.goingEvents.includes(eventId)) {
+      return res.status(403).send('Toegang geweigerd. Je hebt niet aangegeven dat je naar dit event gaat.');
+    }
+
+    // Haal eventtitel op via API
+    const eventUrl = `${process.env.API_URL_DETAIL}/${eventId}.json?apikey=${process.env.API_KEY}`;
+    const response = await fetch(eventUrl);
+    if (!response.ok) throw new Error('Event ophalen mislukt');
+    const event = await response.json();
+
+    const prefs = currentUser.preferences;
+
+    const excludedIds = [
+      ...(currentUser.pendingMatch || []),
+      ...(currentUser.noMatch || []),
+      ...(currentUser.match || [])
+    ];
+    
+    const excludedIdStrings = excludedIds.map(item => {
+      if (typeof item === 'object' && item !== null && item._id) {
+        return item._id.toString();
+      }
+      return item.toString();
+    });
+
+    const initialQuery = {
+      _id: { $ne: new ObjectId(currentUserId) },
+      age: { $gte: prefs.minAge, $lte: prefs.maxAge }
+    };
+
+    if (prefs.geslacht !== 'nvt') {
+      initialQuery.gender = prefs.geslacht;
+    }
+
+    if (prefs.taal && prefs.taal.length > 0 && !prefs.taal.includes('nvt')) {
+      initialQuery['preferences.taal'] = { $in: prefs.taal };
+    }
+
+    const users = await db.collection('users').find(initialQuery).toArray();
+
+    const mutualMatches = users.filter(user => {
+      const otherPrefs = user.preferences;
+      const matchesTheirAgeRange =
+        currentUser.age >= otherPrefs.minAge &&
+        currentUser.age <= otherPrefs.maxAge;
+
+      const genderMatches =
+        otherPrefs.geslacht === 'nvt' || otherPrefs.geslacht === currentUser.gender;
+
+      const notAlreadyHandled = !excludedIdStrings.includes(user._id.toString());
+
+      return matchesTheirAgeRange && genderMatches && notAlreadyHandled;
+    });
+
+    // Geef event name mee aan de EJS
+    res.render('pages/concertMatching', {
+      users: mutualMatches,
+      eventTitle: event.name,
+      eventId
+    });
+
+  } catch (err) {
+    console.error("Fout bij concert-matching:", err);
+    res.status(500).send("Interne serverfout");
+  }
+});
+
 
 // overview
 // --------------------
@@ -373,7 +601,11 @@ app.post('/registration', upload.single('img'), async (req, res) => {
                 genres: Array.isArray(genres) ? genres : [genres]
             },
             imagePath: req.file ? `/uploads/${req.file.filename}` : null,
-            createdAt: new Date()
+            createdAt: new Date(),
+            favorites: [],
+            pendingMatch: [],
+            noMatch: [],
+            match: []
         };
 
         const result = await db.collection('users').insertOne(newUser);
@@ -449,37 +681,78 @@ app.post("/login", async (req, res) => {
   }
 });
 
-// app.get("/account", isLoggedIn, (req, res) => {
-//   const user = req.session.user; // Retrieve user info from session
-//   res.render("pages/account", { user }); // Pass user data to the view
-// });
-
-// app.get("/account", isLoggedIn, (req, res) => {
-//     const user = req.session.user;
-//     console.log("Gebruiker in sessie:", user);
-//     res.render("pages/account", { user });
-//   });
 
 app.get("/account", isLoggedIn, async (req, res) => {
   try {
     const userId = req.session.user?.id;
+    console.log('User ID from session:', userId);
 
-    if (!userId) {
+    if (!userId || !ObjectId.isValid(userId)) {
       return res.redirect("/");
     }
 
     const gebruiker = await db.collection('users').findOne({ _id: new ObjectId(userId) });
+    console.log('User found:', gebruiker);
 
-    if (!gebruiker) {
-      return res.status(404).send("Gebruiker niet gevonden.");
+    if (!gebruiker) return res.status(404).send("Gebruiker niet gevonden.");
+
+    // Variabelen alvast definiëren
+    let matchedUsers = [];
+    let favoriteEvents = [];
+    let goingEvents = [];
+
+    // Matched users ophalen
+    if (Array.isArray(gebruiker.matched) && gebruiker.matched.length > 0) {
+      const matchedIds = gebruiker.matched
+        .map(item => (item._id ? item._id.toString() : null))
+        .filter(id => id && ObjectId.isValid(id))
+        .map(id => new ObjectId(id));
+
+      if (matchedIds.length > 0) {
+        matchedUsers = await db.collection('users')
+          .find({ _id: { $in: matchedIds } })
+          .project({ firstName: 1, lastName: 1, imagePath: 1 })
+          .toArray();
+      }
     }
 
-    res.render("pages/account", { user: gebruiker });
+    // Favoriete events ophalen via API
+    if (Array.isArray(gebruiker.favorites) && gebruiker.favorites.length > 0) {
+      const eventPromises = gebruiker.favorites.map(eventId => {
+        const url = `${process.env.API_URL_DETAIL}/${eventId}.json?apikey=${process.env.API_KEY}`;
+        return fetch(url)
+          .then(res => (res.ok ? res.json() : null))
+          .catch(() => null);
+      });
+      const results = await Promise.all(eventPromises);
+      favoriteEvents = results.filter(event => event !== null);
+    }
+
+    // Events waar user naartoe gaat ophalen
+    if (Array.isArray(gebruiker.goingEvents) && gebruiker.goingEvents.length > 0) {
+      const eventPromises = gebruiker.goingEvents.map(eventId => {
+        const url = `${process.env.API_URL_DETAIL}/${eventId}.json?apikey=${process.env.API_KEY}`;
+        return fetch(url)
+          .then(res => (res.ok ? res.json() : null))
+          .catch(() => null);
+      });
+      const results = await Promise.all(eventPromises);
+      goingEvents = results.filter(event => event !== null);
+    }
+
+    res.render("pages/account", {
+      user: gebruiker,
+      matchedUsers,
+      favoriteEvents,
+      goingEvents
+    });
+
   } catch (error) {
     console.error("Fout bij ophalen gebruiker:", error);
     res.status(500).send("Fout bij ophalen gebruiker");
   }
 });
+
 
 
 
@@ -525,22 +798,166 @@ app.use((req, res, next) => {
     next();
   });
 
-  app.get('/detail/:id', async (req, res) => {
-    const eventId = req.params.id;
-    const url = `${process.env.API_URL_DETAIL}/${eventId}.json?apikey=${process.env.API_KEY}`;
-  
-    try {
-      const response = await fetch(url);
-  
-      if (!response.ok) {
-        throw new Error(`API error: ${response.status} ${response.statusText}`);
+
+// like van een event
+app.post('/favorites', async (req, res) => {
+  const { eventId } = req.body;
+  const userId = req.session.user ? req.session.user.id : null;
+
+  if (!userId) return res.status(401).json({ error: 'Niet ingelogd' });
+  if (!eventId) return res.status(400).json({ error: 'Geen eventId opgegeven' });
+
+  try {
+    await db.collection('users').updateOne(
+      { _id: new ObjectId(userId) },
+      { $addToSet: { favorites: eventId.toString() } } // toegevoegde favorite eventId als string
+    );
+    res.json({ success: true });
+  } catch (err) {
+    console.error('Fout bij toevoegen favoriet:', err);
+    res.status(500).json({ error: 'Fout bij toevoegen favoriet' });
+  }
+});
+
+// Favoriet verwijderen
+app.delete('/favorites', async (req, res) => {
+  const { eventId } = req.body;
+  const userId = req.session.user ? req.session.user.id : null;
+
+  if (!userId) return res.status(401).json({ error: 'Niet ingelogd' });
+  if (!eventId) return res.status(400).json({ error: 'Geen eventId opgegeven' });
+
+  try {
+    await db.collection('users').updateOne(
+      { _id: new ObjectId(userId) },
+      { $pull: { favorites: eventId.toString() } }
+    );
+    res.json({ success: true });
+  } catch (err) {
+    console.error('Fout bij verwijderen favoriet:', err);
+    res.status(500).json({ error: 'Fout bij verwijderen favoriet' });
+  }
+});
+
+app.get("/account", isLoggedIn, async (req, res) => {
+  try {
+    const userId = req.session.user?.id;
+    if (!userId) return res.redirect("/");
+
+    const gebruiker = await db.collection('users').findOne({ _id: new ObjectId(userId) });
+    if (!gebruiker) return res.status(404).send("Gebruiker niet gevonden.");
+
+    // -------------------
+    // Voeg hier de matchedUsers code toe:
+    let matchedUsers = [];
+    if (Array.isArray(gebruiker.matched) && gebruiker.matched.length > 0) {
+      const matchedIds = gebruiker.matched
+        .map(item => item._id ? item._id.toString() : null)
+        .filter(id => id && ObjectId.isValid(id))
+        .map(id => new ObjectId(id));
+
+      if (matchedIds.length > 0) {
+        matchedUsers = await db.collection('users')
+          .find({ _id: { $in: matchedIds } })
+          .project({ firstName: 1, lastName: 1, imagePath: 1 })
+          .toArray();
       }
-  
-      const event = await response.json();
-  
-      res.render('pages/detail', { event });
-    } catch (error) {
-      console.error("Fout bij ophalen event detail:", error);
-      res.render('pages/detail', { event: null, error: 'Event niet gevonden.' });
     }
-  });
+    // -------------------
+
+    // Later kun je hier ook favoriteEvents en goingEvents ophalen...
+
+    res.render("pages/account", { user: gebruiker, matchedUsers /*, favoriteEvents, goingEvents */ });
+
+  } catch (error) {
+    console.error("Fout bij ophalen gebruiker:", error);
+    res.status(500).send("Fout bij ophalen gebruiker");
+  }
+});
+
+app.post('/api/going', async (req, res) => {
+  try {
+    const userId = req.session.user?.id;
+    const { eventId } = req.body;
+
+    if (!userId) { 
+      return res.status(401).json({ message: 'Niet ingelogd' });
+    }
+
+    const userCollection = db.collection('users');
+
+    // Voeg het event toe aan het 'goingEvents' veld van de gebruiker
+    await userCollection.updateOne(
+      { _id: new ObjectId(userId) },
+      { $addToSet: { goingEvents: eventId } }
+    );
+
+    res.status(200).json({ message: 'Event opgeslagen als going' });
+  } catch (error) {
+    console.error('Fout bij opslaan van going:', error);
+    res.status(500).json({ message: 'Serverfout' });
+  }
+});
+
+
+// matches
+// ---------------------
+app.get("/matches", isLoggedIn, async (req, res) => {
+  try {
+    const userId = req.session.user?.id;
+    if (!userId) return res.redirect("/");
+
+    const gebruiker = await db.collection("users").findOne({ _id: new ObjectId(userId) });
+
+    if (!gebruiker || !gebruiker.matched) {
+      return res.render("pages/matches", { matches: [] });
+    }
+
+    const matchedIds = gebruiker.matched
+      .map(item => item._id?.toString())
+      .filter(id => id && ObjectId.isValid(id))
+      .map(id => new ObjectId(id));
+
+    const matches = await db.collection("users")
+      .find({ _id: { $in: matchedIds } })
+      .project({ firstName: 1, lastName: 1, age: 1, imagePath: 1, favorites: 1 })
+      .toArray();
+
+    res.render("pages/matches", { matches });
+
+  } catch (error) {
+    console.error("Fout bij ophalen matches:", error);
+    res.status(500).send("Fout bij ophalen matches");
+  }
+});
+
+app.get('/detail/:id', async (req, res) => {
+  const eventId = req.params.id;
+  const url = `${process.env.API_URL_DETAIL}/${eventId}.json?apikey=${process.env.API_KEY}`;
+  try {
+    const currentUserId = req.session.user ? req.session.user.id : null;
+    let currentUser = null;
+    let isGoing = false;
+ 
+    if (currentUserId) {
+      currentUser = await db.collection('users').findOne({ _id: new ObjectId(currentUserId) });
+ 
+      // Check of de user dit concert al heeft opgeslagen in goingEvents
+      if (currentUser && Array.isArray(currentUser.goingEvents)) {
+        isGoing = currentUser.goingEvents.includes(eventId);
+      }
+    }
+ 
+    const response = await fetch(url);
+    if (!response.ok) {
+      throw new Error(`API error: ${response.status} ${response.statusText}`);
+    }
+ 
+    const event = await response.json();
+ 
+    res.render('pages/detail', { event, currentUser, isGoing });
+  } catch (error) {
+    console.error("Fout bij ophalen event detail:", error);
+    res.render('pages/detail', { event: null, error: 'Event niet gevonden.', isGoing: false });
+  }
+});
