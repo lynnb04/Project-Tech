@@ -474,47 +474,6 @@ app.get('/profile', function(req, res) {
     res.render('pages/profile');
 });
 
-// profile settings
-// --------------------
-const fs = require('fs');
- const port = 3000;
-
-// zorgt dat de uploads folder altijd bestaat
- const uploadDir = path.join(__dirname, 'uploads');
- if (!fs.existsSync(uploadDir)) {
-   fs.mkdirSync(uploadDir);
- }
-
-// EJS view engine
- app.set('view engine', 'ejs');
-
-// middleware om URL-encoded form data te verwerken
- app.use(express.urlencoded({ extended: true }));
-
- app.use('/uploads', express.static(uploadDir));
- app.use('/public', express.static(path.join(__dirname, 'public')));
-
-// render profile settings pagina
- app.get('/profile-settings', (req, res) => {
-   res.render('pages/profileSettings', { user });
- });
-
-// formulier uploaden
- app.post('/profile-settings', upload.single('profilePic'), (req, res) => {
-   const { username, email } = req.body;
-   user.username = username;
-   user.email = email;
-   if (req.file) {
-     user.profilePic = req.file.filename;
-   }
-  // terug naar profile settings page
-   res.redirect('/profile-settings');
- });
-
- app.listen(port, () => {
-   console.log(`Server running at http://localhost:${port}`);
- });
-
 // registration
 // --------------------
 app.get('/registration', async function (req, res) {
@@ -568,7 +527,7 @@ app.post('/registration', upload.single('img'), async (req, res) => {
             genres
         } = req.body;
 
-        // Controlle
+        // Controle
         if (!firstName || !email || !password) {
             return res.status(400).send('Vul alle verplichte velden in.');
         }
@@ -596,6 +555,9 @@ app.post('/registration', upload.single('img'), async (req, res) => {
         };
 
         const result = await db.collection('users').insertOne(newUser);
+
+        // voor profile settings: sla userId op in sessie **direct na registratie**
+        req.session.userId = result.insertedId;
 
         console.log('Nieuwe registratie toegevoegd:', result.insertedId);
         res.redirect('/');
@@ -898,10 +860,19 @@ app.post('/api/going', async (req, res) => {
 
 // profileSettings werkend
 // -----------------------
-app.get("/profile-settings", isLoggedIn, async (req, res) => {
-  const gebruiker = await db.collection('users').findOne({ _id: new ObjectId(req.session.user.id) });
+app.get('/profile-settings', isLoggedIn, async (req, res) => {
+  try {
+    const gebruiker = await db.collection('users').findOne({ _id: new ObjectId(req.session.userId) });
 
-  res.render("pages/profileSettings", { user: gebruiker });
+    if (!gebruiker) {
+      return res.status(404).send('Gebruiker niet gevonden');
+    }
+
+    res.render('pages/profileSettings', { user: gebruiker });
+  } catch (error) {
+    console.error(error);
+    res.status(500).send('Er is iets misgegaan');
+  }
 });
 
 app.use(express.static('public'));
@@ -959,3 +930,97 @@ app.post('/profile-settings', upload.single('profilePic'), async (req, res) => {
     res.status(500).send('Fout bij updaten van profielinstellingen.');
   }
 });
+
+// profile settings
+// --------------------
+const fs = require('fs');
+ const port = 3000;
+
+// zorgt dat de uploads folder altijd bestaat
+ const uploadDir = path.join(__dirname, 'uploads');
+ if (!fs.existsSync(uploadDir)) {
+   fs.mkdirSync(uploadDir);
+ }
+
+// EJS view engine
+ app.set('view engine', 'ejs');
+
+// middleware om URL-encoded form data te verwerken
+ app.use(express.urlencoded({ extended: true }));
+
+ app.use('/uploads', express.static(uploadDir));
+ app.use('/public', express.static(path.join(__dirname, 'public')));
+
+// render profile settings pagina
+ app.get('/profile-settings', (req, res) => {
+   res.render('pages/profileSettings', { user });
+ });
+
+//database profiel ophalen
+app.get('/profile-settings', async (req, res) => {
+  try {
+    // Voorbeeld: userId uit sessie halen (pas dit aan naar jouw authenticatie)
+    const userId = req.session.userId; // Dit moet je implementeren
+
+    if (!userId) {
+      return res.redirect('/login'); // Of een andere actie als niet ingelogd
+    }
+
+    // User ophalen uit DB
+    const user = await db.collection('users').findOne({ _id: new ObjectId(userId) });
+
+    if (!user) {
+      return res.status(404).send('Gebruiker niet gevonden');
+    }
+
+    // User-object doorgeven aan view
+    res.render('pages/profileSettings', { user });
+  } catch (error) {
+    console.error('Fout bij ophalen gebruiker:', error);
+    res.status(500).send('Er is een fout opgetreden');
+  }
+});
+
+// formulier uploaden
+ app.post('/profile-settings', upload.single('profilePic'), async (req, res) => {
+  try {
+    const userId = req.session.userId;
+    if (!userId) {
+      return res.redirect('/login');
+    }
+
+    const {
+      firstName,
+      lastName,
+      email,
+      age,
+      bio,
+    } = req.body;
+
+    const updateData = {
+      firstName,
+      lastName,
+      email,
+      age: Number(age),
+      bio,
+    };
+
+    if (req.file) {
+      updateData.imagePath = `/uploads/${req.file.filename}`;
+    }
+
+    await db.collection('users').updateOne(
+      { _id: new ObjectId(userId) },
+      { $set: updateData }
+    );
+
+    res.redirect('/profile-settings');
+  } catch (error) {
+    console.error('Fout bij updaten gebruiker:', error);
+    res.status(500).send('Er is een fout opgetreden bij het updaten');
+  }
+});
+
+ app.listen(port, () => {
+   console.log(`Server running at http://localhost:${port}`);
+ });
