@@ -39,36 +39,52 @@
 
 document.addEventListener('DOMContentLoaded', () => {
   const likeButton = document.querySelector('.favo-btn');
+  if (!likeButton) return;
 
-  if (likeButton) {
-    likeButton.addEventListener('click', async () => {
-      const eventId = likeButton.dataset.eventId;
+  const img       = likeButton.querySelector('img');
+  const eventId   = likeButton.dataset.eventId;
+  let liked       = likeButton.dataset.liked === 'true';
 
-      try {
-        const response = await fetch('/favorites', {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json'
-          },
-          body: JSON.stringify({ eventId })
-        });
-
-        const data = await response.json();
-
-        if (data.success) {
-          likeButton.classList.toggle('active');
-          const img = likeButton.querySelector('img');
-          img.src = likeButton.classList.contains('active')
-            ? '/static/heart_active.svg'
-            : '/static/heart_open.svg';
-        } else {
-          console.error('Fout bij liken:', data.error);
-        }
-      } catch (err) {
-        console.error('Fout bij verzoek:', err);
-      }
-    });
+  // **Initialisatie bij laden**:
+  if (liked) {
+    likeButton.classList.add('active');
+    img.src = '/static/heart_active.svg';
+  } else {
+    likeButton.classList.remove('active');
+    img.src = '/static/heart_open.svg';
   }
+
+  likeButton.addEventListener('click', async () => {
+    try {
+      // Verstuur naar server
+      const method = liked ? 'DELETE' : 'POST';
+      const res    = await fetch('/favorites', {
+        method,
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ eventId })
+      });
+      const data = await res.json();
+      if (!data.success) throw new Error(data.error || 'Server error');
+
+      // Toggle local state
+      liked = !liked;
+      likeButton.classList.toggle('active', liked);
+      img.src = liked
+        ? '/static/heart_active.svg'
+        : '/static/heart_open.svg';
+
+      // Alleen pulsen bij activeren
+      if (liked) {
+        likeButton.classList.add('pulse');
+        likeButton.addEventListener('animationend', () => {
+          likeButton.classList.remove('pulse');
+        }, { once: true });
+      }
+
+    } catch (err) {
+      console.error('Fout bij like/unlike:', err);
+    }
+  });
 });
 
 console.log("JS geladen");
