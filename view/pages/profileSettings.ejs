@@ -21,7 +21,7 @@
 
             <!-- formulier -->
             <div class="form-wrapper">
-                <form action="/settings" method="POST" enctype="multipart/form-data">
+                <form action="/profile-settings" method="POST" enctype="multipart/form-data">
 
                     <div class="profielfoto-wrapper">
                     <div class="profielfoto">
@@ -37,53 +37,37 @@
 
                     <div class="name-fields">
                     <div class="firstName">
-                        <input type="text" name="firstName" placeholder="Voornaam" disabled />
+                        <input type="text" name="firstName" placeholder="Voornaam" value="<%= user.firstName || '' %>" disabled />
                     </div>
                     <div class="lastName">
-                        <input type="text" name="lastName" placeholder="Achternaam" disabled />
+                        <input type="text" name="lastName" placeholder="Achternaam" value="<%= user.lastName || '' %>" disabled />
                     </div>
                     </div>
 
                     <div class="leeftijd">
-                        <input type="number" name="age" placeholder="Leeftijd" disabled/><br>
+                        <input type="number" name="age" placeholder="Leeftijd" value="<%= user.age || '' %>" disabled/><br>
                     </div>
 
                     <div class="geslacht">
                         <select name="gender" disabled>
-                            <option value="">Geslacht</option>
-                            <option value="man">Man</option>
-                            <option value="vrouw">Vrouw</option>
-                            <option value="anders">Anders</option>
+                            <option value="" <%= !user.gender ? 'selected' : '' %> >Geslacht</option>
+                            <option value="man" <%= user.gender === 'man' ? 'selected' : '' %> >Man</option>
+                            <option value="vrouw" <%= user.gender === 'vrouw' ? 'selected' : '' %> >Vrouw</option>
+                            <option value="anders" <%= user.gender === 'anders' ? 'selected' : '' %> >Anders</option>
                         </select>
                     </div>
 
                     <div class="bio">
-                        <input type="text" name="bio" placeholder="Vertel iets over jezelf..." disabled/><br>
+                        <input type="text" name="bio" placeholder="Vertel iets over jezelf..." value="<%= user.bio || '' %>" disabled/><br>
                     </div>
-                </form>
             </div>
-
-            <script>
-            function enableEditing() {
-                // Schakel alle invoervelden en select-elementen in
-                const fields = document.querySelectorAll('input, select, textarea, button');
-                fields.forEach(field => field.disabled = false);
-
-                // Verberg de bewerk-knop
-                document.querySelector('button[onclick="enableEditing()"]').style.display = "none";
-
-                // Toon de opslaan-knop
-                document.getElementById('saveButton').style.display = "inline-block";
-            }
-            </script>
         </section>
-
 
         <section class="accountmanagement">
             <h2>Accountmanagement</h2>
 
                 <div class="email">
-                    <input type="email" name="email" placeholder="E-mail" disabled/>
+                    <input type="email" name="email" placeholder="E-mail" value="<%= user.email || '' %>" disabled/>
                 </div>
 
                 <div class="wachtwoord">
@@ -96,22 +80,38 @@
 
         <section class="concertvoorkeuren">
             <h2>Concertvoorkeuren</h2>
-                <form id="concertForm">
                     <div class="genres"></div>
-                        <!-- vervangen door genre's uit registration -->
+                        <% if (user.genres && user.genres.length > 0) { %>
+                            <% user.genres.forEach(function(genre) { %>
+                                <span class="genre-tag"><%= genre %></span>
+                            <% }); %>
+                        <% } else { %>
+                            <p>Geen voorkeuren geselecteerd.</p>
+        <% } %>
                     </div>
-                </form>
         </section>
        
         
         <section class="matchvoorkeuren">
             <h2>Matchvoorkeuren</h2>
                 <h3>Leeftijd</h3>
-                    <!-- slider uit registration-->
+                    <% if (user.matchPreferences && user.matchPreferences.ageRange) { %>
+                        <p><%= user.matchPreferences.ageRange.min %> - <%= user.matchPreferences.ageRange.max %> jaar</p>
+                    <% } else { %>
+                        <p>Geen leeftijdsvoorkeur ingesteld.</p>
+                    <% } %>
                 <h3>Geslacht</h3>
-                    <!-- menu uit registration -->
+                    <% if (user.matchPreferences && user.matchPreferences.gender) { %>
+                            <p><%= user.matchPreferences.gender %></p>
+                        <% } else { %>
+                            <p>Geen voorkeur opgegeven.</p>
+                        <% } %>
                 <h3>Taal</h3>
-                    <!-- menu uit registration -->
+                    <% if (user.matchPreferences && user.matchPreferences.language) { %>
+                            <p><%= user.matchPreferences.language %></p>
+                        <% } else { %>
+                            <p>Geen voorkeur opgegeven.</p>
+                        <% } %>
         </section>
 
 
@@ -152,7 +152,22 @@
         <div class="center-wrapper">
             <button type="submit" id="saveButton" style="display: none;">Instellingen opslaan</button>
             </div>
+                </form>
 
     <%- include('../partials/footer'); %>
+
+    <script>
+            function enableEditing() {
+                // Schakel alle invoervelden en select-elementen in
+                const fields = document.querySelectorAll('input, select, textarea, button');
+                fields.forEach(field => field.disabled = false);
+
+                // Verberg de bewerk-knop
+                document.querySelector('button[onclick="enableEditing()"]').style.display = "none";
+
+                // Toon de opslaan-knop
+                document.getElementById('saveButton').style.display = "inline-block";
+            }
+            </script>
 </body>
 </html>

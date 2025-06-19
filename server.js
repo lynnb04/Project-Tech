@@ -486,23 +486,13 @@ const fs = require('fs');
 // EJS view engine
  app.set('view engine', 'ejs');
 
-// Middleware om URL-encoded form data te verwerken
+// middleware om URL-encoded form data te verwerken
  app.use(express.urlencoded({ extended: true }));
 
  app.use('/uploads', express.static(uploadDir));
  app.use('/public', express.static(path.join(__dirname, 'public')));
 
-// Multer storage configuratie
-
-
-// In-memory user data (vervang door database)
- let user = {
-   username: 'johndoe',
-   email: 'john@example.com',
-   profilePic: null
- };
-
-// Render profile settings page
+// render profile settings pagina
  app.get('/profile-settings', (req, res) => {
    res.render('pages/profileSettings', { user });
  });
@@ -849,5 +839,70 @@ app.post('/api/going', async (req, res) => {
   } catch (error) {
     console.error('Fout bij opslaan van going:', error);
     res.status(500).json({ message: 'Serverfout' });
+  }
+});
+
+
+// profileSettings werkend
+// -----------------------
+app.get("/profile-settings", isLoggedIn, async (req, res) => {
+  const gebruiker = await db.collection('users').findOne({ _id: new ObjectId(req.session.user.id) });
+
+  res.render("pages/profileSettings", { user: gebruiker });
+});
+
+app.use(express.static('public'));
+
+app.post('/profile-settings', upload.single('profilePic'), async (req, res) => {
+  const userId = req.session.user.id;
+
+  // Verzamel standaard gebruikersinfo
+  const updateData = {
+    firstName: req.body.firstName,
+    lastName: req.body.lastName,
+    age: parseInt(req.body.age),
+    gender: req.body.gender,
+    bio: req.body.bio,
+    email: req.body.email
+  };
+
+  // Wachtwoord versleutelen indien ingevoerd
+  if (req.body.password && req.body.password.trim() !== '') {
+    const hashedPassword = await bcrypt.hash(req.body.password, 10);
+    updateData.password = hashedPassword;
+  }
+
+  // Profielfoto upload
+  if (req.file) {
+    updateData.profilePic = req.file.filename;
+  }
+
+  // Concertvoorkeuren (bijv. array van genres)
+  if (Array.isArray(req.body.genres)) {
+    updateData.genres = req.body.genres;
+  } else if (typeof req.body.genres === 'string') {
+    updateData.genres = [req.body.genres]; // voor enkelvoudige selectie
+  }
+
+  // Matchvoorkeuren opslaan
+  updateData.matchPreferences = {
+    ageRange: {
+      min: parseInt(req.body.ageMin) || 18,
+      max: parseInt(req.body.ageMax) || 99
+    },
+    gender: req.body.matchGender || '',
+    language: req.body.matchLanguage || ''
+  };
+
+  try {
+    await db.collection('users').updateOne(
+      { _id: new ObjectId(userId) },
+      { $set: updateData }
+    );
+
+    res.redirect('/profile-settings');
+  } catch (err) {
+    console.error('Update mislukt:', err);
+    res.status(500).send('Fout bij updaten van profielinstellingen.');
   }
 });
