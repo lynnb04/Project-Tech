@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link rel="stylesheet" href="/styles.css">
+    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined" rel="stylesheet">
+</head>
+<body>
+    <h1>Jouw Matches</h1>
+
+    <% if (matches.length > 0) { %>
+      <ul class="match-list">
+        <% matches.forEach(function(match) { %>
+          <li class="match-item">
+            <img src="<%= match.imagePath %>" alt="Foto van <%= match.firstName %>" class="match-img" />
+            <div class="match-info">
+              <h2><%= match.firstName %> <%= match.lastName %></h2>
+              <p><%= match.age %> jaar oud</p>
+            </div>
+          </li>
+        <% }); %>
+      </ul>
+    <% } else { %>
+      <p>Je hebt nog geen matches. Probeer de <a href="/matching">matchingpagina</a>.</p>
+    <% } %>
+  </main>
+
+  <%- include('../partials/footer'); %>
+</body>
+</html>
+    <%- include('../partials/footer'); %>
+    <script src="/registration.js"></script>
+</body>
