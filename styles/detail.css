@@ -163,6 +163,8 @@ p {
   background-color: var(--roze);
   height: 2.875em;
   border: 0;
+
+  transition: background-color 0.3s ease
 }
 
 .eventCheck a{
@@ -181,11 +183,17 @@ p {
   display: flex;
   align-items: center;
   justify-content: center;
+
+  transition: background-color 0.3s ease;
 }
 
 .eventCheck a.disabled{
   pointer-events: none;
   background-color: var(--backgroundSecundary);
+}
+
+a {
+  text-decoration: none;
 }
 
 .tickets {
@@ -198,3 +206,8 @@ p {
     border-radius: 2em;
     margin: 0 3em 0 3em;
   }
+
+.eventCheck button.active {
+    background-color: var(--backgroundSecundary);
+    font-weight: 700;
+}

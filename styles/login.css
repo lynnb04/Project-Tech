@@ -1,17 +1,26 @@
+main {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    padding: 2em;
+    height: calc(100vh - (9em + 62px));
+}
+
 form {
     display: flex;
     flex-direction: column;
 }
 
-.jumbotron {
-    padding: 1em 2em 2em 1em;
+p {
+    font-size: 1em;
 }
 
-.jumbotron:nth-of-type(2) {
-    margin-bottom: 5em;
+a {
+    font-size: 1em;
+    color: var(--lichtBlauw);
 }
 
-.jumbotron h2 {
+h2 {
     font-size: 2em;
 }
 
@@ -22,10 +31,14 @@ form {
   }
   
   label {
-    font-size: 0.9em; 
+    font-size: 1em; 
     font-weight: 600;
   }
-  
+
+  input {
+    color: white;
+  }
+
   input[type="text"],
   input[type="email"],
   input[type="password"],
@@ -57,3 +70,27 @@ input::placeholder {
     opacity: 0.8;
   }
 
+
+
+  .button {
+    display: flex;
+    justify-content: center;
+    color: var(--tekst);
+    font-family: 'Quicksand', sans-serif;
+    text-decoration: none;
+    border: 0.08em solid var(--tekst);
+    padding: 0.75em 1em;
+    border-radius: 2em;
+  }
+
+  .showPassword {
+    display: flex;
+    align-items: center;
+    margin-bottom: 1em;
+    font-size: .9em;
+    font-weight: 300;
+  }
+
+  .showPassword input {
+    margin-left: 1em;
+  }
