@@ -1,3 +1,7 @@
+main {
+  margin-bottom: 7em;
+}
+
 main img {
   width: 11em;
   height: 11em;
@@ -84,7 +88,7 @@ section:nth-of-type(2) ol li::before {
 }
 
 section:nth-of-type(3) {
-  margin: 3em 3em 8em 3em;
+  margin: 3em 3em 5em 3em;
 }
 
 section:nth-of-type(3) h2 {
@@ -103,5 +107,11 @@ section:nth-of-type(3) ul li {
   margin-bottom: 1em;
   font-family: 'Poppins', sans-serif;
   padding-left: 0;
+}
+
+main > a {
+  color: var(--tekst);
+  font-family: 'Poppins', sans-serif;
+  margin: 3em;
 }
 

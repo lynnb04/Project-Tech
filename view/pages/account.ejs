@@ -24,9 +24,9 @@
           <%= user.firstName %>
             <%= user.lastName %>
         </h2>
-        <p>
+        <!-- <p>
           <%= user.email %>
-        </p>
+        </p> -->
       </section>
 
       <article class="profiel-bio">
@@ -52,6 +52,7 @@
             <% }) %>
         </ol>
       </section>
+      
 
 
       <section>
@@ -74,7 +75,112 @@
         </ul>
       </section>
 
+      <section>
+      <h2>Matches</h2>
+        <ul>
+          <% if (matchedUsers.length > 0) { %>
+            <% matchedUsers.forEach(function(match) { %>
+              <li>
+                <img src="<%= match.imagePath %>" alt="Foto van <%= match.firstName %>" />
+                <span><%= match.firstName %> <%= match.lastName %></span>
+              </li>
+            <% }) %>
+            <li><a href="/matching">Bekijk alle matches</a></li>
+          <% } else { %>
+            <li><a href="/matching">Nog geen matches – vind jouw match</a></li>
+          <% } %>
+        </ul>
 
+      <section>
+        <h2>Favorieten</h2>
+        <ul>
+          <% if (goingEvents.length > 0) { %>
+            <% goingEvents.forEach(function(event) { %>
+              <li data-date="<%= event.dates.start.localDate %>">
+                <a class="card-link" href="/detail/<%= event.id %>"></a>
+                <div class="card-img-wrapper">
+                  <img src="<%= event.images[2]?.url || event.images[0].url %>" alt="Foto van event" />
+        
+                  <% 
+                    const dateParts = event.dates.start.localDate.split("-");
+                    const day = parseInt(dateParts[2], 10);
+                    const month = new Date(event.dates.start.localDate).toLocaleString('nl-NL', { month: 'short' });
+                  %>
+                  <div class="card-date">
+                    <span class="day"><%= day %></span>
+                    <span class="month"><%= month %></span>
+                  </div>
+                </div>
+        
+                <h1 class="name"><%= event.name %></h1>
+                <p><strong><%= event._embedded.venues[0].name %></strong></p>
+                <p><%= event._embedded.venues[0].city.name %></p>
+        
+                <div>
+                  <% 
+                    const genre = event.classifications?.[0]?.genre?.name;
+                    const subgenre = event.classifications?.[0]?.subGenre?.name;
+                  %>
+                  <p><%= genre || "Other" %></p>
+                  <% if (subgenre && subgenre !== genre) { %>
+                    <p><%= subgenre %></p>
+                  <% } %>
+                </div>
+              </li>
+            <% }) %>
+            <li><a href="/overview">Bekijk alle events</a></li>
+          <% } else { %>
+            <li><a href="/overview">Nog geen events – bekijk het aanbod</a></li>
+          <% } %>
+        </ul>
+      </section>
+
+      <section>
+        <h2>Events waar je naartoe gaat</h2>
+        <ul>
+          <% if (goingEvents.length > 0) { %>
+            <% goingEvents.forEach(function(event) { %>
+              <li data-date="<%= event.dates.start.localDate %>">
+                <a class="card-link" href="/detail/<%= event.id %>"></a>
+                <div class="card-img-wrapper">
+                  <img src="<%= event.images[2]?.url || event.images[0].url %>" alt="Foto van event" />
+        
+                  <% 
+                    const dateParts = event.dates.start.localDate.split("-");
+                    const day = parseInt(dateParts[2], 10);
+                    const month = new Date(event.dates.start.localDate).toLocaleString('nl-NL', { month: 'short' });
+                  %>
+                  <div class="card-date">
+                    <span class="day"><%= day %></span>
+                    <span class="month"><%= month %></span>
+                  </div>
+                </div>
+        
+                <h1 class="name"><%= event.name %></h1>
+                <p><strong><%= event._embedded.venues[0].name %></strong></p>
+                <p><%= event._embedded.venues[0].city.name %></p>
+        
+                <div>
+                  <% 
+                    const genre = event.classifications?.[0]?.genre?.name;
+                    const subgenre = event.classifications?.[0]?.subGenre?.name;
+                  %>
+                  <p><%= genre || "Other" %></p>
+                  <% if (subgenre && subgenre !== genre) { %>
+                    <p><%= subgenre %></p>
+                  <% } %>
+                </div>
+              </li>
+            <% }) %>
+            <li><a href="/overview">Bekijk alle events</a></li>
+          <% } else { %>
+            <li><a href="/overview">Nog geen events – bekijk het aanbod</a></li>
+          <% } %>
+        </ul>
+        
+        
+        <a href="/registration">Uitloggen</a>
+        
     </main>
 
     <%- include('../partials/footer'); %>

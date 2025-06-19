@@ -128,3 +128,24 @@ ul.matches{
   .swipe-right {
     animation: addMatch 0.5s ease-out forwards;
   }
+
+  .matchPopUp{
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: calc(100vw - 2em);
+    height: 100vh;
+    background-color: rgba(0, 0, 0, 0.8);
+    padding: 1em;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    z-index: 1000;
+  }
+
+  #closePopup{
+    position: absolute;
+    top: 1em;
+    right: 1em;
+  }
