@@ -4,6 +4,8 @@ const path = require('path')
 const bcrypt = require('bcryptjs');
 const { ObjectId } = require('mongodb');
 
+
+
 // Configure multer storage
 const storage = multer.diskStorage({
     destination: function (req, file, cb) {
@@ -676,16 +678,16 @@ app.post("/login", async (req, res) => {
   }
 });
 
-// app.get("/account", isLoggedIn, (req, res) => {
-//   const user = req.session.user; // Retrieve user info from session
-//   res.render("pages/account", { user }); // Pass user data to the view
-// });
+app.get("/account", isLoggedIn, (req, res) => {
+  const user = req.session.user; // Retrieve user info from session
+  res.render("pages/account", { user }); // Pass user data to the view
+});
 
-// app.get("/account", isLoggedIn, (req, res) => {
-//     const user = req.session.user;
-//     console.log("Gebruiker in sessie:", user);
-//     res.render("pages/account", { user });
-//   });
+app.get("/account", isLoggedIn, (req, res) => {
+    const user = req.session.user;
+    console.log("Gebruiker in sessie:", user);
+    res.render("pages/account", { user });
+  });
 
 app.get("/account", isLoggedIn, async (req, res) => {
   try {
@@ -707,7 +709,6 @@ app.get("/account", isLoggedIn, async (req, res) => {
     res.status(500).send("Fout bij ophalen gebruiker");
   }
 });
-
 
 
 
