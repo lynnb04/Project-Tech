@@ -930,3 +930,34 @@ app.get("/matches", isLoggedIn, async (req, res) => {
     res.status(500).send("Fout bij ophalen matches");
   }
 });
+
+app.get('/detail/:id', async (req, res) => {
+  const eventId = req.params.id;
+  const url = `${process.env.API_URL_DETAIL}/${eventId}.json?apikey=${process.env.API_KEY}`;
+  try {
+    const currentUserId = req.session.user ? req.session.user.id : null;
+    let currentUser = null;
+    let isGoing = false;
+ 
+    if (currentUserId) {
+      currentUser = await db.collection('users').findOne({ _id: new ObjectId(currentUserId) });
+ 
+      // Check of de user dit concert al heeft opgeslagen in goingEvents
+      if (currentUser && Array.isArray(currentUser.goingEvents)) {
+        isGoing = currentUser.goingEvents.includes(eventId);
+      }
+    }
+ 
+    const response = await fetch(url);
+    if (!response.ok) {
+      throw new Error(`API error: ${response.status} ${response.statusText}`);
+    }
+ 
+    const event = await response.json();
+ 
+    res.render('pages/detail', { event, currentUser, isGoing });
+  } catch (error) {
+    console.error("Fout bij ophalen event detail:", error);
+    res.render('pages/detail', { event: null, error: 'Event niet gevonden.', isGoing: false });
+  }
+});
