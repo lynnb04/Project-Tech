@@ -70,9 +70,9 @@
                     <input type="email" name="email" placeholder="E-mail" value="<%= user.email || '' %>" disabled/>
                 </div>
 
-                <div class="wachtwoord">
+        <!--    <div class="wachtwoord">
                     <input type="password" name="password" placeholder="Wachtwoord" disabled/>
-                </div>
+                </div>  -->
 
                 <!-- account verwijderen -->
         </section>
@@ -100,6 +100,29 @@
                     <% } else { %>
                         <p>Geen leeftijdsvoorkeur ingesteld.</p>
                     <% } %>
+                    
+                    <div class="container">
+                        <div class="slider-track"></div>
+                        <input
+                            type="range"
+                            min="18"
+                            max="100"
+                            id="slider-1"
+                            name="minAge"
+                            value="<%= user.matchPreferences?.ageRange?.min || 18 %>"
+                            oninput="slideOne()"
+                        >
+                        <input
+                            type="range"
+                            min="18"
+                            max="100"
+                            id="slider-2"
+                            name="maxAge"
+                            value="<%= user.matchPreferences?.ageRange?.max || 100 %>"
+                            oninput="slideTwo()"
+                        >
+                        </div>
+
                 <h3>Geslacht</h3>
                     <% if (user.matchPreferences && user.matchPreferences.gender) { %>
                             <p><%= user.matchPreferences.gender %></p>

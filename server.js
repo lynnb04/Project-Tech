@@ -858,7 +858,7 @@ app.post('/api/going', async (req, res) => {
 });
 
 
-// profileSettings werkend
+// profileSettings
 // -----------------------
 app.get('/profile-settings', isLoggedIn, async (req, res) => {
   try {
