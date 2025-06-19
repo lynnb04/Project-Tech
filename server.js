@@ -204,7 +204,11 @@ app.get('/matching', async (req, res) => {
       return matchesTheirAgeRange && genderMatches && notAlreadyHandled;
     });
 
-    res.render('pages/matching', { users: mutualMatches });
+    let match = null;
+    if (req.query.matchId) {
+      match = await db.collection('users').findOne({ _id: new ObjectId(req.query.matchId) });
+    }
+    res.render('pages/matching', { users: mutualMatches, match });
 
   } catch (err) {
     console.error("Fout bij ophalen wederzijdse matches:", err);
@@ -263,6 +267,8 @@ app.post('/match/add/:id', async (req, res) => {
           }
         }
       );
+
+      res.redirect(`/matching?matchId=${targetUserId}`);
     } else {
       // Nog geen wederzijdse match, zet in afwachting
       const pendingEntry = { _id: new ObjectId(targetUserId) };
@@ -272,10 +278,9 @@ app.post('/match/add/:id', async (req, res) => {
         { _id: new ObjectId(currentUserId) },
         { $addToSet: { pendingMatch: pendingEntry } }
       );
-    }
 
-    // Redirect naar juiste pagina
-    res.redirect(eventId ? `/concertMatching/${eventId}` : '/matching');
+      res.redirect('/matching');
+    }
 
   } catch (err) {
     console.error("Fout bij toevoegen van match:", err);
