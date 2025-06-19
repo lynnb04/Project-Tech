@@ -2,7 +2,7 @@ main {
   margin-bottom: 7em;
 }
 
-main img {
+main > img {
   width: 11em;
   height: 11em;
   border-radius: 50%; 
@@ -16,7 +16,7 @@ section:nth-of-type(1) {
   align-items: center;
 }
 
-section:nth-of-type(1) h2 {
+main > section:nth-of-type(1) h2 {
   font-family: 'Staatliches', sans-serif;
   font-size: 1.3em;
 }
@@ -50,14 +50,13 @@ section:nth-of-type(1) p {
 
 section:nth-of-type(2) {
   width: 100%;
-  
 }
 
-section:nth-of-type(2) h2 {
+main > section:nth-of-type(2) h2 {
   font-family: 'Staatliches', sans-serif;
   font-size: 1.5em;
-  margin-left: 1.5em;
-  padding:0 0 0 1em ;
+  margin-left: 1.2em;
+  padding:0 0 0 1em;
 }
 
 section:nth-of-type(2) ol {
@@ -109,9 +108,173 @@ section:nth-of-type(3) ul li {
   padding-left: 0;
 }
 
-main > a {
+.settings {
   color: var(--tekst);
   font-family: 'Poppins', sans-serif;
   margin: 3em;
 }
 
+.concerten {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.concerten ul.list {
+  display: flex;
+  gap: 2em;
+  overflow-x: auto;
+  list-style: none;
+  padding: 1em 2em;
+  margin: 0;
+  scroll-snap-type: x mandatory;
+}
+
+.concerten ul.list li {
+  flex: 0 0 auto;
+  width: 20em;
+  scroll-snap-align: start;
+}
+
+
+.concerten li {
+  position: relative;
+  background-color: var(--backgroundSecundary);
+  border-radius: 1em;
+  padding-bottom: 2em;
+  margin-bottom: 1em;
+  display: grid;
+  grid-template-columns: 6em 1fr;
+  grid-template-rows: 13.9em 1fr repeat(2, 1.5em);
+  gap: 0;
+  border: 0.075em solid var(--lichtBlauw);
+
+  width: 90%;             
+  max-width: 30em;
+  margin: 0 auto;  
+  flex: 0 0 auto;
+}
+
+.card-img-wrapper {
+  grid-area: 1 / 1 / 2 / 3;
+  position: relative;
+  width: 100%;
+  height: 100%;
+}
+
+.card-img-wrapper img {
+  width: 100%;
+  height: 13em;
+  object-fit: cover;
+  border-radius: 1em 1em 0 0;
+  display: block;
+}
+
+.card-date {
+  position: absolute;
+  bottom: 1.5em;
+  left: 0.75em;
+  background-color: var(--backgroundSecundary);
+  padding: 0.6em .75em;
+  border-radius: 0.5em;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  font-weight: bold;
+  z-index: 5;
+}
+
+.card-date .day {
+  font-size: 1.5em;
+  color: var(--lichtBlauw);
+  line-height: 1;
+}
+
+.card-date .month {
+  font-size: 0.75em;
+  color: var(--tekstSecundary);
+  text-transform: lowercase;
+  line-height: 1;
+}
+
+.concerten li h1 {
+  grid-area: 2 / 1 / 3 / 3;
+  margin: 0 1em 0.5em 1em;
+  justify-self: start;
+  align-self: start;
+  font-size: 1.2em;
+}
+
+.concerten li > p:nth-of-type(1) {
+  color: var(--lichtBlauw);
+  grid-area: 3 / 1 / 4 / 3;
+  margin-left: 1em;
+  justify-self: start;
+}
+
+.concerten li > p:nth-of-type(2) {
+  grid-area: 4 / 1 / 5 / 2;
+  align-self: start;
+  margin-left: 1em;
+  justify-self: start;
+}
+
+.concerten li > div {
+  align-self: center;
+  display: flex;
+  column-gap: 0.3em;
+  justify-content: flex-end;
+  margin-right: 1.5em;
+}
+
+.concerten li > div p {
+  font-size: 0.85em;
+  margin-top: .5em;
+  margin-bottom: 1em;
+  padding: 0.3em 0.75em;
+  border-radius: 999em;
+  color: var(--tekst);
+}
+
+.concerten li > div p:nth-of-type(1) {
+  background-color: var(--roze);
+}
+
+.concerten li > div p:nth-of-type(2) {
+  background-color: var(--blauw);
+}
+
+/* Link over hele kaart */
+.card-link {
+  position: absolute;
+  inset: 0;
+  z-index: 10;
+  text-decoration: none;
+  color: inherit;
+}
+
+.event-link {
+  all: unset; /* reset alle kaartstijlen */
+  display: block;
+  text-align: center;
+  margin: 3em auto;
+
+  background-color: var(--lichtBlauw);
+  padding: 0.7em;
+  border-radius: 0.5em;
+  border: 0.075em solid var(--lichtBlauw);
+  text-decoration: none;
+  font-family: 'poppins', sans-serif;
+}
+
+.concerten h2 {
+  font-size: 1.5em;
+}
+
+/* Matches */
+
+.matches {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}

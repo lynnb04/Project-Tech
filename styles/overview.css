@@ -20,7 +20,6 @@ h1{
   font-family: 'Staatliches', 'Quicksand', Helvetica, Arial, sans-serif;
 }
 
-/* Zoekbalk (sticky) */
 form[role="search"] {
   position: sticky;
   top: 0;
@@ -42,7 +41,7 @@ form[role="search"] input[type="search"] {
   color: var(--tekst);
 }
 
-/* Filter & Sorteer knoppen (sticky) */
+/* Filter & Sorteer knoppen */
 nav.controls {
   position: sticky;
   top: 0em;
@@ -54,19 +53,16 @@ nav.controls {
   align-items: center;
 }
 
-/* Teller naast Filter-knop */
 nav.controls button.filter + .filter-count {
   margin-left: 0.5em;
 }
 
-/* Sorteerknop naar rechts duwen */
 nav.controls select.sort {
   margin-left: auto;
   background-color: var(--background);
   border: 0.1em solid var(--tekst);
 }
 
-/* Standaard styling voor beide knoppen */
 nav.controls button, nav.controls select {
   padding: 0.5em 1em;
   border: none;
@@ -80,7 +76,6 @@ nav.controls button.filter:active {
   background-color: var(--backgroundSecundary);
 }
 
-/* Teller binnen Filter-button */
 nav.controls .filter-count {
   background-color: var(--roze);
   color: var(--tekst);
@@ -351,7 +346,6 @@ article li {
   font-weight: bold;
   z-index: 5;
 }
-
 
 .card-date .day {
   font-size: 1.5em;
