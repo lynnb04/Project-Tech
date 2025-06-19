@@ -13,3 +13,13 @@
       }, 500); // tijd gelijk aan de animatieduur
     });
   });
+
+  document.addEventListener('DOMContentLoaded', function() {
+    const popup = document.querySelector('.matchPopUp');
+    const closeBtn = document.getElementById('closePopup');
+    if (popup && closeBtn) {
+      closeBtn.addEventListener('click', () => {
+        popup.style.display = 'none';
+      });
+    }
+  });

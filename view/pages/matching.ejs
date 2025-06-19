@@ -45,6 +45,16 @@
                 </li>
             <% }) %>
         </ul>
+        <% if (match) { %>
+        <section class="matchPopUp" style="display:block;">
+            <button id="closePopup">Sluiten</button>
+            <h2>Je hebt een match!</h2>
+            <p>Je hebt een match met <%= match.firstName %> <%= match.lastName %></p>
+            <img src="<%= match.imagePath %>" alt="Match Image" width="100">
+            <!-- current user image -->
+            <img src="<%= user.imagePath %>" alt="Profielfoto" />
+        </section>
+        <% } %>
     </main>
     <%- include('../partials/footer'); %>
     <script src="/matching.js"></script>
