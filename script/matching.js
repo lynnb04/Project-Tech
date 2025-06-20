@@ -14,13 +14,12 @@
     });
   });
 
-  document.addEventListener('DOMContentLoaded', function() {
-    const popup = document.querySelector('.matchPopUp');
+  document.addEventListener('DOMContentLoaded', () => {
+    const popup    = document.querySelector('.matchPopUp');
     const closeBtn = document.getElementById('closePopup');
-    if (popup && closeBtn) {
-      closeBtn.addEventListener('click', () => {
-        popup.style.display = 'none';
-        window.location.href = '/matching';
-      });
-    }
+    if (!popup || !closeBtn) return;
+
+    closeBtn.addEventListener('click', () => {
+      popup.style.display = 'none';
+    });
   });

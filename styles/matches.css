@@ -53,6 +53,6 @@ a.more-matches {
     background-color: var(--roze);
     text-decoration: none;
     font-weight: 600;
-    padding: 1.4em;
+    padding: 1em 1.4em;
     border-radius: 10em;
 }
