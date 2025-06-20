@@ -288,7 +288,7 @@ article li > div p:nth-of-type(2){
 }
 
 /* extra code van thomas voor animatie van de cards */
-@media (prefers-reduced-motion: no-preference){
+/* @media (prefers-reduced-motion: no-preference){
   article li:nth-child(even){
       opacity: 0.2; 
       transform: scale(0.8) rotate(-20deg) translate(15em, -5em);
@@ -303,7 +303,7 @@ article li > div p:nth-of-type(2){
       animation: showConcert linear forwards;
       animation-timeline: view(38em -15em);
       animation-range: contain;
-  }
+  } */
 
 article li {
   position: relative;
@@ -426,14 +426,14 @@ article li > div p:nth-of-type(2) {
     opacity: 0.2;
     transform: scale(0.8) rotate(-20deg) translate(15em, -5em);
     animation: showConcert linear forwards;
-    animation-timeline: view(35em -15em);
+    animation-timeline: view(38em -15em);
     animation-range: contain;
   }
   article li:nth-child(odd) {
     opacity: 0.2;
     transform: scale(0.8) rotate(20deg) translate(-15em, -5em);
     animation: showConcert linear forwards;
-    animation-timeline: view(35em -15em);
+    animation-timeline: view(38em -15em);
     animation-range: contain;
   }
   @keyframes showConcert {
