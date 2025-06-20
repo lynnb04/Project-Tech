@@ -91,6 +91,7 @@
                                 value="<%= genre %>"
                                 id="genre_<%= genre %>"
                                 <% if (selectedGenres.includes(genre)) { %> checked <% } %>
+                                disabled
                                 >
                                 <label for="genre_<%= genre %>"><%= genre %></label>
                             </li>
