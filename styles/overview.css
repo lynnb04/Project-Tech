@@ -20,7 +20,6 @@ h1{
   font-family: 'Staatliches', 'Quicksand', Helvetica, Arial, sans-serif;
 }
 
-/* Zoekbalk (sticky) */
 form[role="search"] {
   position: sticky;
   top: 0;
@@ -42,7 +41,7 @@ form[role="search"] input[type="search"] {
   color: var(--tekst);
 }
 
-/* Filter & Sorteer knoppen (sticky) */
+/* Filter & Sorteer knoppen */
 nav.controls {
   position: sticky;
   top: 0em;
@@ -54,19 +53,16 @@ nav.controls {
   align-items: center;
 }
 
-/* Teller naast Filter-knop */
 nav.controls button.filter + .filter-count {
   margin-left: 0.5em;
 }
 
-/* Sorteerknop naar rechts duwen */
 nav.controls select.sort {
   margin-left: auto;
   background-color: var(--background);
   border: 0.1em solid var(--tekst);
 }
 
-/* Standaard styling voor beide knoppen */
 nav.controls button, nav.controls select {
   padding: 0.5em 1em;
   border: none;
@@ -80,7 +76,6 @@ nav.controls button.filter:active {
   background-color: var(--backgroundSecundary);
 }
 
-/* Teller binnen Filter-button */
 nav.controls .filter-count {
   background-color: var(--roze);
   color: var(--tekst);
@@ -293,12 +288,12 @@ article li > div p:nth-of-type(2){
 }
 
 /* extra code van thomas voor animatie van de cards */
-@media (prefers-reduced-motion: no-preference){
+/* @media (prefers-reduced-motion: no-preference){
   article li:nth-child(even){
       opacity: 0.2; 
       transform: scale(0.8) rotate(-20deg) translate(15em, -5em);
       animation: showConcert linear forwards;
-      animation-timeline: view(35em -15em);
+      animation-timeline: view(38em -15em);
       animation-range: contain;
   }}
   
@@ -306,9 +301,9 @@ article li > div p:nth-of-type(2){
       opacity: 0.2; 
       transform: scale(0.8) rotate(20deg) translate(-15em, -5em);
       animation: showConcert linear forwards;
-      animation-timeline: view(35em -15em);
+      animation-timeline: view(38em -15em);
       animation-range: contain;
-  }
+  } */
 
 article li {
   position: relative;
@@ -322,6 +317,7 @@ article li {
   gap: 0;
   border: 0.075em solid var(--lichtBlauw);
 }
+
 
 .card-img-wrapper {
   grid-area: 1 / 1 / 2 / 3;
@@ -351,7 +347,6 @@ article li {
   font-weight: bold;
   z-index: 5;
 }
-
 
 .card-date .day {
   font-size: 1.5em;
@@ -431,14 +426,14 @@ article li > div p:nth-of-type(2) {
     opacity: 0.2;
     transform: scale(0.8) rotate(-20deg) translate(15em, -5em);
     animation: showConcert linear forwards;
-    animation-timeline: view(35em -15em);
+    animation-timeline: view(38em -15em);
     animation-range: contain;
   }
   article li:nth-child(odd) {
     opacity: 0.2;
     transform: scale(0.8) rotate(20deg) translate(-15em, -5em);
     animation: showConcert linear forwards;
-    animation-timeline: view(35em -15em);
+    animation-timeline: view(38em -15em);
     animation-range: contain;
   }
   @keyframes showConcert {

@@ -5,9 +5,12 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Document</title>
     <link rel="stylesheet" href="/styles.css">
+    <link rel="stylesheet" href="/matches.css">
     <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined" rel="stylesheet">
 </head>
 <body>
+  <%- include('../partials/header'); %>
+  <main>
     <h1>Jouw Matches</h1>
 
     <% if (matches.length > 0) { %>
@@ -19,12 +22,14 @@
               <h2><%= match.firstName %> <%= match.lastName %></h2>
               <p><%= match.age %> jaar oud</p>
             </div>
+            <a href=""></a>
           </li>
         <% }); %>
       </ul>
     <% } else { %>
       <p>Je hebt nog geen matches. Probeer de <a href="/matching">matchingpagina</a>.</p>
     <% } %>
+    <a class="more-matches" href="/matching">Vind meer matches</a>
   </main>
 
   <%- include('../partials/footer'); %>
