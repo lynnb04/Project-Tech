@@ -13,6 +13,7 @@
     <main>
         <form action="/registration" method="POST" enctype="multipart/form-data" class="persoonsGegevensWrapper">
             <fieldset id="persoonsGegevens">
+              <div>
                 <legend>Registreer</legend>
                 <label for="firstName">Voornaam
                     <input type="text" name="firstName" placeholder="Enter your name"> 
@@ -28,15 +29,35 @@
                 </label>
                 <label for="age">Leeftijd
                     <input type="number" name="age" placeholder="Enter your age">
-                </label>        
+                </label>
+                <section class="geslacht">
+                <label>Geslacht</label>
+                      <label for="man">Man
+                        <input type="radio" name="geslacht" id="man" value="man">
+                      </label>
+                      <label for="vrouw">Vrouw
+                        <input type="radio" name="geslacht" id="vrouw" value="vrouw">
+                      </label>                      
+                      <label for="anders">Anders
+                        <input type="radio" name="geslacht" id="anders" value="anders">
+                      </label>        
+                      <label for="geenVoorkeur">Geen voorkeur
+                        <input type="radio" name="geslacht" id="geenVoorkeur" value="nvt">
+                      </label>
+                </section>
                 <label for="img">Profiel foto
                     <input type="file" name="img" accept="image/*">  
                 </label>
                 <label for="bio">Biografie
                     <textarea id="bio" name="bio"></textarea>
                 </label>
+                <section class="form-nav">
+                  <span></span>
+                  <a href="#genres">Volgende</a>
+                </section>
+              </div>
             </fieldset>
-            <fieldset class="genres">
+            <fieldset id="genres" class="genres">
                 <legend>Genres</legend>
                 <ul>
                   <% genres.forEach(function(genre) { %>
@@ -48,6 +69,10 @@
                     </li>
                   <% }); %>
                 </ul>
+                <section class="form-nav">
+                  <a href="#persoonsGegevens">Vorige</a>
+                  <a href="#matchVoorkeuren">Volgende</a>
+                </section>
               </fieldset>
   
             <fieldset id="artiesten"></fieldset>
@@ -94,11 +119,10 @@
                       <label for="nvt">Geen voorkeur
                         <input type="radio" name="taal" id="nvt" value="nvt">
                       </label>
-                      <label for="else">Anders
-                        <input type="text" name="taal" id="else">
-                      </label>
-                      <input type="submit" value="Submit">
-
+                      <section class="form-nav">
+                        <a href="#genres">Vorige</a>
+                        <input type="submit" value="Submit">
+                      </section>
                 <!-- https://codepen.io/alexpg96/pen/xxrBgbP -->
             </fieldset>
         </form>

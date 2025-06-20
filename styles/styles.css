@@ -13,6 +13,7 @@
 	--lichtBlauw:#8E80FF;
 
   --main-gradient: linear-gradient(to right, #B91BF4, #6B3AB4, #4D37F6 ,#8E80FF);
+  --secundary-gradient: linear-gradient(to right, #741198, #5d339c, #3727ab ,#4438a2);
   --inputBackground: #1a1e4c;
   
   --secundaryButton: #9370c7;

@@ -17,19 +17,20 @@
       <ul class="match-list">
         <% matches.forEach(function(match) { %>
           <li class="match-item">
-            <img src="<%= match.imagePath %>" alt="Foto van <%= match.firstName %>" class="match-img" />
-            <div class="match-info">
-              <h2><%= match.firstName %> <%= match.lastName %></h2>
-              <p><%= match.age %> jaar oud</p>
-            </div>
-            <a href=""></a>
+            <a href="/profile/<%= match._id %>">
+              <img src="<%= match.imagePath %>" alt="Foto van <%= match.firstName %>" class="match-img" />
+              <div class="match-info">
+                <h2><%= match.firstName %> <%= match.lastName %></h2>
+                <p><%= match.age %> jaar oud</p>
+              </div>
+            </a>
           </li>
         <% }); %>
       </ul>
     <% } else { %>
-      <p>Je hebt nog geen matches. Probeer de <a href="/matching">matchingpagina</a>.</p>
+      <p>Je hebt nog geen matches.</p>
     <% } %>
-    <a class="more-matches" href="/matches">Meer matches vinden</a>
+    <a class="more-matches" href="/matching">Vind meer matches</a>
   </main>
 
   <%- include('../partials/footer'); %>

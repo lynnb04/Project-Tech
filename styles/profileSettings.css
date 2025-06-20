@@ -1,19 +1,227 @@
-.fullscreen-button {
-    width: 450px;
-    background-color: rgb(185,27,244);
+body {
+    margin: 0;
+    padding: 0;
+    font-family: 'Segoe UI', sans-serif;
+    background-color: #0B0C1A;
+    color: #FFFFFF;
+    text-align: center;
+}
+
+main {
+    padding: 1.25em;
+}
+
+/* Titels */
+h1 {
+    font-size: 1rem;
+    color: #a9a9b3;
+    margin: 1.25em 0 0.625em;
+    text-align: center;
+}
+
+/* Knoppen */
+.fullscreen-button,
+button[type="submit"] {
+    width: 90%;
+    margin: 1.25em auto;
+    display: block;
+    padding: 0.75em;
+    border-radius: 1.5625em;
+    background: #B238FF;
     color: white;
-    border: 10px;
-    border-radius: 12px;
-    padding: 16px;
-    font-size: 16px;
+    border: none;
+    font-weight: bold;
+    font-size: 1rem;
+    box-shadow: 0 0.25em 0.9375em rgba(178, 56, 255, 0.5);
+}
+
+button[type="submit"] {
+    margin-bottom: 3.125em;
+}
+
+/* Form wrapper */
+.form-wrapper,
+section {
+    margin-bottom: 1.5625em;
+}
+
+.profielfoto-wrapper {
+    position: relative;
+    width: 8.75em;
+    height: 8.75em;
+    margin: 0 auto 1.25em;
+}
+
+/* Profielfoto upload */
+.profielfoto {
+    width: 100%;
+    height: 100%;
+    border-radius: 50%;
+    background-color: #1A1B2E;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    overflow: hidden;
+    position: relative;
+}
+
+.profielfoto img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    border-radius: 50%;
+}
+
+.placeholder {
+    width: 60%;
+    height: 60%;
+    background-color: #2A2B3D;
+    border-radius: 50%;
+}
+
+input[type="file"] {
+    display: none;
+}
+
+/* Plusje bij de profielfoto */
+.plus-button {
+    position: absolute;
+    right: -0.625em;
+    bottom: -0.937em;
+    width: 0.9375em;
+    height: 1.875em;
+    background-color: #B238FF;
+    color: #fff;
+    border-radius: 50%;
+    border: 0.25em solid #0B0C1A;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 1.25em;
+    font-weight: bold;
+    text-align: center;
     cursor: pointer;
+    z-index: 2;
+    box-shadow: 0 0.25em 0.625em rgba(0, 0, 0, 0.5);
+}
+
+.profielfoto input[type="file"] {
+    display: none;
+}
+
+.profielfoto::after {
+    content: '+';
+    position: absolute;
+    bottom: -0.625em;
+    right: -0.625em;
+    width: 2.5em;
+    height: 2.5em;
+    background-color: #B238FF;
+    border-radius: 50%;
+    font-size: 1.5em;
+    color: white;
+    text-align: center;
+    line-height: 2.5em;
+    border: 0.25em solid #0B0C1A;
+}
+
+/* Input and select */
+input, select {
+    width: 100%;
+    max-width: 400px;
+    padding: 0.75em;
+    margin: 0.5em 0;
+    background-color: #1A1B2E;
+    border: none;
+    border-radius: 1.25em;
+    color: white;
+    font-size: 0.9rem;
+    box-sizing: border-box;
+}
+
+.name-fields {
+    display: flex;
+    justify-content: center;
+    gap: 1em; /* Ruimte tussen voornaam en achternaam */
+    width: 90%; /* zodat het net zo breed is als inputs */
+    margin: 0 auto 0.5em;
+}
+
+.name-fields > div {
+    flex: 1; /* beide velden even breed */
+}
+
+.name-fields input {
+    width: 100%; /* input vult z’n container volledig */
+    box-sizing: border-box;
+}
+
+/* Geslacht */
+label input[type="checkbox"],
+label input[type="radio"] {
+    display: none;
+}
+
+.geslacht {
+    width: 100%;
+    text-align: center;
+}
+
+label {
+    display: inline-block;
+    margin: 0.375em 0.25em;
+    padding: 0.5em 1em;
+    border-radius: 1.5625em;
+    background-color: #1A1B2E;
+    color: white;
+    cursor: pointer;
+    transition: background 0.3s;
+    font-size: 0.85rem;
+}
+
+input[type="checkbox"]:checked + label,
+input[type="radio"]:checked + label {
+    background-color: #B238FF;
+    color: #fff;
+}
+
+/* Slider voor leeftijd */
+
+
+
+/* Genre's */
+.genres ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5em;
+}
+
+.genres li {
+  margin: 0;
+}
+
+.genres input[type="checkbox"] {
+  display: none;
+}
+
+.genres label {
+  display: inline-block;
+  padding: 0.5em 1em;
+  background-color: var(--lichtBlauw);
+  color: var(--tekst);
+  cursor: pointer;
+  border-radius: 99em;
+  transition: all 0.3s ease;
+}
+
+.genres input[type="checkbox"]:checked + label,
+.genres label:has(input[type="checkbox"]:checked) {
+  background-color: var(--roze);
 }
 
 
 
-
-
-/* Kleuren
-
-rgb(34,36,49)
-rgb(185,27,244)
+/* Uitlog section */

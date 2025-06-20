@@ -85,6 +85,25 @@ nav.controls .filter-count {
   vertical-align: middle;
 }
 
+/* Tags in de locatie-filter */
+.filter-tag {
+  padding: 0.4em 1em;
+  border-radius: 999em;
+  background: var(--background);
+  border: 0.075em solid var(--lichtBlauw);
+  color: var(--tekst);
+  cursor: pointer;
+  user-select: none;
+  transition: background-color 0.2s, border-color 0.2s;
+}
+
+/* Actieve (geselecteerde) filter-tag */
+.filter-tag.selected {
+  background: var(--roze);
+  border-color: var(--paars); /* of var(--background), afhankelijk van jouw design */
+  color: var(--tekst);        /* zorg dat tekst leesbaar blijft */
+}
+
 /* Modal overlay & content */
 .modal {
   display: none;
@@ -177,6 +196,37 @@ nav.controls .filter-count {
 }
 
 .filter-tag.selected {
+  background: var(--roze);
+  border-color: var(--background);
+}
+
+
+/* Cities */
+ul.cities {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.4em;
+  list-style: none;
+  padding: 1em 0;
+  margin: 0;
+}
+
+.cities input[type="checkbox"] {
+  display: none;
+}
+
+.cities label {
+  display: block;
+  padding: 0.4em 1em;
+  border-radius: 999em;
+  background: var(--background);
+  border: 0.075em solid var(--lichtBlauw);
+  color: var(--tekst);
+  cursor: pointer;
+  transition: 0.3s;
+}
+
+.cities label:has(input:checked) {
   background: var(--roze);
   border-color: var(--background);
 }
@@ -288,12 +338,12 @@ article li > div p:nth-of-type(2){
 }
 
 /* extra code van thomas voor animatie van de cards */
-@media (prefers-reduced-motion: no-preference){
+/* @media (prefers-reduced-motion: no-preference){
   article li:nth-child(even){
       opacity: 0.2; 
       transform: scale(0.8) rotate(-20deg) translate(15em, -5em);
       animation: showConcert linear forwards;
-      animation-timeline: view(35em -15em);
+      animation-timeline: view(38em -15em);
       animation-range: contain;
   }}
   
@@ -301,9 +351,9 @@ article li > div p:nth-of-type(2){
       opacity: 0.2; 
       transform: scale(0.8) rotate(20deg) translate(-15em, -5em);
       animation: showConcert linear forwards;
-      animation-timeline: view(35em -15em);
+      animation-timeline: view(38em -15em);
       animation-range: contain;
-  }
+  } */
 
 article li {
   position: relative;
@@ -317,6 +367,7 @@ article li {
   gap: 0;
   border: 0.075em solid var(--lichtBlauw);
 }
+
 
 .card-img-wrapper {
   grid-area: 1 / 1 / 2 / 3;
@@ -425,14 +476,14 @@ article li > div p:nth-of-type(2) {
     opacity: 0.2;
     transform: scale(0.8) rotate(-20deg) translate(15em, -5em);
     animation: showConcert linear forwards;
-    animation-timeline: view(35em -15em);
+    animation-timeline: view(38em -15em);
     animation-range: contain;
   }
   article li:nth-child(odd) {
     opacity: 0.2;
     transform: scale(0.8) rotate(20deg) translate(-15em, -5em);
     animation: showConcert linear forwards;
-    animation-timeline: view(35em -15em);
+    animation-timeline: view(38em -15em);
     animation-range: contain;
   }
   @keyframes showConcert {

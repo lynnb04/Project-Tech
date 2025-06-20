@@ -74,22 +74,24 @@
 
       <section class="matches">
         <h2>Matches</h2>
-        <ul>
-          <% if (matchedUsers.length> 0) { %>
+        <% if (matchedUsers.length > 0) { %>
+          <ul class="match-list">
             <% matchedUsers.forEach(function(match) { %>
               <li>
-                <img src="<%= match.imagePath %>" alt="Foto van <%= match.firstName %>" />
+                <div class="match-img-wrapper">
+                  <img src="<%= match.imagePath %>" alt="Foto van <%= match.firstName %>" />
+                </div>
                 <span>
-                  <%= match.firstName %>
-                    <%= match.lastName %>
+                  <%= match.firstName %> <%= match.lastName %>
                 </span>
               </li>
-              <% }) %>
-                <li><a href="/matching">Bekijk alle matches</a></li>
-                <% } else { %>
-                  <li><a href="/matching">Nog geen matches – vind jouw match</a></li>
-                  <% } %>
-        </ul>
+            <% }) %>
+          </ul>
+          <a class="event-link" href="/matching">Bekijk alle matches</a>
+        <% } else { %>
+          <a class="find" href="/matching">Nog geen matches – vind jouw match</a>
+        <% } %>
+      </section>
 
         <section class="concerten">
           <h2>Favorieten</h2>
@@ -146,8 +148,7 @@
 
             <% } else { %>
               <!-- Geen events? Toon alleen dit -->
-              <ul class="list">
-                <li><a href="/overview">Nog geen events – bekijk het aanbod</a></li>
+              <a class="find" href="/overview">Nog geen events – bekijk het aanbod</a>
               </ul>
               <% } %>
         </section>
@@ -155,59 +156,59 @@
 
         <section class="concerten">
           <h2>Events waar je naartoe gaat</h2>
-          <ul class="list">
-            <% if (goingEvents.length> 0) { %>
+        
+          <% if (goingEvents.length > 0) { %>
+            <!-- Alleen de kaarten komen in deze ul -->
+            <ul class="list">
               <% goingEvents.forEach(function(event) { %>
                 <li data-date="<%= event.dates.start.localDate %>">
                   <a class="card-link" href="/detail/<%= event.id %>"></a>
+        
                   <div class="card-img-wrapper">
                     <img src="<%= event.images[2]?.url || event.images[0].url %>" alt="Foto van event" />
-
-                    <% const dateParts=event.dates.start.localDate.split("-"); const day=parseInt(dateParts[2], 10);
-                      const month=new Date(event.dates.start.localDate).toLocaleString('nl-NL', { month: 'short' }); %>
-                      <div class="card-date">
-                        <span class="day">
-                          <%= day %>
-                        </span>
-                        <span class="month">
-                          <%= month %>
-                        </span>
-                      </div>
+        
+                    <% 
+                      const dateParts = event.dates.start.localDate.split("-");
+                      const day = parseInt(dateParts[2], 10);
+                      const month = new Date(event.dates.start.localDate).toLocaleString('nl-NL', { month: 'short' });
+                    %>
+        
+                    <div class="card-date">
+                      <span class="day"><%= day %></span>
+                      <span class="month"><%= month %></span>
+                    </div>
                   </div>
-
-                  <h1 class="name">
-                    <%= event.name %>
-                  </h1>
-                  <p><strong>
-                      <%= event._embedded.venues[0].name %>
-                    </strong></p>
-                  <p>
-                    <%= event._embedded.venues[0].city.name %>
-                  </p>
-
+        
+                  <h1 class="name"><%= event.name %></h1>
+                  <p><strong><%= event._embedded.venues[0].name %></strong></p>
+                  <p><%= event._embedded.venues[0].city.name %></p>
+        
                   <div>
-                    <% const genre=event.classifications?.[0]?.genre?.name; const
-                      subgenre=event.classifications?.[0]?.subGenre?.name; %>
-                      <p>
-                        <%= genre || "Other" %>
-                      </p>
-                      <% if (subgenre && subgenre !==genre) { %>
-                        <p>
-                          <%= subgenre %>
-                        </p>
-                        <% } %>
+                    <% 
+                      const genre = event.classifications?.[0]?.genre?.name;
+                      const subgenre = event.classifications?.[0]?.subGenre?.name;
+                    %>
+                    <p><%= genre || "Other" %></p>
+                    <% if (subgenre && subgenre !== genre) { %>
+                      <p><%= subgenre %></p>
+                    <% } %>
                   </div>
                 </li>
-          </ul>
-
-          <% }) %>
-          <a class="event-link" href="/overview">Vind meer events</a>
+              <% }); %>
+            </ul>
+        
+            <!-- Link onder de scrollbare lijst -->
+            <a class="event-link" href="/overview">Vind meer events</a>
+        
           <% } else { %>
-            <li><a href="/overview">Nog geen events – bekijk het aanbod</a></li>
-            <% } %>
+            <!-- Geen events -->
+            <a class="find" href="/overview">Nog geen events – bekijk het aanbod</a>
+          <% } %>
+        </section>
+        
 
 
-          <a class="settings" href="/profileSettings">Profiel instellingen</a>
+          <a class="settings" href="/profile-settings">Profiel instellingen</a>
 
     </main>
 

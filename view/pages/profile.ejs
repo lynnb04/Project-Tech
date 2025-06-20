@@ -1,87 +1,194 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
-    <link rel="stylesheet" href="/styles.css">
-    <link rel="stylesheet" href="/profiel.css">
-    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined" rel="stylesheet">
-</head> 
 
-<body>
-    <%- include('../partials/header'); %>
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Login</title>
+
+  <link rel="stylesheet" href="/styles.css">
+  <link rel="stylesheet" href="/account.css">
+  <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined" rel="stylesheet">
+</head>
+
+<body class="container">
+
+  <%- include('../partials/header'); %>
+
     <main>
-        <section>
-            <h2>Profiel</h2>
-            <div class="profiel-foto"><img src="uploads/artiesten/billie-eilish.png" alt=""></div>
-            <p>@tessamuilwijk</p>
+      <a class="close-btn" href="/matches">
+        <img src="/static/close_button.svg" alt="Sluit pagina">
+      </a>
+      <img src="<%= user.imagePath %>" alt="Profielfoto" />
+
+      <section>
+        <h2>
+          <%= user.firstName %>
+            <%= user.lastName %>
+        </h2>
+      </section>
+
+      <article class="profiel-bio">
+        <div class="info-headings">
+          <h3>
+            <%= user.age %> jaar oud
+          </h3>
+          <h3>Buddy sinds <%= user.createdAt.toLocaleDateString() %>
+          </h3>
+        </div>
+        <p>
+          <%= user.bio %>
+        </p>
+      </article>
+
+      <section>
+        <h2>Mijn favoriete genres</h2>
+        <ol>
+          <% user.preferences.genres.forEach(function(genre) { %>
+            <li>
+              <%= genre %>
+            </li>
+            <% }) %>
+        </ol>
+      </section>
+
+      <section>
+        <h2>Matching voorkeuren</h2>
+        <ul>
+          <li><strong>Leeftijd:</strong>
+            <%= user.preferences.minAge %> - <%= user.preferences.maxAge %>
+          </li>
+          <li><strong>Geslacht:</strong>
+            <%= user.preferences.geslacht %>
+          </li>
+          <li><strong>Talen:</strong></li>
+          <ul>
+            <% user.preferences.taal.forEach(function(taal) { %>
+              <% if (taal) { %>
+                <li>
+                  <%= taal %>
+                </li>
+                <% } %>
+                  <% }) %>
+          </ul>
+        </ul>
+      </section>
+
+        <section class="concerten">
+          <h2>Favorieten</h2>
+
+          <% if (goingEvents.length> 0) { %>
+            <!-- Alleen de kaarten gaan in de ul -->
+            <ul class="list">
+              <% goingEvents.forEach(function(event) { %>
+                <li data-date="<%= event.dates.start.localDate %>">
+                  <a class="card-link" href="/detail/<%= event.id %>"></a>
+                  <div class="card-img-wrapper">
+                    <img src="<%= event.images[2]?.url || event.images[0].url %>" alt="Foto van event" />
+                    <% const dateParts=event.dates.start.localDate.split("-"); const day=parseInt(dateParts[2], 10);
+                      const month=new Date(event.dates.start.localDate).toLocaleString('nl-NL', { month: 'short' }); %>
+                      <div class="card-date">
+                        <span class="day">
+                          <%= day %>
+                        </span>
+                        <span class="month">
+                          <%= month %>
+                        </span>
+                      </div>
+                  </div>
+
+                  <h1 class="name">
+                    <%= event.name %>
+                  </h1>
+                  <p><strong>
+                      <%= event._embedded.venues[0].name %>
+                    </strong></p>
+                  <p>
+                    <%= event._embedded.venues[0].city.name %>
+                  </p>
+
+                  <div>
+                    <% const genre=event.classifications?.[0]?.genre?.name; const
+                      subgenre=event.classifications?.[0]?.subGenre?.name; %>
+                      <p>
+                        <%= genre || "Other" %>
+                      </p>
+                      <% if (subgenre && subgenre !==genre) { %>
+                        <p>
+                          <%= subgenre %>
+                        </p>
+                        <% } %>
+                  </div>
+                </li>
+                <% }) %>
+            </ul>
+
+
+
+            <% } else { %>
+              <!-- Geen events? Toon alleen dit -->
+              <p>Nog geen events</p>
+              </ul>
+              <% } %>
         </section>
 
-        <div class="profiel-info">
-            <p>19 jaar oud</p>
-            <p>Zuid-holland</p>
-        </div>
 
-        <div class="bio">
-            <p>Hi, ik ben Tess. <br>
-            Ik hou veel van pop zoals je aan mijn favoriete artiesten kunt zien. Ik vind het heel leuk om nieuwe mensen te ontmoeten die ook een passie voor muziek hebben en gelijke favoriete artiesten. Ik ben altijd wel aan voor een concert en sta open om nieuwe muziek te ontdekken! </p>
-        </div>
+        <section class="concerten">
+          <h2>Events waar je naartoe gaat</h2>
+        
+          <% if (goingEvents.length > 0) { %>
+            <!-- Alleen de kaarten komen in deze ul -->
+            <ul class="list">
+              <% goingEvents.forEach(function(event) { %>
+                <li data-date="<%= event.dates.start.localDate %>">
+                  <a class="card-link" href="/detail/<%= event.id %>"></a>
+        
+                  <div class="card-img-wrapper">
+                    <img src="<%= event.images[2]?.url || event.images[0].url %>" alt="Foto van event" />
+        
+                    <% 
+                      const dateParts = event.dates.start.localDate.split("-");
+                      const day = parseInt(dateParts[2], 10);
+                      const month = new Date(event.dates.start.localDate).toLocaleString('nl-NL', { month: 'short' });
+                    %>
+        
+                    <div class="card-date">
+                      <span class="day"><%= day %></span>
+                      <span class="month"><%= month %></span>
+                    </div>
+                  </div>
+        
+                  <h1 class="name"><%= event.name %></h1>
+                  <p><strong><%= event._embedded.venues[0].name %></strong></p>
+                  <p><%= event._embedded.venues[0].city.name %></p>
+        
+                  <div>
+                    <% 
+                      const genre = event.classifications?.[0]?.genre?.name;
+                      const subgenre = event.classifications?.[0]?.subGenre?.name;
+                    %>
+                    <p><%= genre || "Other" %></p>
+                    <% if (subgenre && subgenre !== genre) { %>
+                      <p><%= subgenre %></p>
+                    <% } %>
+                  </div>
+                </li>
+              <% }); %>
+            </ul>
+        
+        
+          <% } else { %>
+            <!-- Geen events -->
+            <p>Nog geen events </p>
+          <% } %>
+        </section>
+        
 
-        <section class="top-artiesten">
-            <h2>Mijn top 5 artiesten</h2>
-            <ol>
-              <li>
-                <img src="uploads/artiesten/billie-eilish.png" alt="Billie Eilish">
-                <p>Billie Eilish</p>
-              </li>
-              <li>
-                <img src="uploads/artiesten/billie-eilish.png" alt="Taylor Swift">
-                <p>Taylor Swift</p>
-              </li>
-              <li>
-                <img src="uploads/artiesten/billie-eilish.png" alt="Reneé Rapp">
-                <p>Reneé Rapp</p>
-              </li>
-              <li>
-                <img src="uploads/artiesten/billie-eilish.png" alt="Lana Del Rey">
-                <p>Lana Del Rey</p>
-              </li>
-              <li>
-                <img src="uploads/artiesten/billie-eilish.png" alt="Tate McRae">
-                <p>Tate McRae</p>
-              </li>
-            </ol>
-          </section>
 
-          <section class="top-genres">
-            <h2>Mijn top 5 genres</h2>
-            <ol>
-              <li>
-                <span class="genre-rank">1</span>
-                <p>Pop</p>
-              </li>
-              <li>
-                <span class="genre-rank">2</span>
-                <p>Alternative</p>
-              </li>
-              <li>
-                <span class="genre-rank">3</span>
-                <p>Indie</p>
-              </li>
-              <li>
-                <span class="genre-rank">4</span>
-                <p>R&B</p>
-              </li>
-              <li>
-                <span class="genre-rank">5</span>
-                <p>Rock</p>
-              </li>
-            </ol>
-          </section>
-          
-          
     </main>
+
     <%- include('../partials/footer'); %>
+
 </body>
+
 </html>

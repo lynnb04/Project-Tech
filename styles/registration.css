@@ -227,14 +227,16 @@ textarea::placeholder {
 /* Submit knop */
 input[type="submit"] {
   padding: 0.9em;
-  background-color: var(--lichtBlauw);
-  color: var(--backgroundSecundary);
-  font-weight: bold;
+  background-color: var(--roze);
+  color: var(--tekst);
+  font-weight: 600;
+  font-size: 1em;
   border: none;
-  border-radius: 0.5em;
+  border-radius: 5em;
   cursor: pointer;
   transition: background-color 0.3s ease;
-  margin-top: 2em;
+  min-width: 8em;
+    text-align: center;
 }
 
 input[type="submit"]:hover {
@@ -262,11 +264,12 @@ input[type="submit"]:hover {
 .genres label {
   display: inline-block;
   padding: 0.5em 1em;
-  background-color: var(--lichtBlauw);
+  background-color: var(--background);
   color: var(--tekst);
-  cursor: pointer;
+  border: 0.07em solid var(--tekst);
   border-radius: 99em;
   transition: all 0.3s ease;
+  font-weight: normal;
 }
 
 .genres input[type="checkbox"]:checked + label,
@@ -277,9 +280,58 @@ input[type="submit"]:hover {
 /* Alleen voor labels met radio-buttons */
 input[type="radio"] + label,
 #matchVoorkeuren label {
-  flex-direction: row;
+  flex-direction: row-reverse;
   align-items: center;
+  justify-content: start;
   gap: 0.5em;
 }
 
 
+/* Multie step */
+
+form>fieldset {
+  display: none;
+}
+
+form>fieldset:target {
+  display: block;
+}
+
+.geslacht {
+  label {
+    flex-direction: row-reverse;
+    align-items: center;
+    justify-content: start;
+    gap: 0.5em;
+  }
+}
+
+#persoonsGegevens div {
+  gap: 1em;
+  display: flex;
+  flex-direction: column;
+}
+
+.form-nav {
+  display: flex;
+  justify-content: space-between;
+  gap: 1em;
+  margin-top: 2em;
+  margin-bottom: 2em;
+
+  a {
+    color: var(--tekst);
+    background-color: var(--roze);
+    text-decoration: none;
+    font-weight: 600;
+    padding: 1em 1.4em;
+    border-radius: 10em;
+    min-width: 5em;
+    text-align: center;
+    font-size: 1em;
+  }
+
+  a:nth-child(1) {
+    background-color: var(--lichtBlauw);
+  }
+}

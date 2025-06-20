@@ -11,15 +11,15 @@
 <body>
     <%- include('../partials/header'); %>
     <main>
-        <h1>Gebruikers</h1>
-        <ul class="matches">
+        <h1>Vindt je match!</h1>
+        <ul class="matchList">
             <% users.forEach(user => { %>
                 <li>
-                    <div class="matchFotoContainer">
+                    <div class="matchPhotoContainer">
                         <% if (user.imagePath) { %>
                         <img src="<%= user.imagePath %>" alt="User Image" width="100">
                         <% } %>
-                        <div class="matchNaam">
+                        <div class="matchName">
                             <h2><%= user.firstName %> <%= user.lastName %></h2>
                             <p><%= user.age %></p>
                         </div>
@@ -31,7 +31,7 @@
                         <% }) %>
                         </ul>
                     <% } else { %>
-                        Geen genres gekozen
+                        No genres selected
                     <% } %>
                     <div class="matchButtons">
                         <form action="/match/skip/<%= user._id %>" method="POST">
@@ -41,20 +41,23 @@
                           <button type="submit">Toevoegen</button>
                         </form>
                     </div>
-                    
                 </li>
             <% }) %>
         </ul>
         <% if (match) { %>
-        <section class="matchPopUp" style="display:block;">
-            <button id="closePopup">Sluiten</button>
-            <h2>Je hebt een match!</h2>
-            <p>Je hebt een match met <%= match.firstName %> <%= match.lastName %></p>
-            <img src="<%= match.imagePath %>" alt="Match Image" width="100">
-            <!-- current user image -->
-            
-        </section>
-        <% } %>
+            <div class="overlay"></div>
+            <section class="matchPopup">
+              <button id="closePopup" aria-label="Close" class="closeBtn">
+                <img src="/static/close_button.svg" alt="×">
+              </button>
+          
+              <h2>You have a match!</h2>
+              <img src="<%= match.imagePath %>" alt="Match Image">
+              <p>You matched with: <br><strong><%= match.firstName %> <%= match.lastName %></strong></p>
+          
+              <a href="/matches">View match</a>
+            </section>
+          <% } %>
     </main>
     <%- include('../partials/footer'); %>
     <script src="/matching.js"></script>
