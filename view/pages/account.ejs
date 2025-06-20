@@ -24,9 +24,6 @@
           <%= user.firstName %>
             <%= user.lastName %>
         </h2>
-        <!-- <p>
-          <%= user.email %>
-        </p> -->
       </section>
 
       <article class="profiel-bio">
@@ -52,8 +49,6 @@
             <% }) %>
         </ol>
       </section>
-      
-
 
       <section>
         <h2>Matching voorkeuren</h2>
@@ -68,119 +63,158 @@
           <ul>
             <% user.preferences.taal.forEach(function(taal) { %>
               <% if (taal) { %>
-                <li><%= taal %></li>
-              <% } %>
-            <% }) %>
-          </ul>  
+                <li>
+                  <%= taal %>
+                </li>
+                <% } %>
+                  <% }) %>
+          </ul>
         </ul>
       </section>
 
-      <section>
-      <h2>Matches</h2>
+      <section class="matches">
+        <h2>Matches</h2>
         <ul>
-          <% if (matchedUsers.length > 0) { %>
+          <% if (matchedUsers.length> 0) { %>
             <% matchedUsers.forEach(function(match) { %>
               <li>
+                <div class="match-img-wrapper">
                 <img src="<%= match.imagePath %>" alt="Foto van <%= match.firstName %>" />
-                <span><%= match.firstName %> <%= match.lastName %></span>
+              </div>
+                <span>
+                  <%= match.firstName %>
+                    <%= match.lastName %>
+                </span>
               </li>
-            <% }) %>
-            <li><a href="/matching">Bekijk alle matches</a></li>
-          <% } else { %>
-            <li><a href="/matching">Nog geen matches – vind jouw match</a></li>
-          <% } %>
-        </ul>
 
-      <section>
-        <h2>Favorieten</h2>
-        <ul>
-          <% if (goingEvents.length > 0) { %>
-            <% goingEvents.forEach(function(event) { %>
-              <li data-date="<%= event.dates.start.localDate %>">
-                <a class="card-link" href="/detail/<%= event.id %>"></a>
-                <div class="card-img-wrapper">
-                  <img src="<%= event.images[2]?.url || event.images[0].url %>" alt="Foto van event" />
-        
-                  <% 
-                    const dateParts = event.dates.start.localDate.split("-");
-                    const day = parseInt(dateParts[2], 10);
-                    const month = new Date(event.dates.start.localDate).toLocaleString('nl-NL', { month: 'short' });
-                  %>
-                  <div class="card-date">
-                    <span class="day"><%= day %></span>
-                    <span class="month"><%= month %></span>
-                  </div>
-                </div>
-        
-                <h1 class="name"><%= event.name %></h1>
-                <p><strong><%= event._embedded.venues[0].name %></strong></p>
-                <p><%= event._embedded.venues[0].city.name %></p>
-        
-                <div>
-                  <% 
-                    const genre = event.classifications?.[0]?.genre?.name;
-                    const subgenre = event.classifications?.[0]?.subGenre?.name;
-                  %>
-                  <p><%= genre || "Other" %></p>
-                  <% if (subgenre && subgenre !== genre) { %>
-                    <p><%= subgenre %></p>
-                  <% } %>
-                </div>
-              </li>
-            <% }) %>
-            <li><a href="/overview">Bekijk alle events</a></li>
-          <% } else { %>
-            <li><a href="/overview">Nog geen events – bekijk het aanbod</a></li>
-          <% } %>
         </ul>
+        <% }) %>
+        <a class="event-link" href="/matching">Bekijk alle matches</a>
+        <% } else { %>
+          <a href="/matching">Nog geen matches – vind jouw match</a>
+          <% } %>
       </section>
 
-      <section>
-        <h2>Events waar je naartoe gaat</h2>
-        <ul>
-          <% if (goingEvents.length > 0) { %>
-            <% goingEvents.forEach(function(event) { %>
-              <li data-date="<%= event.dates.start.localDate %>">
-                <a class="card-link" href="/detail/<%= event.id %>"></a>
-                <div class="card-img-wrapper">
-                  <img src="<%= event.images[2]?.url || event.images[0].url %>" alt="Foto van event" />
-        
-                  <% 
-                    const dateParts = event.dates.start.localDate.split("-");
-                    const day = parseInt(dateParts[2], 10);
-                    const month = new Date(event.dates.start.localDate).toLocaleString('nl-NL', { month: 'short' });
-                  %>
-                  <div class="card-date">
-                    <span class="day"><%= day %></span>
-                    <span class="month"><%= month %></span>
+        <section class="concerten">
+          <h2>Favorieten</h2>
+
+          <% if (goingEvents.length> 0) { %>
+            <!-- Alleen de kaarten gaan in de ul -->
+            <ul class="list">
+              <% goingEvents.forEach(function(event) { %>
+                <li data-date="<%= event.dates.start.localDate %>">
+                  <a class="card-link" href="/detail/<%= event.id %>"></a>
+                  <div class="card-img-wrapper">
+                    <img src="<%= event.images[2]?.url || event.images[0].url %>" alt="Foto van event" />
+                    <% const dateParts=event.dates.start.localDate.split("-"); const day=parseInt(dateParts[2], 10);
+                      const month=new Date(event.dates.start.localDate).toLocaleString('nl-NL', { month: 'short' }); %>
+                      <div class="card-date">
+                        <span class="day">
+                          <%= day %>
+                        </span>
+                        <span class="month">
+                          <%= month %>
+                        </span>
+                      </div>
                   </div>
-                </div>
+
+                  <h1 class="name">
+                    <%= event.name %>
+                  </h1>
+                  <p><strong>
+                      <%= event._embedded.venues[0].name %>
+                    </strong></p>
+                  <p>
+                    <%= event._embedded.venues[0].city.name %>
+                  </p>
+
+                  <div>
+                    <% const genre=event.classifications?.[0]?.genre?.name; const
+                      subgenre=event.classifications?.[0]?.subGenre?.name; %>
+                      <p>
+                        <%= genre || "Other" %>
+                      </p>
+                      <% if (subgenre && subgenre !==genre) { %>
+                        <p>
+                          <%= subgenre %>
+                        </p>
+                        <% } %>
+                  </div>
+                </li>
+                <% }) %>
+            </ul>
+
+            <!-- Losse link onder de scrollbare ul -->
+              <a class="event-link" href="/overview">Vind meer favorieten</a>
+
+
+            <% } else { %>
+              <!-- Geen events? Toon alleen dit -->
+              <ul class="list">
+                <li><a href="/overview">Nog geen events – bekijk het aanbod</a></li>
+              </ul>
+              <% } %>
+        </section>
+
+
+        <section class="concerten">
+          <h2>Events waar je naartoe gaat</h2>
         
-                <h1 class="name"><%= event.name %></h1>
-                <p><strong><%= event._embedded.venues[0].name %></strong></p>
-                <p><%= event._embedded.venues[0].city.name %></p>
+          <% if (goingEvents.length > 0) { %>
+            <!-- Alleen de kaarten komen in deze ul -->
+            <ul class="list">
+              <% goingEvents.forEach(function(event) { %>
+                <li data-date="<%= event.dates.start.localDate %>">
+                  <a class="card-link" href="/detail/<%= event.id %>"></a>
         
-                <div>
-                  <% 
-                    const genre = event.classifications?.[0]?.genre?.name;
-                    const subgenre = event.classifications?.[0]?.subGenre?.name;
-                  %>
-                  <p><%= genre || "Other" %></p>
-                  <% if (subgenre && subgenre !== genre) { %>
-                    <p><%= subgenre %></p>
-                  <% } %>
-                </div>
-              </li>
-            <% }) %>
-            <li><a href="/overview">Bekijk alle events</a></li>
+                  <div class="card-img-wrapper">
+                    <img src="<%= event.images[2]?.url || event.images[0].url %>" alt="Foto van event" />
+        
+                    <% 
+                      const dateParts = event.dates.start.localDate.split("-");
+                      const day = parseInt(dateParts[2], 10);
+                      const month = new Date(event.dates.start.localDate).toLocaleString('nl-NL', { month: 'short' });
+                    %>
+        
+                    <div class="card-date">
+                      <span class="day"><%= day %></span>
+                      <span class="month"><%= month %></span>
+                    </div>
+                  </div>
+        
+                  <h1 class="name"><%= event.name %></h1>
+                  <p><strong><%= event._embedded.venues[0].name %></strong></p>
+                  <p><%= event._embedded.venues[0].city.name %></p>
+        
+                  <div>
+                    <% 
+                      const genre = event.classifications?.[0]?.genre?.name;
+                      const subgenre = event.classifications?.[0]?.subGenre?.name;
+                    %>
+                    <p><%= genre || "Other" %></p>
+                    <% if (subgenre && subgenre !== genre) { %>
+                      <p><%= subgenre %></p>
+                    <% } %>
+                  </div>
+                </li>
+              <% }); %>
+            </ul>
+        
+            <!-- Link onder de scrollbare lijst -->
+            <a class="event-link" href="/overview">Vind meer events</a>
+        
           <% } else { %>
-            <li><a href="/overview">Nog geen events – bekijk het aanbod</a></li>
+            <!-- Geen events -->
+            <ul class="list">
+              <li><a href="/overview">Nog geen events – bekijk het aanbod</a></li>
+            </ul>
           <% } %>
-        </ul>
+        </section>
         
-        
-        <a href="/registration">Uitloggen</a>
-        
+
+
+          <a class="settings" href="/profileSettings">Profiel instellingen</a>
+
     </main>
 
     <%- include('../partials/footer'); %>
