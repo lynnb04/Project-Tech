@@ -53,11 +53,12 @@ form {
   
   input[type="submit"] {
     padding: 0.9em; 
-    background-color: var(--lichtBlauw);
-    color: #020528;
+    background-color: var(--roze);
+    color: var(--tekst);
     font-weight: bold;
+    font-size: 1em;
     border: none;
-    border-radius: 0.5em; 
+    border-radius: 5em; 
     cursor: pointer;
     transition: background-color 0.3s ease;
   }

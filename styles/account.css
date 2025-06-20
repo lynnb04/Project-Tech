@@ -269,10 +269,9 @@ section:nth-of-type(3) ul li {
   text-align: center;
   margin: 3em auto;
 
-  background-color: var(--lichtBlauw);
-  padding: 0.7em;
-  border-radius: 0.5em;
-  border: 0.075em solid var(--lichtBlauw);
+  background-color: var(--roze);
+  padding: 0.7em 1.5em;
+  border-radius: 5em;
   text-decoration: none;
   font-family: 'poppins', sans-serif;
 }
