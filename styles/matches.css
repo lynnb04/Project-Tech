@@ -1,5 +1,6 @@
 /* Algemene basis */
-main * {
+main *,
+body {
     box-sizing: border-box;
     margin: 0;
     padding: 0;
@@ -9,10 +10,12 @@ main * {
 main{
     padding: 2em;
     overflow: clip;
+    margin-bottom: 0;
+    position: relative;
 }
 
 h1{
-    font-family: 'Staatliches', 'Quicksand', Helvetica, Arial, sans-serif;;
+    font-family: 'Staatliches', 'Quicksand', Helvetica, Arial, sans-serif;
     margin-bottom: 1em;
 }
 
@@ -20,7 +23,7 @@ h2{
     font-size: 1em;
 }
 
-li{
+li.match-item{
     display: flex;
     background-color: var(--backgroundSecundary);
     padding: 1em;
@@ -28,19 +31,28 @@ li{
     margin-bottom: 1em;
 }
 
-img{
+.match-item img{
     width: 4em;
     height: 4em;
     border-radius: 10em;
     margin-right: 1em;
 }
 
-li div{
+li.match-item div{
     align-self: center;
 }
 
-a .more-matches{
+/* More matches button fixed bottom center */
+a.more-matches {
+    position: fixed;
+    bottom: 7.5em;   
+    left: 50%;
+    transform: translateX(-50%);
+    z-index: 1000;
     color: var(--tekst);
     background-color: var(--roze);
     text-decoration: none;
+    font-weight: 600;
+    padding: 1.4em;
+    border-radius: 10em;
 }
