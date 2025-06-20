@@ -46,18 +46,19 @@
             <% }) %>
         </ul>
         <% if (match) { %>
-        <section class="matchPopUp" style="display:flex;">
-            <h2>Je hebt een match!</h2>
-            <div>
-                <p>Je hebt een match met <%= match.firstName %> <%= match.lastName %></p>
-                <img src="<%= match.imagePath %>" alt="Match Image" width="100">
-            </div>
-            <div class="popButtons">
-                <a href="/matches">Bekijk match</a>
-                <button id="closePopup">Vindt andere matches</button>
-            </div>
-        </section>
-        <% } %>
+            <div class="overlay"></div>
+            <section class="matchPopUp">
+              <button id="closePopup" aria-label="Sluit" class="close-btn">
+                <img src="/static/close_button.svg" alt="×">
+              </button>
+          
+              <h2>Je hebt een match!</h2>
+              <img src="<%= match.imagePath %>" alt="Match Image">
+              <p>Je hebt een match met: <br><strong><%= match.firstName %> <%= match.lastName %></strong></p>
+          
+              <a href="/matches">Bekijk match</a>
+            </section>
+          <% } %>
     </main>
     <%- include('../partials/footer'); %>
     <script src="/matching.js"></script>
