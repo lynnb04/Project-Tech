@@ -1051,5 +1051,3 @@ app.get("/matches", isLoggedIn, async (req, res) => {
     res.status(500).send("Fout bij ophalen matches");
   }
 });
-
-/* genres */

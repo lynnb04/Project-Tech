@@ -80,16 +80,21 @@
 
         <section class="concertvoorkeuren">
             <h2>Concertvoorkeuren</h2>
-                <ul>
-                  <% genres.forEach(function(genre) { %>
-                    <li>
-                        <label for="<%= genre %>">
-                          <input type="checkbox" name="genres[]" value="<%= genre %>" id="<%= genre %>">
-                          <%= genre %>
-                        </label>
-                    </li>
-                  <% }); %>
-                </ul>
+                <h3>Genre's</h3>
+                    <ul class="genres">
+                        <% genres.forEach(function(genre) { %>
+                            <li>
+                              <input
+                                type="checkbox"
+                                name="genres"
+                                value="<%= genre %>"
+                                id="genre_<%= genre %>"
+                                <% if (selectedGenres.includes(genre)) { %> checked <% } %>
+                                >
+                                <label for="genre_<%= genre %>"><%= genre %></label>
+                            </li>
+                        <% }); %>
+                    </ul>
         </section>
        
         
