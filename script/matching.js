@@ -21,5 +21,6 @@
 
     closeBtn.addEventListener('click', () => {
       popup.style.display = 'none';
+      window.location.href = '/matching';
     });
   });

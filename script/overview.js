@@ -43,15 +43,22 @@ document.addEventListener("DOMContentLoaded", function () {
 
   document.querySelector('form[role="search"]').addEventListener('submit', e => e.preventDefault());
 
-  // Filter tags (cities + genres)
-  document.querySelectorAll(".filter-tag").forEach(tag => {
-    const checkbox = tag.querySelector('input[type="checkbox"]');
-    tag.addEventListener("click", (e) => {
-      e.preventDefault(); // voorkomt dubbele toggling
-      tag.classList.toggle("selected");
-      checkbox.checked = !checkbox.checked;
+  // --- NEW: Use change handler for checkboxes instead of click handler for .filter-tag ---
+  document.querySelectorAll('.filter-tag input[type="checkbox"]').forEach(checkbox => {
+    checkbox.addEventListener('change', function() {
+      if (this.checked) {
+        this.closest('.filter-tag').classList.add('selected');
+      } else {
+        this.closest('.filter-tag').classList.remove('selected');
+      }
       updateFilterCount();
     });
+    // Set initial state on page load
+    if (checkbox.checked) {
+      checkbox.closest('.filter-tag').classList.add('selected');
+    } else {
+      checkbox.closest('.filter-tag').classList.remove('selected');
+    }
   });
 
   // Date filters
@@ -68,13 +75,14 @@ document.addEventListener("DOMContentLoaded", function () {
 
     if (total === 0) {
       countEl.classList.add("hidden");
-      document.querySelector(".filter-submit").disabled = true;
     } else {
       countEl.textContent = total;
       countEl.classList.remove("hidden");
-      document.querySelector(".filter-submit").disabled = false;
     }
   }
+
+  // Always enable the filter-submit button on page load
+  document.querySelector('.filter-submit').disabled = false;
 
   // Submit sluit modal
   document.querySelector(".filter-menu").addEventListener("submit", (e) => {
