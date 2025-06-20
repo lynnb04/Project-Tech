@@ -318,6 +318,7 @@ article li {
   border: 0.075em solid var(--lichtBlauw);
 }
 
+
 .card-img-wrapper {
   grid-area: 1 / 1 / 2 / 3;
   position: relative;
