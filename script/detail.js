@@ -110,7 +110,7 @@ document.addEventListener('DOMContentLoaded', () => {
           // Maak match knop klikbaar en haal disabled class weg
           matchButton.classList.remove('disabled');
           goingButton.classList.add('active');
-          goingButton.textContent = "Je gaat naar dit Event!";
+          goingButton.textContent = "Je gaat naar dit Event! ✔";
           console.log('Match knop geactiveerd');
         } else {
           alert('Je moet ingelogd zijn om dit te doen!');
