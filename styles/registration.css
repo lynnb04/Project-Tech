@@ -277,9 +277,33 @@ input[type="submit"]:hover {
 /* Alleen voor labels met radio-buttons */
 input[type="radio"] + label,
 #matchVoorkeuren label {
-  flex-direction: row;
+  flex-direction: row-reverse;
   align-items: center;
+  justify-content: start;
   gap: 0.5em;
 }
 
 
+/* Multie step */
+
+form>fieldset {
+  display: none;
+}
+
+form>fieldset:target {
+  display: block;
+}
+
+.geslacht {
+  label {
+    flex-direction: row-reverse;
+    align-items: center;
+    justify-content: start;
+    gap: 0.5em;
+  }
+}
+
+#persoonsGegevens {
+  gap: 1em;
+  display: flex;
+}
