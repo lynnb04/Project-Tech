@@ -80,15 +80,16 @@
 
         <section class="concertvoorkeuren">
             <h2>Concertvoorkeuren</h2>
-                    <div class="genres"></div>
-                        <% if (user.genres && user.genres.length > 0) { %>
-                            <% user.genres.forEach(function(genre) { %>
-                                <span class="genre-tag"><%= genre %></span>
-                            <% }); %>
-                        <% } else { %>
-                            <p>Geen voorkeuren geselecteerd.</p>
-        <% } %>
-                    </div>
+                <ul>
+                  <% genres.forEach(function(genre) { %>
+                    <li>
+                        <label for="<%= genre %>">
+                          <input type="checkbox" name="genres[]" value="<%= genre %>" id="<%= genre %>">
+                          <%= genre %>
+                        </label>
+                    </li>
+                  <% }); %>
+                </ul>
         </section>
        
         

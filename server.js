@@ -560,7 +560,7 @@ app.post('/registration', upload.single('img'), async (req, res) => {
 
         const result = await db.collection('users').insertOne(newUser);
 
-        // voor profile settings: sla userId op in sessie **direct na registratie**
+        // toegevoegd voor profile settings: sla userId op in sessie direct na registratie
         req.session.userId = result.insertedId;
 
         console.log('Nieuwe registratie toegevoegd:', result.insertedId);
@@ -1051,3 +1051,5 @@ app.get("/matches", isLoggedIn, async (req, res) => {
     res.status(500).send("Fout bij ophalen matches");
   }
 });
+
+/* genres */
