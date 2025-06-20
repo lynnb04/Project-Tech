@@ -855,76 +855,76 @@ app.post('/api/going', async (req, res) => {
 
 // profileSettings
 // -----------------------
-app.get('/profile-settings', isLoggedIn, async (req, res) => {
-  try {
-    const gebruiker = await db.collection('users').findOne({ _id: new ObjectId(req.session.userId) });
+// app.get('/profile-settings', isLoggedIn, async (req, res) => {
+//   try {
+//     const gebruiker = await db.collection('users').findOne({ _id: new ObjectId(req.session.userId) });
 
-    if (!gebruiker) {
-      return res.status(404).send('Gebruiker niet gevonden');
-    }
+//     if (!gebruiker) {
+//       return res.status(404).send('Gebruiker niet gevonden');
+//     }
 
-    res.render('pages/profileSettings', { user: gebruiker });
-  } catch (error) {
-    console.error(error);
-    res.status(500).send('Er is iets misgegaan');
-  }
-});
+//     res.render('pages/profileSettings', { user: gebruiker });
+//   } catch (error) {
+//     console.error(error);
+//     res.status(500).send('Er is iets misgegaan');
+//   }
+// });
 
-app.use(express.static('public'));
+// app.use(express.static('public'));
 
-app.post('/profile-settings', upload.single('profilePic'), async (req, res) => {
-  const userId = req.session.user.id;
+// app.post('/profile-settings', upload.single('profilePic'), async (req, res) => {
+//   const userId = req.session.user.id;
 
-  // Verzamel standaard gebruikersinfo
-  const updateData = {
-    firstName: req.body.firstName,
-    lastName: req.body.lastName,
-    age: parseInt(req.body.age),
-    gender: req.body.gender,
-    bio: req.body.bio,
-    email: req.body.email
-  };
+//   // Verzamel standaard gebruikersinfo
+//   const updateData = {
+//     firstName: req.body.firstName,
+//     lastName: req.body.lastName,
+//     age: parseInt(req.body.age),
+//     gender: req.body.gender,
+//     bio: req.body.bio,
+//     email: req.body.email
+//   };
 
-  // Wachtwoord versleutelen indien ingevoerd
-  if (req.body.password && req.body.password.trim() !== '') {
-    const hashedPassword = await bcrypt.hash(req.body.password, 10);
-    updateData.password = hashedPassword;
-  }
+//   // Wachtwoord versleutelen indien ingevoerd
+//   if (req.body.password && req.body.password.trim() !== '') {
+//     const hashedPassword = await bcrypt.hash(req.body.password, 10);
+//     updateData.password = hashedPassword;
+//   }
 
-  // Profielfoto upload
-  if (req.file) {
-    updateData.profilePic = req.file.filename;
-  }
+//   // Profielfoto upload
+//   if (req.file) {
+//     updateData.profilePic = req.file.filename;
+//   }
 
-  // Concertvoorkeuren (bijv. array van genres)
-  if (Array.isArray(req.body.genres)) {
-    updateData.genres = req.body.genres;
-  } else if (typeof req.body.genres === 'string') {
-    updateData.genres = [req.body.genres]; // voor enkelvoudige selectie
-  }
+//   // Concertvoorkeuren (bijv. array van genres)
+//   if (Array.isArray(req.body.genres)) {
+//     updateData.genres = req.body.genres;
+//   } else if (typeof req.body.genres === 'string') {
+//     updateData.genres = [req.body.genres]; // voor enkelvoudige selectie
+//   }
 
-  // Matchvoorkeuren opslaan
-  updateData.matchPreferences = {
-    ageRange: {
-      min: parseInt(req.body.ageMin) || 18,
-      max: parseInt(req.body.ageMax) || 99
-    },
-    gender: req.body.matchGender || '',
-    language: req.body.matchLanguage || ''
-  };
+//   // Matchvoorkeuren opslaan
+//   updateData.matchPreferences = {
+//     ageRange: {
+//       min: parseInt(req.body.ageMin) || 18,
+//       max: parseInt(req.body.ageMax) || 99
+//     },
+//     gender: req.body.matchGender || '',
+//     language: req.body.matchLanguage || ''
+//   };
 
-  try {
-    await db.collection('users').updateOne(
-      { _id: new ObjectId(userId) },
-      { $set: updateData }
-    );
+//   try {
+//     await db.collection('users').updateOne(
+//       { _id: new ObjectId(userId) },
+//       { $set: updateData }
+//     );
 
-    res.redirect('/profile-settings');
-  } catch (err) {
-    console.error('Update mislukt:', err);
-    res.status(500).send('Fout bij updaten van profielinstellingen.');
-  }
-});
+//     res.redirect('/profile-settings');
+//   } catch (err) {
+//     console.error('Update mislukt:', err);
+//     res.status(500).send('Fout bij updaten van profielinstellingen.');
+//   }
+// });
 
 // profile settings
 // --------------------
@@ -947,29 +947,42 @@ const fs = require('fs');
  app.use('/public', express.static(path.join(__dirname, 'public')));
 
 // render profile settings pagina
- app.get('/profile-settings', (req, res) => {
-   res.render('pages/profileSettings', { user });
- });
+//  app.get('/profile-settings', (req, res) => {
+//    res.render('pages/profileSettings', { user });
+//  });
 
 //database profiel ophalen
 app.get('/profile-settings', async (req, res) => {
   try {
-    // Voorbeeld: userId uit sessie halen (pas dit aan naar jouw authenticatie)
-    const userId = req.session.userId; // Dit moet je implementeren
-
+    const userId = req.session.user && req.session.user.id;
     if (!userId) {
-      return res.redirect('/login'); // Of een andere actie als niet ingelogd
+      return res.redirect('/login');
     }
-
-    // User ophalen uit DB
     const user = await db.collection('users').findOne({ _id: new ObjectId(userId) });
-
     if (!user) {
       return res.status(404).send('Gebruiker niet gevonden');
     }
 
-    // User-object doorgeven aan view
-    res.render('pages/profileSettings', { user });
+    // Fetch genres from API
+    const urlGenres = `${process.env.API_URL_GENRES}?apikey=${process.env.API_KEY}`;
+    const response = await fetch(urlGenres);
+    const data = await response.json();
+    const classifications = data._embedded?.classifications || [];
+    const genresSet = new Set();
+    classifications.forEach(classification => {
+      const segment = classification.segment;
+      if (segment?.name === "Music" && segment._embedded?.genres) {
+        segment._embedded.genres.forEach(genre => {
+          if (genre.name) genresSet.add(genre.name);
+        });
+      }
+    });
+    const genres = Array.from(genresSet).sort();
+
+    // Determine selected genres
+    const selectedGenres = user.genres || user.preferences?.genres || [];
+
+    res.render('pages/profileSettings', { user, genres, selectedGenres });
   } catch (error) {
     console.error('Fout bij ophalen gebruiker:', error);
     res.status(500).send('Er is een fout opgetreden');
