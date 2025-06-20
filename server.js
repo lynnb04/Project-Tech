@@ -477,56 +477,6 @@ app.get('/profile', function(req, res) {
     res.render('pages/profile');
 });
 
-// profile settings
-// --------------------
-const fs = require('fs');
- const port = 3000;
-
-// zorgt dat de uploads folder altijd bestaat
- const uploadDir = path.join(__dirname, 'uploads');
- if (!fs.existsSync(uploadDir)) {
-   fs.mkdirSync(uploadDir);
- }
-
-// EJS view engine
- app.set('view engine', 'ejs');
-
-// Middleware om URL-encoded form data te verwerken
- app.use(express.urlencoded({ extended: true }));
-
- app.use('/uploads', express.static(uploadDir));
- app.use('/public', express.static(path.join(__dirname, 'public')));
-
-// Multer storage configuratie
-
-
-// In-memory user data (vervang door database)
- let user = {
-   username: 'johndoe',
-   email: 'john@example.com',
-   profilePic: null
- };
-
-// Render profile settings page
- app.get('/profile-settings', (req, res) => {
-   res.render('pages/profileSettings', { user });
- });
-
-// formulier uploaden
- app.post('/profile-settings', upload.single('profilePic'), (req, res) => {
-   const { username, email } = req.body;
-   user.username = username;
-   user.email = email;
-   if (req.file) {
-     user.profilePic = req.file.filename;
-   }
-  // terug naar profile settings page
-   res.redirect('/profile-settings');
- });
-
- app.listen(port, () => {
-   console.log(`Server running at http://localhost:${port}`);
- });
 
 // registration
 // --------------------
@@ -581,7 +531,7 @@ app.post('/registration', upload.single('img'), async (req, res) => {
             genres
         } = req.body;
 
-        // Controlle
+        // Controle
         if (!firstName || !email || !password) {
             return res.status(400).send('Vul alle verplichte velden in.');
         }
@@ -609,6 +559,9 @@ app.post('/registration', upload.single('img'), async (req, res) => {
         };
 
         const result = await db.collection('users').insertOne(newUser);
+
+        // toegevoegd voor profile settings: sla userId op in sessie direct na registratie
+        req.session.userId = result.insertedId;
 
         console.log('Nieuwe registratie toegevoegd:', result.insertedId);
         res.redirect('/');
@@ -898,6 +851,187 @@ app.post('/api/going', async (req, res) => {
     res.status(500).json({ message: 'Serverfout' });
   }
 });
+
+
+// profileSettings
+// -----------------------
+// app.get('/profile-settings', isLoggedIn, async (req, res) => {
+//   try {
+//     const gebruiker = await db.collection('users').findOne({ _id: new ObjectId(req.session.userId) });
+
+//     if (!gebruiker) {
+//       return res.status(404).send('Gebruiker niet gevonden');
+//     }
+
+//     res.render('pages/profileSettings', { user: gebruiker });
+//   } catch (error) {
+//     console.error(error);
+//     res.status(500).send('Er is iets misgegaan');
+//   }
+// });
+
+// app.use(express.static('public'));
+
+// app.post('/profile-settings', upload.single('profilePic'), async (req, res) => {
+//   const userId = req.session.user.id;
+
+//   // Verzamel standaard gebruikersinfo
+//   const updateData = {
+//     firstName: req.body.firstName,
+//     lastName: req.body.lastName,
+//     age: parseInt(req.body.age),
+//     gender: req.body.gender,
+//     bio: req.body.bio,
+//     email: req.body.email
+//   };
+
+//   // Wachtwoord versleutelen indien ingevoerd
+//   if (req.body.password && req.body.password.trim() !== '') {
+//     const hashedPassword = await bcrypt.hash(req.body.password, 10);
+//     updateData.password = hashedPassword;
+//   }
+
+//   // Profielfoto upload
+//   if (req.file) {
+//     updateData.profilePic = req.file.filename;
+//   }
+
+//   // Concertvoorkeuren (bijv. array van genres)
+//   if (Array.isArray(req.body.genres)) {
+//     updateData.genres = req.body.genres;
+//   } else if (typeof req.body.genres === 'string') {
+//     updateData.genres = [req.body.genres]; // voor enkelvoudige selectie
+//   }
+
+//   // Matchvoorkeuren opslaan
+//   updateData.matchPreferences = {
+//     ageRange: {
+//       min: parseInt(req.body.ageMin) || 18,
+//       max: parseInt(req.body.ageMax) || 99
+//     },
+//     gender: req.body.matchGender || '',
+//     language: req.body.matchLanguage || ''
+//   };
+
+//   try {
+//     await db.collection('users').updateOne(
+//       { _id: new ObjectId(userId) },
+//       { $set: updateData }
+//     );
+
+//     res.redirect('/profile-settings');
+//   } catch (err) {
+//     console.error('Update mislukt:', err);
+//     res.status(500).send('Fout bij updaten van profielinstellingen.');
+//   }
+// });
+
+// profile settings
+// --------------------
+const fs = require('fs');
+ const port = 3000;
+
+// zorgt dat de uploads folder altijd bestaat
+ const uploadDir = path.join(__dirname, 'uploads');
+ if (!fs.existsSync(uploadDir)) {
+   fs.mkdirSync(uploadDir);
+ }
+
+// EJS view engine
+ app.set('view engine', 'ejs');
+
+// middleware om URL-encoded form data te verwerken
+ app.use(express.urlencoded({ extended: true }));
+
+ app.use('/uploads', express.static(uploadDir));
+ app.use('/public', express.static(path.join(__dirname, 'public')));
+
+// render profile settings pagina
+//  app.get('/profile-settings', (req, res) => {
+//    res.render('pages/profileSettings', { user });
+//  });
+
+//database profiel ophalen
+app.get('/profile-settings', async (req, res) => {
+  try {
+    const userId = req.session.user && req.session.user.id;
+    if (!userId) {
+      return res.redirect('/login');
+    }
+    const user = await db.collection('users').findOne({ _id: new ObjectId(userId) });
+    if (!user) {
+      return res.status(404).send('Gebruiker niet gevonden');
+    }
+
+    // Fetch genres from API
+    const urlGenres = `${process.env.API_URL_GENRES}?apikey=${process.env.API_KEY}`;
+    const response = await fetch(urlGenres);
+    const data = await response.json();
+    const classifications = data._embedded?.classifications || [];
+    const genresSet = new Set();
+    classifications.forEach(classification => {
+      const segment = classification.segment;
+      if (segment?.name === "Music" && segment._embedded?.genres) {
+        segment._embedded.genres.forEach(genre => {
+          if (genre.name) genresSet.add(genre.name);
+        });
+      }
+    });
+    const genres = Array.from(genresSet).sort();
+
+    // Determine selected genres
+    const selectedGenres = user.genres || user.preferences?.genres || [];
+
+    res.render('pages/profileSettings', { user, genres, selectedGenres });
+  } catch (error) {
+    console.error('Fout bij ophalen gebruiker:', error);
+    res.status(500).send('Er is een fout opgetreden');
+  }
+});
+
+// formulier uploaden
+ app.post('/profile-settings', upload.single('profilePic'), async (req, res) => {
+  try {
+    const userId = req.session.userId;
+    if (!userId) {
+      return res.redirect('/login');
+    }
+
+    const {
+      firstName,
+      lastName,
+      email,
+      age,
+      bio,
+    } = req.body;
+
+    const updateData = {
+      firstName,
+      lastName,
+      email,
+      age: Number(age),
+      bio,
+    };
+
+    if (req.file) {
+      updateData.imagePath = `/uploads/${req.file.filename}`;
+    }
+
+    await db.collection('users').updateOne(
+      { _id: new ObjectId(userId) },
+      { $set: updateData }
+    );
+
+    res.redirect('/profile-settings');
+  } catch (error) {
+    console.error('Fout bij updaten gebruiker:', error);
+    res.status(500).send('Er is een fout opgetreden bij het updaten');
+  }
+});
+
+ app.listen(port, () => {
+   console.log(`Server running at http://localhost:${port}`);
+ });
 
 
 // matches
