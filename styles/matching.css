@@ -67,19 +67,23 @@ li.matchGenres {
     display: flex;
     justify-content: space-between;
     margin-top: 1em;
+    gap: 1em;
+    
+    form {
+        flex: 1;
+        width: auto;
+    }
 }
 
 .matches button{
-    width: 11.7em;
+    width: 100%;
     border-radius: .5em;
     height: 2.8em;
-
     border: none;
-	padding: 0;
-	font: inherit;
-	cursor: pointer;
-	outline: inherit;
-
+    padding: 0;
+    font: inherit;
+    cursor: pointer;
+    outline: inherit;
     font-family: 'Quicksand', sans-serif;
     font-weight: 700;
 }
@@ -93,6 +97,7 @@ li.matchGenres {
     color: var(--background);
     background-color: var(--roze);
 }
+
 
 ul.matches{
     display: grid;

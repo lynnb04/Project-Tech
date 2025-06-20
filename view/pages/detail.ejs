@@ -46,14 +46,12 @@
                 alt="Toevoegen aan favorieten">
             </button>
           <% } else { %>
-            <p><a href="/">Log in om te liken</a></p>
+            
           <% } %>
         </div>
     
         <div class="time-tag">
           <img src="/static/time_icon.svg" alt="Begin- en eindtijd">
-          <p><%= event.dates.start.localTime ? event.dates.start.localTime.slice(0, 5) : 'Tijd onbekend' %></p>
-          <p>-</p>
           <p><%= event.dates.start.localTime ? event.dates.start.localTime.slice(0, 5) : 'Tijd onbekend' %></p>
         </div>
     
