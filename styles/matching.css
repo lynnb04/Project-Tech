@@ -134,18 +134,69 @@ ul.matches{
     top: 0;
     left: 0;
     width: calc(100vw - 2em);
-    height: 100vh;
+    height: calc(100vh - 2em);
     background-color: rgba(0, 0, 0, 0.8);
     padding: 1em;
     display: flex;
     flex-direction: column;
     align-items: center;
-    justify-content: center;
+    justify-content: space-around;
     z-index: 1000;
+
+    img {
+        width: 100%;
+        aspect-ratio: 1 / 1;
+        object-fit: cover;
+        border-radius: 50%;
+    }
+
+    p {
+        text-align: center;
+    }
+
   }
 
-  #closePopup{
-    position: absolute;
-    top: 1em;
-    right: 1em;
+  .popButtons {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+
+    a {
+        width: 40%;
+        border-radius: 3em .4em .4em 3em;
+        display: block;
+        margin: .2em;
+        text-align: center;
+        font-family: 'Quicksand';
+        font-size: 1em;
+        color: var(--tekst);
+        background-color: var(--roze);
+        transition: background-color 0.3s ease;
+        padding: 1em;
+        text-decoration: none;
+        border: 0;
+    }
+
+    button {
+        width: 60%;
+        border-radius: .4em 3em 3em .4em;
+
+        display: block;
+        margin: .2em;
+        /* text-align: center; */
+        font-family: 'Quicksand';
+        font-size: 1em;
+        color: var(--tekst);
+        background-color: var(--backgroundSecundary);
+        padding: 1em;
+        border: 0;
+
+        display: flex;
+        align-items: center;
+        justify-content: center;
+
+        transition: background-color 0.3s ease;
+    }
   }

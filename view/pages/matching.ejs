@@ -46,13 +46,16 @@
             <% }) %>
         </ul>
         <% if (match) { %>
-        <section class="matchPopUp" style="display:block;">
-            <button id="closePopup">Sluiten</button>
+        <section class="matchPopUp" style="display:flex;">
             <h2>Je hebt een match!</h2>
-            <p>Je hebt een match met <%= match.firstName %> <%= match.lastName %></p>
-            <img src="<%= match.imagePath %>" alt="Match Image" width="100">
-            <!-- current user image -->
-            
+            <div>
+                <p>Je hebt een match met <%= match.firstName %> <%= match.lastName %></p>
+                <img src="<%= match.imagePath %>" alt="Match Image" width="100">
+            </div>
+            <div class="popButtons">
+                <a href="/matches">Bekijk match</a>
+                <button id="closePopup">Vindt andere matches</button>
+            </div>
         </section>
         <% } %>
     </main>
