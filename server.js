@@ -956,7 +956,7 @@ app.get('/profile-settings', async (req, res) => {
   try {
     const userId = req.session.user && req.session.user.id;
     if (!userId) {
-      return res.redirect('/login');
+      return res.redirect('/');
     }
     const user = await db.collection('users').findOne({ _id: new ObjectId(userId) });
     if (!user) {
@@ -992,9 +992,9 @@ app.get('/profile-settings', async (req, res) => {
 // formulier uploaden
  app.post('/profile-settings', upload.single('profilePic'), async (req, res) => {
   try {
-    const userId = req.session.userId;
+    const userId = req.session.user && req.session.user.id;
     if (!userId) {
-      return res.redirect('/login');
+      return res.redirect('/');
     }
 
     const {
