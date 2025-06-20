@@ -16,7 +16,7 @@ li.matches {
     font-family: 'Quicksand', sans-serif;
 }
 
-.matchFotoContainer{
+.matchPhotoContainer{
     width: 100%;
     aspect-ratio: 1 / 1;
     overflow: hidden;
@@ -26,7 +26,7 @@ li.matches {
     align-items: end
 }
 
-.matchFotoContainer img{
+.matchPhotoContainer img{
     width: 100%;
     height: 100%;
     object-fit: cover;
@@ -34,7 +34,7 @@ li.matches {
     grid-area: 1 / 1 / 3 / 2;
 }
 
-.matchNaam{
+.matchName{
     background: rgba(0, 0, 0, 0.3);
     color: var(--tekst);
     width: 100%;
@@ -62,7 +62,6 @@ li.matchGenres {
     font-size: .85em;
 }
 
-
 .matchButtons{
     display: flex;
     justify-content: space-between;
@@ -75,7 +74,7 @@ li.matchGenres {
     }
 }
 
-.matches button{
+.matchList button{
     width: 100%;
     border-radius: .5em;
     height: 2.8em;
@@ -88,22 +87,21 @@ li.matchGenres {
     font-weight: 700;
 }
 
-.matches form:nth-of-type(1) button{
+.matchList form:nth-of-type(1) button{
     color: var(--roze);
     background-color: var(--backgroundSecundary);
 }
 
-.matches form:nth-of-type(2) button{
+.matchList form:nth-of-type(2) button{
     color: var(--background);
     background-color: var(--roze);
 }
 
-
-ul.matches{
+ul.matchList{
     display: grid;
 }
 
-.matches > li {
+.matchList > li {
     grid-area: 1 / 1 / 2 / 2;
     margin-bottom: 2em;
     list-style: none;
@@ -131,15 +129,15 @@ ul.matches{
     }
   }
   
-  .swipe-left {
+  .swipeLeft {
     animation: removeMatch 0.5s ease-out forwards;
   }
   
-  .swipe-right {
+  .swipeRight {
     animation: addMatch 0.5s ease-out forwards;
   }
 
-.matchPopUp {
+.matchPopup {
     position: fixed;
     width: 75vw;
     height: 50vh;
@@ -156,35 +154,35 @@ ul.matches{
     border-radius: 1em;
   }
   
-.close-btn {
+.closeBtn {
     position: absolute;
     top: 1em;
     right: 1em;
     background: none;
     border: none;
   }
-.close-btn img {
+.closeBtn img {
     max-width: 2.5em;
     max-height: 2.5em;
     display: block;
   }
   
-  /* Titels en tekst */
-.matchPopUp h2, .matchPopUp p {
+  /* Titles and text */
+.matchPopup h2, .matchPopup p {
     color: var(--tekst);
     text-align: center;
     margin: 0.5em 0;
   }
 
-.matchPopUp h2{
+.matchPopup h2{
   font-size: 2.5em;
   rotate: -8deg;
   z-index: 1001;
   translate: -0.5em 0;
 }
   
-  /* Match-afbeelding */
-.matchPopUp img {
+  /* Match image */
+.matchPopup img {
     width: 12em;
     height: 12em;
     border-radius: 50em;
@@ -193,7 +191,7 @@ ul.matches{
   }
   
   /* Link styling */
-.matchPopUp a {
+.matchPopup a {
     display: block;
     font-family: 'Quicksand', Arial, Helvetica, sans-serif;
     background-color: var(--roze);
