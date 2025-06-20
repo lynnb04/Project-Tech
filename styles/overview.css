@@ -293,7 +293,7 @@ article li > div p:nth-of-type(2){
       opacity: 0.2; 
       transform: scale(0.8) rotate(-20deg) translate(15em, -5em);
       animation: showConcert linear forwards;
-      animation-timeline: view(35em -15em);
+      animation-timeline: view(38em -15em);
       animation-range: contain;
   }}
   
@@ -301,7 +301,7 @@ article li > div p:nth-of-type(2){
       opacity: 0.2; 
       transform: scale(0.8) rotate(20deg) translate(-15em, -5em);
       animation: showConcert linear forwards;
-      animation-timeline: view(35em -15em);
+      animation-timeline: view(38em -15em);
       animation-range: contain;
   }
 
@@ -317,6 +317,7 @@ article li {
   gap: 0;
   border: 0.075em solid var(--lichtBlauw);
 }
+
 
 .card-img-wrapper {
   grid-area: 1 / 1 / 2 / 3;
