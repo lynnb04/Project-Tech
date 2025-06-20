@@ -396,8 +396,8 @@ app.get('/concertMatching/:eventId', async (req, res) => {
 // --------------------
 app.get('/overview', async function (req, res) {
     // Haal filters uit de query
-    const selectedGenres = req.query.genres || [];
-    const selectedCities = req.query.cities || [];
+    const selectedGenres = [].concat(req.query.genres || []);
+    const selectedCities = [].concat(req.query.cities || []);
     const dateFrom = req.query.dateFrom;
     const dateTo = req.query.dateTo;
   
