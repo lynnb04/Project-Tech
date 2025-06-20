@@ -79,12 +79,12 @@ li.matchGenres {
     font-weight: 700;
 }
 
-.matches button:nth-of-type(1) {
+.matches form:nth-of-type(1) button{
     color: var(--roze);
     background-color: var(--backgroundSecundary);
 }
 
-.matches button:nth-of-type(2){
+.matches form:nth-of-type(2) button{
     color: var(--background);
     background-color: var(--roze);
 }
