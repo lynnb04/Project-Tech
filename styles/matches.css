@@ -23,7 +23,7 @@ h2{
     font-size: 1em;
 }
 
-li{
+li.match-item{
     display: flex;
     background-color: var(--backgroundSecundary);
     padding: 1em;
@@ -31,21 +31,21 @@ li{
     margin-bottom: 1em;
 }
 
-img{
+.match-item img{
     width: 4em;
     height: 4em;
     border-radius: 10em;
     margin-right: 1em;
 }
 
-li div{
+li.match-item div{
     align-self: center;
 }
 
 /* More matches button fixed bottom center */
 a.more-matches {
     position: fixed;
-    bottom: 10em;   
+    bottom: 7.5em;   
     left: 50%;
     transform: translateX(-50%);
     z-index: 1000;
