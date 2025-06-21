@@ -186,10 +186,151 @@ input[type="radio"]:checked + label {
 }
 
 /* Slider voor leeftijd */
+form{
+  margin-bottom: 4em;
+}
+
+.container {
+  position: relative;
+  width: 100%;
+  height: 6.25em;
+  padding-top: 2em;
+  box-sizing: border-box;
+}
+
+/* slider algemene styling */
+input[type="range"] {
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  appearance: none;
+  width: 100%;
+  background-color: transparent;
+  position: relative; /* <---- dit is de fix */
+  pointer-events: auto; /* laat beide sliders werken */
+  margin: 0;
+  z-index: 2;
+}
+
+#slider-1 {
+    z-index: 3;
+}
+
+#slider-2 {
+    z-index: 2;
+}
+
+/* onderliggende lijn */
+.slider-track {
+  width: 100%;
+  height: .3em;
+  position: absolute;
+  top: 85%;
+  transform: translateY(-50%);
+  border-radius: .3em;
+  background-color: var(--paars);
+}
+
+/* track styling */
+input[type="range"]::-webkit-slider-runnable-track {
+  height: .3em;
+}
+
+input[type="range"]::-moz-range-track {
+  height: .3em;
+}
+
+input[type="range"]::-ms-track {
+  height: .3em;
+}
+
+/* thumb styling */
+input[type="range"]::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  height: 1.7em;
+  width: 1.7em;
+  background-color: var(--paars);
+  cursor: pointer;
+  margin-top: -.6em;
+  pointer-events: auto;
+  border-radius: 50%;
+}
+
+input[type="range"]::-moz-range-thumb {
+  height: 1.7em;
+  width: 1.7em;
+  cursor: pointer;
+  border-radius: 50%;
+  background-color: var(--paars);
+  pointer-events: auto;
+  border: none;
+}
+
+input[type="range"]::-ms-thumb {
+  height: 1.7em;
+  width: 1.7em;
+  cursor: pointer;
+  border-radius: 50%;
+  background-color: var(--paars);
+  pointer-events: auto;
+}
+
+/* thumb actief effect */
+input[type="range"]:active::-webkit-slider-thumb {
+  background-color: var(--tekst);
+  border: 1px solid var(--paars);
+}
+
+/* waarde bubbel boven sliders */
+.values {
+  background-color: var(--paars);
+  position: absolute;
+  top: .3em;
+  left: 50%;
+  transform: translateX(-50%);
+  padding: .4em 1em;
+  border-radius: .4em;
+  text-align: center;
+  font-weight: 500;
+  font-size: 1.3em;
+  color: var(--tekst);
+  display: flex;
+  gap: 0.2em;
+  align-items: center;
+}
+.values:before {
+  content: "";
+  position: absolute;
+  bottom: -.6em;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 0;
+  height: 0;
+  border-left: .6em solid transparent;
+  border-right: .6em solid transparent;
+  border-top: .6em solid var(--paars);
+}
+
+input[type="range"]:first-of-type {
+    z-index: 2;
+}
+input[type="range"]:last-of-type {
+    z-index: 3;
+}
+
+#slider-1::-webkit-slider-thumb {
+    margin-top: 2em;
+}
+#slider-2::-webkit-slider-thumb {
+    margin-top: 0em;
+}
 
 
+/* Genres */
+.genres {
+    display: flex;
+    justify-content: center;
+}
 
-/* Genre's */
 .genres ul {
   list-style: none;
   padding: 0;
@@ -222,6 +363,19 @@ input[type="radio"]:checked + label {
   background-color: var(--roze);
 }
 
+/* Geslacht */
+
+
+
+/* Taal */
+input[type="radio"] {
+    background-color: var(--lichtBlauw);
+}
+
+input[type="radio"]:checked + label {
+    background-color:var(--roze);
+
+}
 
 
 /* Uitlog section */

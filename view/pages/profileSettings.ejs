@@ -81,7 +81,8 @@
 
         <section class="concertvoorkeuren">
             <h2>Concertvoorkeuren</h2>
-                <h3>Genre's</h3>
+                <h3>Genres</h3>
+                <p>Selecteer hieronder je favoriete genres...</p>
                     <ul class="genres">
                         <% genres.forEach(function(genre) { %>
                             <li>
@@ -103,46 +104,32 @@
         <section class="matchvoorkeuren">
             <h2>Matchvoorkeuren</h2>
                 <h3>Leeftijd</h3>
-                    <% if (user.matchPreferences && user.matchPreferences.ageRange) { %>
-                        <p><%= user.matchPreferences.ageRange.min %> - <%= user.matchPreferences.ageRange.max %> jaar</p>
-                    <% } else { %>
-                        <p>Geen leeftijdsvoorkeur ingesteld.</p>
-                    <% } %>
-                    
-                    <div class="container">
-                        <div class="slider-track"></div>
-                        <input
-                            type="range"
-                            min="18"
-                            max="100"
-                            id="slider-1"
-                            name="minAge"
-                            value="<%= user.matchPreferences?.ageRange?.min || 18 %>"
-                            oninput="slideOne()"
-                        >
-                        <input
-                            type="range"
-                            min="18"
-                            max="100"
-                            id="slider-2"
-                            name="maxAge"
-                            value="<%= user.matchPreferences?.ageRange?.max || 100 %>"
-                            oninput="slideTwo()"
-                        >
-                        </div>
+                <div class="container">
+                    <div class="values" id="range-values">
+                      <span id="range1">0</span>
+                      <span> &dash; </span>
+                      <span id="range2">100</span>
+                    </div>
+                      <div class="slider-track"></div>
+                      <input type="range" min="18" max="100" value="18" id="slider-1" name="minAge" oninput="slideOne()">
+                      <input type="range" min="18" max="100" value="100" id="slider-2" name="maxAge" oninput="slideTwo()">
+                    </div>
 
                 <h3>Geslacht</h3>
-                    <% if (user.matchPreferences && user.matchPreferences.gender) { %>
-                            <p><%= user.matchPreferences.gender %></p>
-                        <% } else { %>
-                            <p>Geen voorkeur opgegeven.</p>
-                        <% } %>
+                    <!-- invullen uit registration -->
+
                 <h3>Taal</h3>
-                    <% if (user.matchPreferences && user.matchPreferences.language) { %>
-                            <p><%= user.matchPreferences.language %></p>
-                        <% } else { %>
-                            <p>Geen voorkeur opgegeven.</p>
-                        <% } %>
+                    <!-- invullen uit registration -->
+                        <input type="radio" name="taal" id="nl" value="nl">
+                        <label for="nl">Nederlands</label>
+                
+                        <input type="radio" name="taal" id="en" value="en">
+                        <label for="en">English</label>
+
+                        <input type="radio" name="taal" id="nvt" value="nvt">
+                        <label for="nvt">Geen voorkeur</label>
+                      
+
         </section>
 
 
@@ -176,7 +163,7 @@
     
 
         <section class="uitloggen">
-            <button>Uitloggen</button>
+            <button type="button" onclick="window.location.href='/'">Uitloggen</button>
         </section>
 
 
@@ -200,6 +187,7 @@
                 // Toon de opslaan-knop
                 document.getElementById('saveButton').style.display = "inline-block";
             }
+
             </script>
 </body>
 </html>

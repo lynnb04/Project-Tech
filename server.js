@@ -1033,6 +1033,11 @@ app.get('/profile-settings', async (req, res) => {
    console.log(`Server running at http://localhost:${port}`);
  });
 
+ //uitloggen
+ app.get('/', (req, res) => {
+  res.render('pages/index', {bericht: null});
+ });
+
 
 // matches
 // ---------------------
