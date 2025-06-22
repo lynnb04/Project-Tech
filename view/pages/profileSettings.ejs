@@ -19,7 +19,6 @@
             </div>
 
             <h2>Profiel</h2>
-
             <!-- formulier -->
             <div class="form-wrapper">
                 <form action="/profile-settings" method="POST" enctype="multipart/form-data">
@@ -128,8 +127,6 @@
 
                         <input type="radio" name="taal" id="nvt" value="nvt">
                         <label for="nvt">Geen voorkeur</label>
-                      
-
         </section>
 
 
@@ -187,6 +184,33 @@
                 // Toon de opslaan-knop
                 document.getElementById('saveButton').style.display = "inline-block";
             }
+
+            // leeftijdsslider client side
+            const sliderOne = document.getElementById("slider-1");
+            const sliderTwo = document.getElementById("slider-2");
+            const displayValOne = document.getElementById("range1");
+            const displayValTwo = document.getElementById("range2");
+
+            function updateBubble() {
+            displayValOne.textContent = sliderOne.value;
+            displayValTwo.textContent = sliderTwo.value;
+            }
+
+            function slideOne() {
+            if (parseInt(sliderTwo.value) - parseInt(sliderOne.value) <= 0) {
+                sliderOne.value = parseInt(sliderTwo.value) - 1;
+            }
+            updateBubble();
+            }
+
+            function slideTwo() {
+            if (parseInt(sliderTwo.value) - parseInt(sliderOne.value) <= 0) {
+                sliderTwo.value = parseInt(sliderOne.value) + 1;
+            }
+            updateBubble();
+            }
+
+            updateBubble();
 
             </script>
 </body>
