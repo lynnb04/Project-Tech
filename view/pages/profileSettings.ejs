@@ -134,7 +134,7 @@
 
                             <input type="radio" name="taal" id="else" value="anders"
                             <%= selectedTaal !== 'nl' && selectedTaal !== 'en' && selectedTaal !== 'nvt' ? 'checked' : '' %> disabled>
-                            <label for="else">Anders:</label>
+                            <label for="else">Anders</label>
 
                             <input type="text" id="taal-anders-input" name="taalAnders" placeholder="Typ een taal..."
                             value="<%= taalAnders || '' %>" style="<%= selectedTaal !== 'nl' && selectedTaal !== 'en' && selectedTaal !== 'nvt' ? 'display:inline-block;' : 'display:none;' %>">
