@@ -19,6 +19,34 @@ h1 {
     text-align: center;
 }
 
+/* cursor standaard default */
+label,
+.genres label,
+input,
+select,
+textarea,
+button {
+    cursor: default;
+}
+
+/* cursor veranderingen bij bewerken */
+body.editing-enabled input[type="text"],
+body.editing-enabled input[type="range"],
+body.editing-enabled input[type="email"],
+body.editing-enabled input[type="password"],
+body.editing-enabled textarea,
+body.editing-enabled select {
+  cursor: text;
+}
+
+body.editing-enabled label,
+body.editing-enabled input[type="radio"] + label,
+body.editing-enabled input[type="checkbox"] + label,
+body.editing-enabled .genres label,
+body.editing-enabled button {
+  cursor: pointer;
+}
+
 /* Knoppen */
 .fullscreen-button,
 button[type="submit"] {
@@ -50,6 +78,14 @@ section {
     width: 8.75em;
     height: 8.75em;
     margin: 0 auto 1.25em;
+}
+
+main > img {
+  width: 11em;
+  height: 11em;
+  border-radius: 50%; 
+  margin: 2em auto 0 auto;
+  display: block;
 }
 
 /* Profielfoto upload */
@@ -100,7 +136,6 @@ input[type="file"] {
     font-size: 1.25em;
     font-weight: bold;
     text-align: center;
-    cursor: pointer;
     z-index: 2;
     box-shadow: 0 0.25em 0.625em rgba(0, 0, 0, 0.5);
 }
@@ -174,7 +209,6 @@ label {
     border-radius: 1.5625em;
     background-color: #1A1B2E;
     color: white;
-    cursor: pointer;
     transition: background 0.3s;
     font-size: 0.85rem;
 }
@@ -249,7 +283,6 @@ input[type="range"]::-webkit-slider-thumb {
   height: 1.7em;
   width: 1.7em;
   background-color: var(--paars);
-  cursor: pointer;
   margin-top: -.6em;
   pointer-events: auto;
   border-radius: 50%;
@@ -258,7 +291,6 @@ input[type="range"]::-webkit-slider-thumb {
 input[type="range"]::-moz-range-thumb {
   height: 1.7em;
   width: 1.7em;
-  cursor: pointer;
   border-radius: 50%;
   background-color: var(--paars);
   pointer-events: auto;
@@ -268,7 +300,6 @@ input[type="range"]::-moz-range-thumb {
 input[type="range"]::-ms-thumb {
   height: 1.7em;
   width: 1.7em;
-  cursor: pointer;
   border-radius: 50%;
   background-color: var(--paars);
   pointer-events: auto;
@@ -353,7 +384,6 @@ input[type="range"]:last-of-type {
   padding: 0.5em 1em;
   background-color: var(--lichtBlauw);
   color: var(--tekst);
-  cursor: pointer;
   border-radius: 99em;
   transition: all 0.3s ease;
 }
@@ -373,6 +403,11 @@ input[type="radio"] {
 }
 label {
     background-color: var(--lichtBlauw);
+    cursor: default;
+}
+
+body.editing-enabled label {
+    cursor: pointer;
 }
 
 input[type="radio"]:checked + label {

@@ -23,10 +23,11 @@
             <div class="form-wrapper">
                 <form action="/profile-settings" method="POST" enctype="multipart/form-data">
 
+                    <!-- profielfoto code uit account halen -->
                     <div class="profielfoto-wrapper">
                     <div class="profielfoto">
-                        <% if (user.profilePic) { %>
-                        <img src="/uploads/<%= user.profilePic %>" alt="Profile Picture">
+                        <% if (user.imagePath) { %>
+                        <img src="<%= user.imagePath %>" alt="Profile Picture">
                         <% } else { %>
                         <span class="placeholder"></span>
                         <% } %>
@@ -120,16 +121,16 @@
                 <h3>Taal</h3>
                     <!-- invullen uit registration -->
                      <div class="taal-keuze">
-                          <input type="radio" name="taal" id="nl" value="nl">
+                          <input type="radio" name="taal" id="nl" value="nl" disabled>
                           <label for="nl">Nederlands</label>
 
-                          <input type="radio" name="taal" id="en" value="en">
+                          <input type="radio" name="taal" id="en" value="en" disabled>
                           <label for="en">English</label>
 
-                          <input type="radio" name="taal" id="nvt" value="nvt">
+                          <input type="radio" name="taal" id="nvt" value="nvt" disabled>
                           <label for="nvt">Geen voorkeur</label>
 
-                          <input type="radio" name="taal" id="else" value="anders">
+                          <input type="radio" name="taal" id="else" value="anders" disabled>
                           <label for="else">Anders:</label>
                           <input type="text" id="taal-anders-input" name="taalAnders" placeholder="Typ een taal..." style="display:none;">
                      </div>
@@ -178,6 +179,7 @@
 
     <%- include('../partials/footer'); %>
 
+    <!-- client side script -->
     <script>
             function enableEditing() {
                 // Schakel alle invoervelden en select-elementen in
@@ -189,9 +191,11 @@
 
                 // Toon de opslaan-knop
                 document.getElementById('saveButton').style.display = "inline-block";
+
+                document.body.classlist.add("editing-enabled");
             }
 
-            // leeftijdsslider client side
+            // leeftijdsslider
             window.onload = function () {
             slideOne();
             slideTwo();
