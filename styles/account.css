@@ -269,10 +269,9 @@ section:nth-of-type(3) ul li {
   text-align: center;
   margin: 3em auto;
 
-  background-color: var(--lichtBlauw);
-  padding: 0.7em;
-  border-radius: 0.5em;
-  border: 0.075em solid var(--lichtBlauw);
+  background-color: var(--roze);
+  padding: 0.7em 1.5em;
+  border-radius: 5em;
   text-decoration: none;
   font-family: 'poppins', sans-serif;
 }
@@ -284,42 +283,50 @@ section:nth-of-type(3) ul li {
 /* Matches */
 
 .matches {
+  width: 100%;
+  max-width: 100vw; /* Zorgt dat het niet breder wordt dan viewport */
+  overflow-x: hidden; /* Zorgt dat pagina zelf niet horizontaal scrolt */
   display: flex;
   flex-direction: column;
   align-items: center;
 }
 
-.matches ul {
-  gap: 1.5em;
+.matches ul.match-list {
+  display: flex;
+  flex-direction: row;
+  gap: 2em;
   overflow-x: auto;
+  overflow-y: hidden;
   padding: 1em 2em;
   margin: 0;
   list-style: none;
-  scroll-snap-type: x mandatory;
-  -webkit-overflow-scrolling: touch;
+
+  width: 100%; /* Zet de breedte op containerbreedte */
   box-sizing: border-box;
+
+  scroll-snap-type: x mandatory;
+  -webkit-overflow-scrolling: touch; /* smooth scroll iOS */
+  white-space: nowrap; /* voorkom wrapping */
 }
 
-/* Extra ruimte links */
-.matches ul::before {
-  content: '';
-  flex: 0 0 1em;
-}
-
-.matches ul li {
-  flex: 0 0 auto;
-  width: 10em;
+.matches ul.match-list li {
+  flex: 0 0 auto; /* voorkom dat ze krimpen of uitrekken */
+  width: 10em;  /* vaste breedte */
   scroll-snap-align: start;
   text-align: center;
   font-family: 'Poppins', sans-serif;
+  display: inline-flex;
+  flex-direction: column;
+  align-items: center;
 }
+
 
 .match-img-wrapper {
   width: 8em;
   height: 8em;
   border-radius: 50%;
   overflow: hidden;
-  margin: 0 auto 0.5em auto;
+  margin-bottom: 0.5em;
 }
 
 .match-img-wrapper img {
@@ -329,7 +336,37 @@ section:nth-of-type(3) ul li {
   display: block;
 }
 
+ul.list > li:nth-of-type(1){
+  margin-left: 3em;
+}
+.find {
+  color: var(--tekst);
+  font-family: 'Poppins', sans-serif;
+  text-align: center;
+  margin: 1.5em 0 3em 0;
+  font-size: 0.8em;
+  background-color: var(--lichtBlauw);
+  padding: 0.7em;
+  border-radius: 0.5em;
+  border: 0.075em solid var(--lichtBlauw);
+  text-decoration: none;
+}
 
+.close-btn {
+  position: absolute;
+  top: 6.5em;
+  right: 2em;
+  width: 2em;
+  height: 2em;
+  background: none;
+  border: none;
+  padding: 0;
+  cursor: pointer;
+}
 
-
+.close-btn img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+}
 

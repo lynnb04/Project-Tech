@@ -1,26 +1,26 @@
-  document.querySelectorAll('.matchButtons form').forEach(form => {
-    form.addEventListener('submit', function (e) {
-      e.preventDefault();
+document.querySelectorAll('.matchButtons form').forEach(form => {
+  form.addEventListener('submit', function (e) {
+    e.preventDefault();
 
-      const listItem = this.closest('li');
-      const isSkip = this.action.includes('/skip/');
-      const animationClass = isSkip ? 'swipe-left' : 'swipe-right';
+    const listItem = this.closest('li');
+    const isSkip = this.action.includes('/skip/');
+    const animationClass = isSkip ? 'swipeLeft' : 'swipeRight';
 
-      listItem.classList.add(animationClass);
+    listItem.classList.add(animationClass);
 
-      setTimeout(() => {
-        this.submit();
-      }, 500); // tijd gelijk aan de animatieduur
-    });
+    setTimeout(() => {
+      this.submit();
+    }, 500); // match animation duration
   });
+});
 
-  document.addEventListener('DOMContentLoaded', function() {
-    const popup = document.querySelector('.matchPopUp');
-    const closeBtn = document.getElementById('closePopup');
-    if (popup && closeBtn) {
-      closeBtn.addEventListener('click', () => {
-        popup.style.display = 'none';
-        window.location.href = '/matching';
-      });
-    }
+document.addEventListener('DOMContentLoaded', () => {
+  const matchPopup = document.querySelector('.matchPopup');
+  const closeBtn = document.getElementById('closePopup');
+  if (!matchPopup || !closeBtn) return;
+
+  closeBtn.addEventListener('click', () => {
+    matchPopup.style.display = 'none';
+    window.location.href = '/matching';
   });
+});

@@ -76,25 +76,23 @@
 
       <section class="matches">
         <h2>Matches</h2>
-        <ul>
-          <% if (matchedUsers.length> 0) { %>
+        <% if (matchedUsers.length > 0) { %>
+          <ul class="match-list">
             <% matchedUsers.forEach(function(match) { %>
               <li>
                 <div class="match-img-wrapper">
-                <img src="<%= match.imagePath %>" alt="Foto van <%= match.firstName %>" />
-              </div>
+                  <img src="<%= match.imagePath %>" alt="Foto van <%= match.firstName %>" />
+                </div>
                 <span>
-                  <%= match.firstName %>
-                    <%= match.lastName %>
+                  <%= match.firstName %> <%= match.lastName %>
                 </span>
               </li>
-
-        </ul>
-        <% }) %>
-        <a class="event-link" href="/matching">Bekijk alle matches</a>
+            <% }) %>
+          </ul>
+          <a class="event-link" href="/matching">Bekijk alle matches</a>
         <% } else { %>
-          <a href="/matching">Nog geen matches – vind jouw match</a>
-          <% } %>
+          <a class="find" href="/matching">Nog geen matches – vind jouw match</a>
+        <% } %>
       </section>
 
         <section class="concerten">
@@ -152,8 +150,7 @@
 
             <% } else { %>
               <!-- Geen events? Toon alleen dit -->
-              <ul class="list">
-                <li><a href="/overview">Nog geen events – bekijk het aanbod</a></li>
+              <a class="find" href="/overview">Nog geen events – bekijk het aanbod</a>
               </ul>
               <% } %>
         </section>
@@ -207,9 +204,7 @@
         
           <% } else { %>
             <!-- Geen events -->
-            <ul class="list">
-              <li><a href="/overview">Nog geen events – bekijk het aanbod</a></li>
-            </ul>
+            <a class="find" href="/overview">Nog geen events – bekijk het aanbod</a>
           <% } %>
         </section>
         

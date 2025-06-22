@@ -7,6 +7,11 @@
 <link rel="stylesheet" href="/styles.css">
 <link rel="stylesheet" href="/overview.css">
 <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined" rel="stylesheet">
+<style>
+.filter-tag input[type="checkbox"]:checked + span {
+  /* style for selected */
+}
+</style>
 </head>
 <body>
   <%- include('../partials/header'); %>
@@ -44,21 +49,21 @@
         </button>
         <form class="filter-menu" method="GET" action="/overview">
           <!-- Locatie -->
-          <details open>
+          <details open name="filters">
             <summary>Locatie</summary>
-            <div class="filter-options" data-filter-group="locatie">
+            <ul class="cities">
               <% cities.forEach(city => { %>
-                <div 
-                  class="filter-tag"
-                  data-value="<%= city %>"
-                  data-selected="<%= selectedCities.includes(city) ? 'true' : 'false' %>"
-                ><%= city %></div>
+                <li><label class="filter-tag">
+                  <input type="checkbox" name="cities" value="<%= city %>" 
+                    <%= selectedCities.includes(city) ? 'checked' : '' %>>
+                  <%= city %>
+                </label></li>
               <% }) %>
-            </div>
+            </ul>
           </details>
 
           <!-- Datum -->
-          <details>
+          <details name="filters">
             <summary>Datum</summary>
             <div class="date-inputs">
               <label>Vanaf:
@@ -71,21 +76,23 @@
           </details>
 
           <!-- Genre -->
-          <details>
+          <details name="filters">
             <summary>Genre</summary>
             <ul class="genres">
               <% genres.forEach(genre => { %>
-                <li><label>
+                <li>
+                  <label class="filter-tag">
                   <input type="checkbox" name="genres" value="<%= genre %>" 
                     <%= selectedGenres.includes(genre)?'checked':'' %>>
                   <%= genre %>
-                </label></li>
+                  </label>
+                </li>
               <% }) %>
             </ul>
           </details>
 
           <div class="submitsection">
-            <button type="submit" class="filter-submit" disabled>Apply Filters</button>
+            <button type="submit" class="filter-submit" disabled>Toepassen</button>
           </div>
         </form>
       </div>

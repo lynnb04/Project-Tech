@@ -23,22 +23,28 @@ h2{
     font-size: 1em;
 }
 
-li.match-item{
+li {
+    list-style: none;
+}
+
+li.match-item a {
     display: flex;
     background-color: var(--backgroundSecundary);
     padding: 1em;
     border-radius: 1.5em;
     margin-bottom: 1em;
+    color: var(--tekst);
+    text-decoration: none;
 }
 
-.match-item img{
+.match-item a img{
     width: 4em;
     height: 4em;
     border-radius: 10em;
     margin-right: 1em;
 }
 
-li.match-item div{
+li.match-item a div{
     align-self: center;
 }
 
@@ -53,6 +59,7 @@ a.more-matches {
     background-color: var(--roze);
     text-decoration: none;
     font-weight: 600;
-    padding: 1.4em;
+    padding: 1em 1.4em;
     border-radius: 10em;
 }
+

@@ -396,10 +396,10 @@ app.get('/concertMatching/:eventId', async (req, res) => {
 // --------------------
 app.get('/overview', async function (req, res) {
     // Haal filters uit de query
-    const selectedGenres = req.query.genres || [];
-    const selectedCities = req.query.cities || [];
-    const dateFrom = req.query.dateFrom;
-    const dateTo = req.query.dateTo;
+    const selectedGenres = [].concat(req.query.genres || []).filter(Boolean);
+    const selectedCities = [].concat(req.query.cities || []).filter(Boolean);
+    const dateFrom = req.query.dateFrom ? req.query.dateFrom : null;
+    const dateTo = req.query.dateTo ? req.query.dateTo : null;
   
     // API URLs
     const urlEvents = `${process.env.API_URL}?countryCode=NL&segmentName=Music&size=100&apikey=${process.env.API_KEY}`;
@@ -473,9 +473,9 @@ app.get('/overview', async function (req, res) {
 
 // profile
 // --------------------
-app.get('/profile', function(req, res) {
-    res.render('pages/profile');
-});
+// app.get('/profile', function(req, res) {
+//     res.render('pages/profile');
+// });
 
 
 // registration
@@ -1045,5 +1045,32 @@ app.get('/detail/:id', async (req, res) => {
   } catch (error) {
     console.error("Fout bij ophalen event detail:", error);
     res.render('pages/detail', { event: null, error: 'Event niet gevonden.', isGoing: false });
+  }
+});
+
+app.get('/profile/:id', async (req, res) => {
+  try {
+    const userId = req.params.id;
+    if (!userId) return res.redirect('/matches');
+    const user = await db.collection('users').findOne({ _id: new ObjectId(userId) });
+    if (!user) return res.status(404).send('Gebruiker niet gevonden.');
+
+    // Fetch events where this user is going
+    let goingEvents = [];
+    if (Array.isArray(user.goingEvents) && user.goingEvents.length > 0) {
+      const eventPromises = user.goingEvents.map(eventId => {
+        const url = `${process.env.API_URL_DETAIL}/${eventId}.json?apikey=${process.env.API_KEY}`;
+        return fetch(url)
+          .then(res => (res.ok ? res.json() : null))
+          .catch(() => null);
+      });
+      const results = await Promise.all(eventPromises);
+      goingEvents = results.filter(event => event !== null);
+    }
+
+    res.render('pages/profile', { user, goingEvents });
+  } catch (error) {
+    console.error('Fout bij ophalen profiel:', error);
+    res.status(500).send('Fout bij ophalen profiel');
   }
 });
