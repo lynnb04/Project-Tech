@@ -110,8 +110,8 @@
                       <span id="range2">100</span>
                     </div>
                       <div class="slider-track"></div>
-                      <input type="range" min="18" max="100" value="18" id="slider-1" name="minAge" oninput="slideOne()">
-                      <input type="range" min="18" max="100" value="100" id="slider-2" name="maxAge" oninput="slideTwo()">
+                      <input type="range" min="18" max="100" value="18" id="slider-1" name="minAge" oninput="slideOne()" disabled>
+                      <input type="range" min="18" max="100" value="100" id="slider-2" name="maxAge" oninput="slideTwo()" disabled>
                     </div>
 
                 <h3>Geslacht</h3>
@@ -119,14 +119,20 @@
 
                 <h3>Taal</h3>
                     <!-- invullen uit registration -->
-                        <input type="radio" name="taal" id="nl" value="nl">
-                        <label for="nl">Nederlands</label>
-                
-                        <input type="radio" name="taal" id="en" value="en">
-                        <label for="en">English</label>
+                     <div class="taal-keuze">
+                          <input type="radio" name="taal" id="nl" value="nl">
+                          <label for="nl">Nederlands</label>
 
-                        <input type="radio" name="taal" id="nvt" value="nvt">
-                        <label for="nvt">Geen voorkeur</label>
+                          <input type="radio" name="taal" id="en" value="en">
+                          <label for="en">English</label>
+
+                          <input type="radio" name="taal" id="nvt" value="nvt">
+                          <label for="nvt">Geen voorkeur</label>
+
+                          <input type="radio" name="taal" id="else" value="anders">
+                          <label for="else">Anders:</label>
+                          <input type="text" id="taal-anders-input" name="taalAnders" placeholder="Typ een taal..." style="display:none;">
+                     </div>
         </section>
 
 
@@ -186,32 +192,55 @@
             }
 
             // leeftijdsslider client side
-            const sliderOne = document.getElementById("slider-1");
-            const sliderTwo = document.getElementById("slider-2");
-            const displayValOne = document.getElementById("range1");
-            const displayValTwo = document.getElementById("range2");
+            window.onload = function () {
+            slideOne();
+            slideTwo();
+            };
 
-            function updateBubble() {
-            displayValOne.textContent = sliderOne.value;
-            displayValTwo.textContent = sliderTwo.value;
-            }
+            let sliderOne = document.getElementById("slider-1");
+            let sliderTwo = document.getElementById("slider-2");
+            let displayValOne = document.getElementById("range1");
+            let displayValTwo = document.getElementById("range2");
+            let minGap = 0;
+            let sliderTrack = document.querySelector(".slider-track");
+            let sliderMaxValue = document.getElementById("slider-1").max;
 
             function slideOne() {
-            if (parseInt(sliderTwo.value) - parseInt(sliderOne.value) <= 0) {
-                sliderOne.value = parseInt(sliderTwo.value) - 1;
+            if (parseInt(sliderTwo.value) - parseInt(sliderOne.value) <= minGap) {
+                sliderOne.value = parseInt(sliderTwo.value) - minGap;
             }
-            updateBubble();
+            displayValOne.textContent = sliderOne.value;
+            fillColor();
             }
-
             function slideTwo() {
-            if (parseInt(sliderTwo.value) - parseInt(sliderOne.value) <= 0) {
-                sliderTwo.value = parseInt(sliderOne.value) + 1;
+            if (parseInt(sliderTwo.value) - parseInt(sliderOne.value) <= minGap) {
+                sliderTwo.value = parseInt(sliderOne.value) + minGap;
             }
-            updateBubble();
+            displayValTwo.textContent = sliderTwo.value;
+            fillColor();
             }
+            function fillColor() {
+            percent1 = (sliderOne.value / sliderMaxValue) * 100;
+            percent2 = (sliderTwo.value / sliderMaxValue) * 100;
+            }
+            //https://codepen.io/alexpg96/pen/xxrBgbP
 
-            updateBubble();
+            // tonen van invulveld bij taal-anders
+            const andersRadio = document.getElementById("else");
+            const andersInput = document.getElementById("taal-anders-input");
 
+            const radioButtons = document.querySelectorAll('input[name="taal"]');
+
+            radioButtons.forEach(rb => {
+                rb.addEventListener("change", () => {
+                if (andersRadio.checked) {
+                    andersInput.style.display = "inline-block";
+                } else {
+                    andersInput.style.display = "none";
+                    andersInput.value = ""; // reset
+                }
+                });
+            });
             </script>
 </body>
 </html>

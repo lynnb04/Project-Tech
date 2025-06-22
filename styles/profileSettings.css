@@ -369,12 +369,19 @@ input[type="range"]:last-of-type {
 
 /* Taal */
 input[type="radio"] {
+    display: none;
+}
+label {
     background-color: var(--lichtBlauw);
 }
 
 input[type="radio"]:checked + label {
     background-color:var(--roze);
+}
 
+.taal-keuze input[type="radio"]:checked + label {
+  background-color: var(--roze);
+  color: white;
 }
 
 
