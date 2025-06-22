@@ -920,7 +920,7 @@ app.get('/profile-settings', async (req, res) => {
 });
 
 // formulier uploaden
- app.post('/profile-settings', upload.single('profilePic'), async (req, res) => {
+app.post('/profile-settings', upload.single('profilePic'), async (req, res) => {
   try {
     const userId = req.session.user && req.session.user.id;
     if (!userId) {
@@ -935,7 +935,8 @@ app.get('/profile-settings', async (req, res) => {
       bio,
       minAge,
       maxAge,
-      geslacht,
+      eigenGeslacht,         
+      geslachtVoorkeur,      
       taal,
       genres
     } = req.body;
@@ -951,10 +952,11 @@ app.get('/profile-settings', async (req, res) => {
       email,
       age: Number(age),
       bio,
+      geslacht: eigenGeslacht, // ← eigen geslacht opslaan op hoofdniveau
       preferences: {
         minAge: Number(minAge),
         maxAge: Number(maxAge),
-        geslacht,
+        geslachtVoorkeur,       // ← voorkeur geslacht juist benoemd
         taal: gekozenTaal,
         genres: Array.isArray(genres) ? genres : [genres]
       }
@@ -975,10 +977,6 @@ app.get('/profile-settings', async (req, res) => {
     res.status(500).send('Er is een fout opgetreden bij het updaten');
   }
 });
-
- app.listen(port, () => {
-   console.log(`Server running at http://localhost:${port}`);
- });
 
  //uitloggen
  app.get('/', (req, res) => {

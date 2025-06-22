@@ -53,6 +53,20 @@ button[type="submit"] {
     box-shadow: 0 0.25em 0.9375em rgba(178, 56, 255, 0.5);
 }
 
+.logout-button {
+    width: 90%;
+    margin: 1.25em auto;
+    display: block;
+    padding: 0.75em;
+    border-radius: 1.5625em;
+    background:#B238FF;
+    color: white;
+    border: none;
+    font-weight: bold;
+    font-size: 1rem;
+    box-shadow: 0 0.25em 0.9375em rgba(178, 56, 255, 0.5);
+}
+
 button[type="submit"] {
     margin-bottom: 3.125em;
 }
@@ -332,8 +346,9 @@ input[type="range"]:last-of-type {
 }
 
 /* Geslacht */
-
-
+.geslacht-keuze input[type="radio"] {
+  display: none;
+}
 
 /* Taal */
 input[type="radio"] {

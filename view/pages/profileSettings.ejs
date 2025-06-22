@@ -19,7 +19,7 @@
             </div>
 
             <h2>Profiel</h2>
-            <!-- formulier -->
+            <!-- alles in een formulier -->
             <div class="form-wrapper">
                 <form action="/profile-settings" method="POST" enctype="multipart/form-data">
 
@@ -50,12 +50,12 @@
                     </div>
 
                     <div class="geslacht">
-                        <select name="geslacht" disabled>
-                          <option value="man" <%= user.preferences?.geslacht === 'man' ? 'selected' : '' %>>Man</option>
-                          <option value="vrouw" <%= user.preferences?.geslacht === 'vrouw' ? 'selected' : '' %>>Vrouw</option>
-                          <option value="anders" <%= user.preferences?.geslacht === 'anders' ? 'selected' : '' %>>Anders</option>
+                        <select name="eigenGeslacht" id="eigenGeslacht" disabled>
+                            <option value="man" <%= user.geslacht === 'man' ? 'selected' : '' %>>Man</option>
+                            <option value="vrouw" <%= user.geslacht === 'vrouw' ? 'selected' : '' %>>Vrouw</option>
+                            <option value="anders" <%= user.geslacht === 'anders' ? 'selected' : '' %>>Anders</option>
                         </select>
-                    </div>
+                        </div>
 
                     <div class="bio">
                         <input type="text" name="bio" placeholder="Vertel iets over jezelf..." value="<%= user.bio || '' %>" disabled/><br>
@@ -65,11 +65,9 @@
 
         <section class="accountmanagement">
             <h2>Accountmanagement</h2>
-
                 <div class="email">
                     <input type="email" name="email" placeholder="E-mail" value="<%= user.email || '' %>" disabled/>
                 </div>
-
         <!--    <div class="wachtwoord">
                     <input type="password" name="password" placeholder="Wachtwoord" disabled/>
                 </div>  -->
@@ -77,11 +75,9 @@
                 <!-- account verwijderen -->
         </section>
 
-
         <section class="concertvoorkeuren">
             <h2>Concertvoorkeuren</h2>
                 <h3>Genres</h3>
-                <p>Selecteer hieronder je favoriete genres...</p>
                     <ul class="genres">
                         <% genres.forEach(function(genre) { %>
                             <li>
@@ -99,11 +95,10 @@
                     </ul>
         </section>
        
-        
         <section class="matchvoorkeuren">
             <h2>Matchvoorkeuren</h2>
                 <h3>Leeftijd</h3>
-                <div class="container">
+                  <div class="container">
                     <div class="values" id="range-values">
                       <span id="range1"><%= user.preferences?.minAge || 18 %></span>
                       <span> &dash; </span>
@@ -115,10 +110,25 @@
                     </div>
 
                 <h3>Geslacht</h3>
-                   
+                   <div class="geslacht-keuze">
+                    <input type="radio" name="geslachtVoorkeur" id="man" value="man"
+                        <%= user.preferences?.geslachtVoorkeur === 'man' ? 'checked' : '' %> disabled>
+                    <label for="man">Man</label>
+
+                    <input type="radio" name="geslachtVoorkeur" id="vrouw" value="vrouw"
+                        <%= user.preferences?.geslachtVoorkeur === 'vrouw' ? 'checked' : '' %> disabled>
+                    <label for="vrouw">Vrouw</label>
+
+                    <input type="radio" name="geslachtVoorkeur" id="anders" value="anders"
+                        <%= user.preferences?.geslachtVoorkeur === 'anders' ? 'checked' : '' %> disabled>
+                    <label for="anders">Anders</label>
+
+                    <input type="radio" name="geslachtVoorkeur" id="geenVoorkeur" value="nvt"
+                        <%= user.preferences?.geslachtVoorkeur === 'nvt' ? 'checked' : '' %> disabled>
+                    <label for="geenVoorkeur">Geen voorkeur</label>
+                    </div>
 
                 <h3>Taal</h3>
-                    <!-- invullen uit registration -->
                      <div class="taal-keuze">
                             <input type="radio" name="taal" id="nl" value="nl"
                             <%= selectedTaal === 'nl' ? 'checked' : '' %> disabled>
@@ -172,7 +182,8 @@
     
 
         <section class="uitloggen">
-            <button type="button" onclick="window.location.href='/'">Uitloggen</button>
+            <br>
+            <button type="button" id="logoutButton" class="logout-button" onclick="window.location.href='/'">Uitloggen</button>
         </section>
 
 
@@ -197,6 +208,10 @@
                 // Toon de opslaan-knop
                 document.getElementById('saveButton').style.display = "inline-block";
 
+                // Verberg de uitlog-knop
+                document.getElementById('logoutButton').style.display = "none";
+
+                // Classlist bug fix
                 document.body.classlist.add("editing-enabled");
 
                 sliderOne.disabled = false;
