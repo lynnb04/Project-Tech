@@ -50,11 +50,10 @@
                     </div>
 
                     <div class="geslacht">
-                        <select name="gender" disabled>
-                            <option value="" <%= !user.gender ? 'selected' : '' %> >Geslacht</option>
-                            <option value="man" <%= user.gender === 'man' ? 'selected' : '' %> >Man</option>
-                            <option value="vrouw" <%= user.gender === 'vrouw' ? 'selected' : '' %> >Vrouw</option>
-                            <option value="anders" <%= user.gender === 'anders' ? 'selected' : '' %> >Anders</option>
+                        <select name="geslacht" disabled>
+                          <option value="man" <%= user.preferences?.geslacht === 'man' ? 'selected' : '' %>>Man</option>
+                          <option value="vrouw" <%= user.preferences?.geslacht === 'vrouw' ? 'selected' : '' %>>Vrouw</option>
+                          <option value="anders" <%= user.preferences?.geslacht === 'anders' ? 'selected' : '' %>>Anders</option>
                         </select>
                     </div>
 
@@ -106,33 +105,39 @@
                 <h3>Leeftijd</h3>
                 <div class="container">
                     <div class="values" id="range-values">
-                      <span id="range1">0</span>
+                      <span id="range1"><%= user.preferences?.minAge || 18 %></span>
                       <span> &dash; </span>
-                      <span id="range2">100</span>
+                      <span id="range2"><%= user.preferences?.maxAge || 100 %></span>
                     </div>
                       <div class="slider-track"></div>
-                      <input type="range" min="18" max="100" value="18" id="slider-1" name="minAge" oninput="slideOne()" disabled>
-                      <input type="range" min="18" max="100" value="100" id="slider-2" name="maxAge" oninput="slideTwo()" disabled>
+                      <input type="range" min="18" max="100" value="<%= user.preferences?.minAge || 18 %>" id="slider-1" name="minAge" oninput="slideOne()" disabled>
+                      <input type="range" min="18" max="100" value="<%= user.preferences?.maxAge || 100 %>" id="slider-2" name="maxAge" oninput="slideTwo()" disabled>
                     </div>
 
                 <h3>Geslacht</h3>
-                    <!-- invullen uit registration -->
+                   
 
                 <h3>Taal</h3>
                     <!-- invullen uit registration -->
                      <div class="taal-keuze">
-                          <input type="radio" name="taal" id="nl" value="nl" disabled>
-                          <label for="nl">Nederlands</label>
+                            <input type="radio" name="taal" id="nl" value="nl"
+                            <%= selectedTaal === 'nl' ? 'checked' : '' %> disabled>
+                            <label for="nl">Nederlands</label>
 
-                          <input type="radio" name="taal" id="en" value="en" disabled>
-                          <label for="en">English</label>
+                            <input type="radio" name="taal" id="en" value="en"
+                            <%= selectedTaal === 'en' ? 'checked' : '' %> disabled>
+                            <label for="en">English</label>
 
-                          <input type="radio" name="taal" id="nvt" value="nvt" disabled>
-                          <label for="nvt">Geen voorkeur</label>
+                            <input type="radio" name="taal" id="nvt" value="nvt"
+                            <%= selectedTaal === 'nvt' ? 'checked' : '' %> disabled>
+                            <label for="nvt">Geen voorkeur</label>
 
-                          <input type="radio" name="taal" id="else" value="anders" disabled>
-                          <label for="else">Anders:</label>
-                          <input type="text" id="taal-anders-input" name="taalAnders" placeholder="Typ een taal..." style="display:none;">
+                            <input type="radio" name="taal" id="else" value="anders"
+                            <%= selectedTaal !== 'nl' && selectedTaal !== 'en' && selectedTaal !== 'nvt' ? 'checked' : '' %> disabled>
+                            <label for="else">Anders:</label>
+
+                            <input type="text" id="taal-anders-input" name="taalAnders" placeholder="Typ een taal..."
+                            value="<%= taalAnders || '' %>" style="<%= selectedTaal !== 'nl' && selectedTaal !== 'en' && selectedTaal !== 'nvt' ? 'display:inline-block;' : 'display:none;' %>">
                      </div>
         </section>
 
@@ -193,6 +198,9 @@
                 document.getElementById('saveButton').style.display = "inline-block";
 
                 document.body.classlist.add("editing-enabled");
+
+                sliderOne.disabled = false;
+                sliderTwo.disabled = false;
             }
 
             // leeftijdsslider

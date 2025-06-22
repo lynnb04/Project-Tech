@@ -61,13 +61,15 @@
           </li>
           <li><strong>Talen:</strong></li>
           <ul>
+            <% if (user.preferences && Array.isArray(user.preferences.taal)) { %>
             <% user.preferences.taal.forEach(function(taal) { %>
               <% if (taal) { %>
-                <li>
-                  <%= taal %>
-                </li>
-                <% } %>
-                  <% }) %>
+                <li><%= taal %></li>
+              <% } %>
+            <% }) %>
+          <% } else { %>
+            <li>Geen voorkeurstalen opgegeven.</li>
+          <% } %>
           </ul>
         </ul>
       </section>

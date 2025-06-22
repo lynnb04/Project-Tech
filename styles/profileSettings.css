@@ -223,7 +223,7 @@ input[type="range"] {
   left: 10%;
   transform: translateY(-50%);
   border-radius: .3em;
-  background-color: var(--paars);
+  background-color: var(--lichtBlauw);
 }
 
 /* track styling */
@@ -244,7 +244,7 @@ input[type="range"]::-webkit-slider-thumb {
   -webkit-appearance: none;
   height: 1.7em;
   width: 1.7em;
-  background-color: var(--paars);
+  background-color: var(--roze);
   margin-top: -.6em;
   pointer-events: auto;
   border-radius: 50%;
@@ -254,7 +254,7 @@ input[type="range"]::-moz-range-thumb {
   height: 1.7em;
   width: 1.7em;
   border-radius: 50%;
-  background-color: var(--paars);
+  background-color: var(--roze);
   pointer-events: auto;
   border: none;
 }
@@ -263,19 +263,13 @@ input[type="range"]::-ms-thumb {
   height: 1.7em;
   width: 1.7em;
   border-radius: 50%;
-  background-color: var(--paars);
+  background-color: var(--roze);
   pointer-events: auto;
-}
-
-/* thumb actief effect */
-input[type="range"]:active::-webkit-slider-thumb {
-  background-color: var(--tekst);
-  border: 1px solid var(--paars);
 }
 
 /* waarde bubbel boven sliders */
 .values {
-  background-color: var(--paars);
+  background-color: var(--roze);
   position: absolute;
   top: .3em;
   left: 50%;
@@ -300,7 +294,7 @@ input[type="range"]:active::-webkit-slider-thumb {
   height: 0;
   border-left: .6em solid transparent;
   border-right: .6em solid transparent;
-  border-top: .6em solid var(--paars);
+  border-top: .6em solid var(--roze);
 }
 
 input[type="range"]:first-of-type {
@@ -325,29 +319,10 @@ input[type="range"]:last-of-type {
     justify-content: center;
 }
 
-.genres ul {
-  list-style: none;
-  padding: 0;
-  margin: 0;
-  display: flex;
-  flex-wrap: wrap;
-  gap: 0.5em;
-}
-
-.genres li {
-  margin: 0;
-}
-
-.genres input[type="checkbox"] {
-  display: none;
-}
-
 .genres label {
   display: inline-block;
   padding: 0.5em 1em;
   background-color: var(--lichtBlauw);
-  color: var(--tekst);
-  border-radius: 99em;
   transition: all 0.3s ease;
 }
 
@@ -375,6 +350,10 @@ body.editing-enabled label {
 
 input[type="radio"]:checked + label {
     background-color:var(--roze);
+}
+
+input[type="radio"]:checked:disabled + label {
+    background-color: var(--roze);
 }
 
 .taal-keuze input[type="radio"]:checked + label {

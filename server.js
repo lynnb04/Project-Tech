@@ -904,10 +904,18 @@ app.get('/profile-settings', async (req, res) => {
     // selected genres
     const selectedGenres = user.genres || user.preferences?.genres || [];
 
-    res.render('pages/profileSettings', { user, genres, selectedGenres });
+    // Haal de geselecteerde taal op
+    const gekozenTaal = user.preferences?.taal || '';
+
+    // Bepaal of het een bekende taal is (nl, en, nvt) of 'anders'
+    const selectedTaal = ['nl', 'en', 'nvt'].includes(gekozenTaal) ? gekozenTaal : 'anders';
+    const taalAnders = selectedTaal === 'anders' ? gekozenTaal : '';
+
+    res.render('pages/profileSettings', { user, genres, selectedGenres, selectedTaal, taalAnders });
   } catch (error) {
     console.error('Fout bij ophalen gebruiker:', error);
     res.status(500).send('Er is een fout opgetreden');
+    
   }
 });
 
@@ -925,7 +933,17 @@ app.get('/profile-settings', async (req, res) => {
       email,
       age,
       bio,
+      minAge,
+      maxAge,
+      geslacht,
+      taal,
+      genres
     } = req.body;
+
+    let gekozenTaal = taal;
+    if (taal === 'anders') {
+      gekozenTaal = req.body.taalAnders || null;
+    }
 
     const updateData = {
       firstName,
@@ -933,6 +951,13 @@ app.get('/profile-settings', async (req, res) => {
       email,
       age: Number(age),
       bio,
+      preferences: {
+        minAge: Number(minAge),
+        maxAge: Number(maxAge),
+        geslacht,
+        taal: gekozenTaal,
+        genres: Array.isArray(genres) ? genres : [genres]
+      }
     };
 
     if (req.file) {
