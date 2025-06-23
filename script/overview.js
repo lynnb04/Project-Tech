@@ -91,3 +91,5 @@ document.addEventListener("DOMContentLoaded", function () {
     document.body.classList.remove("no-scroll");
   });
 });
+
+const concertCard = document.querySelectorAll('article li'); concertCard.forEach((li, index) => { const zIndex = concertCard.length - index; li.style.zIndex = zIndex; });
