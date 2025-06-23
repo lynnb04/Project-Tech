@@ -1,26 +1,26 @@
 document.addEventListener("DOMContentLoaded", function () {
-  const filterBtn = document.querySelector(".filter");
+  const filterBtn = document.querySelector(".filterBtn");
   const modal = document.getElementById("filterModal");
-  const closeBtn = modal.querySelector(".close-btn");
-  const countEl = document.querySelector(".filter-count");
+  const closeBtn = modal.querySelector(".closeBtn");
+  const countEl = document.querySelector(".filterCount");
 
   if (!filterBtn || !modal) return;
 
   filterBtn.addEventListener("click", () => {
     modal.style.display = "flex";
-    document.body.classList.add("no-scroll");
+    document.body.classList.add("noScroll");
     updateFilterCount();
   });
 
   closeBtn.addEventListener("click", () => {
     modal.style.display = "none";
-    document.body.classList.remove("no-scroll");
+    document.body.classList.remove("noScroll");
   });
 
   window.addEventListener("click", (e) => {
     if (e.target === modal) {
       modal.style.display = "none";
-      document.body.classList.remove("no-scroll");
+      document.body.classList.remove("noScroll");
     }
   });
 
@@ -29,7 +29,7 @@ document.addEventListener("DOMContentLoaded", function () {
     listClass: 'list'
   });
 
-  document.getElementById('sort-select').addEventListener('change', function () {
+  document.getElementById('sortSelect').addEventListener('change', function () {
     const [field, order] = this.value.split('-');
     concertList.sort(field, { order });
   });
@@ -40,29 +40,29 @@ document.addEventListener("DOMContentLoaded", function () {
 
   document.querySelector('form[role="search"]').addEventListener('submit', e => e.preventDefault());
 
-  document.querySelectorAll('.filter-tag input[type="checkbox"]').forEach(checkbox => {
+  document.querySelectorAll('.filterTag input[type="checkbox"]').forEach(checkbox => {
     checkbox.addEventListener('change', function() {
       if (this.checked) {
-        this.closest('.filter-tag').classList.add('selected');
+        this.closest('.filterTag').classList.add('selected');
       } else {
-        this.closest('.filter-tag').classList.remove('selected');
+        this.closest('.filterTag').classList.remove('selected');
       }
       updateFilterCount();
     });
     if (checkbox.checked) {
-      checkbox.closest('.filter-tag').classList.add('selected');
+      checkbox.closest('.filterTag').classList.add('selected');
     } else {
-      checkbox.closest('.filter-tag').classList.remove('selected');
+      checkbox.closest('.filterTag').classList.remove('selected');
     }
   });
 
-  document.querySelectorAll(".date-filter").forEach(input =>
+  document.querySelectorAll(".dateFilter").forEach(input =>
     input.addEventListener("change", updateFilterCount)
   );
 
   function updateFilterCount() {
-    const selTags = document.querySelectorAll(".filter-tag.selected").length;
-    const selDates = Array.from(document.querySelectorAll(".date-filter"))
+    const selTags = document.querySelectorAll(".filterTag.selected").length;
+    const selDates = Array.from(document.querySelectorAll(".dateFilter"))
       .filter(i => i.value !== "").length;
     const total = selTags + selDates;
 
@@ -74,11 +74,11 @@ document.addEventListener("DOMContentLoaded", function () {
     }
   }
 
-  document.querySelector('.filter-submit').disabled = false;
+  document.querySelector('.filterSubmit').disabled = false;
 
-  document.querySelector(".filter-menu").addEventListener("submit", (e) => {
+  document.querySelector(".filterMenu").addEventListener("submit", (e) => {
     modal.style.display = "none";
-    document.body.classList.remove("no-scroll");
+    document.body.classList.remove("noScroll");
   });
 });
 
