@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="nl">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
@@ -26,20 +26,17 @@
             <span class="month"><%= month %></span>
           </div>
     
-          <a class="close-btn" href="/overview">
+          <a class="closeBtn" href="/overview">
             <img src="/static/close_button.svg" alt="Sluit pagina">
           </a>
         </div> 
     
         <div class="titel">
           <h1><%= event.name %></h1>
-          <!-- <button class="favo-btn">
-            <img src="/static/heart_open.svg" alt="Toevoegen aan favorieten">
-          </button> -->
           <% if (currentUser && Array.isArray(currentUser.favorites)) { %>
             <% const isFavorite = currentUser.favorites.includes(event.id); %>
             <button
-              class="favo-btn <%= isFavorite ? 'active' : '' %>"
+              class="favoBtn <%= isFavorite ? 'active' : '' %>"
               data-event-id="<%= event.id %>">
               <img
                 src="/static/<%= isFavorite ? 'heart_active' : 'heart_open' %>.svg"
@@ -72,14 +69,13 @@
         </div>
     
         <div class="eventCheck">
-          <button id="going-button" 
+          <button id="goingButton" 
             class="<%= isGoing ? 'active' : '' %>" 
             data-event-id="<%= event.id %>">
-            <%= isGoing ? 'Je gaat naar dit Event ✔' : 'Ik ga naar dit Event!' %>
+            <%= isGoing ? 'You are going to this Event ✔' : 'I am going to this Event!' %>
           </button>
-          <a href="/concertMatching/<%= event.id %>" class="<%= isGoing ? '' : 'disabled' %>">Vind match</a>
+          <a href="/concertMatching/<%= event.id %>" class="<%= isGoing ? '' : 'disabled' %>">Find match</a>
         </div>
-        
   
         <!-- Link naar tickets -->
         <% if (event.url) { %>

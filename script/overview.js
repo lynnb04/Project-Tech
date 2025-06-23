@@ -24,26 +24,22 @@ document.addEventListener("DOMContentLoaded", function () {
     }
   });
 
-  // Init List.js
   const concertList = new List('concert-list', {
     valueNames: ['name', { attr: 'data-date', name: 'date' }],
     listClass: 'list'
   });
 
-  // Sorting
   document.getElementById('sort-select').addEventListener('change', function () {
     const [field, order] = this.value.split('-');
     concertList.sort(field, { order });
   });
 
-  // Search
   document.getElementById('search-input').addEventListener('input', function () {
     concertList.search(this.value);
   });
 
   document.querySelector('form[role="search"]').addEventListener('submit', e => e.preventDefault());
 
-  // --- NEW: Use change handler for checkboxes instead of click handler for .filter-tag ---
   document.querySelectorAll('.filter-tag input[type="checkbox"]').forEach(checkbox => {
     checkbox.addEventListener('change', function() {
       if (this.checked) {
@@ -53,7 +49,6 @@ document.addEventListener("DOMContentLoaded", function () {
       }
       updateFilterCount();
     });
-    // Set initial state on page load
     if (checkbox.checked) {
       checkbox.closest('.filter-tag').classList.add('selected');
     } else {
@@ -61,12 +56,10 @@ document.addEventListener("DOMContentLoaded", function () {
     }
   });
 
-  // Date filters
   document.querySelectorAll(".date-filter").forEach(input =>
     input.addEventListener("change", updateFilterCount)
   );
 
-  // Update counter
   function updateFilterCount() {
     const selTags = document.querySelectorAll(".filter-tag.selected").length;
     const selDates = Array.from(document.querySelectorAll(".date-filter"))
@@ -81,12 +74,9 @@ document.addEventListener("DOMContentLoaded", function () {
     }
   }
 
-  // Always enable the filter-submit button on page load
   document.querySelector('.filter-submit').disabled = false;
 
-  // Submit sluit modal
   document.querySelector(".filter-menu").addEventListener("submit", (e) => {
-    // e.preventDefault();
     modal.style.display = "none";
     document.body.classList.remove("no-scroll");
   });

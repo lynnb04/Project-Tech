@@ -10,7 +10,7 @@ document.querySelectorAll('.matchButtons form').forEach(form => {
 
     setTimeout(() => {
       this.submit();
-    }, 500); // match animation duration
+    }, 500);
   });
 });
 

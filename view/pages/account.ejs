@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="nl">
 
 <head>
   <meta charset="UTF-8">
@@ -97,7 +97,6 @@
 
         <section class="concerten">
           <h2>Favorieten</h2>
-
           <% if (goingEvents.length> 0) { %>
             <!-- Alleen de kaarten gaan in de ul -->
             <ul class="list">
@@ -147,14 +146,12 @@
             <!-- Losse link onder de scrollbare ul -->
               <a class="event-link" href="/overview">Vind meer favorieten</a>
 
-
             <% } else { %>
               <!-- Geen events? Toon alleen dit -->
               <a class="find" href="/overview">Nog geen events – bekijk het aanbod</a>
               </ul>
               <% } %>
         </section>
-
 
         <section class="concerten">
           <h2>Events waar je naartoe gaat</h2>
@@ -204,11 +201,9 @@
         
           <% } else { %>
             <!-- Geen events -->
-            <a class="find" href="/overview">Nog geen events – bekijk het aanbod</a>
+            <a class="find" href="/overview">Nog geen events - bekijk het aanbod</a>
           <% } %>
         </section>
-        
-
 
           <a class="settings" href="/profile-settings">Profiel instellingen</a>
 
@@ -217,5 +212,4 @@
     <%- include('../partials/footer'); %>
 
 </body>
-
 </html>

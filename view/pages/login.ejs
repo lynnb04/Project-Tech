@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="nl">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -14,16 +14,15 @@
     <%- include('../partials/header'); %>
 
 <main>
-  <div class="jumbotron">
 
     <h2>Login</h2>
     <!-- show error from server js -->
     <% if (bericht) { %>
       <div class="error">
-        <%= bericht %>
+        <p><%= bericht %></p>
       </div>
     <% } %>
-  </div>
+    <a class="purpleButton" href="/">Ga terug naar login</a>
 
 </main>
 

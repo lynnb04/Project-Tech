@@ -1,42 +1,3 @@
-// document.addEventListener('DOMContentLoaded', () => {
-//     const favBtn = document.querySelector('.favo-btn');
-//     const icon   = favBtn.querySelector('img');
-
-//     favBtn.addEventListener('click', () => {
-//       // toggle class voor styling of herkenning
-//       const active = favBtn.classList.toggle('active');
-
-//       // wissel het icoon
-//       icon.src = active
-//         ? '/static/heart_active.svg'
-//         : '/static/heart_open.svg';
-//     });
-//   });
-
-// document.addEventListener('DOMContentLoaded', () => {
-//   const favBtn = document.querySelector('.favo-btn');
-//   const icon = favBtn.querySelector('img');
-
-//   favBtn.addEventListener('click', async () => {
-//     const active = favBtn.classList.toggle('active');
-//     const eventId = favBtn.dataset.eventId;
-
-//     icon.src = active
-//       ? '/static/heart_active.svg'
-//       : '/static/heart_open.svg';
-
-//     try {
-//       await fetch('/favorites', {
-//         method: active ? 'POST' : 'DELETE',
-//         headers: { 'Content-Type': 'application/json' },
-//         body: JSON.stringify({ eventId }),
-//       });
-//     } catch (error) {
-//       console.error('Fout bij updaten favoriet:', error);
-//     }
-//   });
-// });
-
 document.addEventListener('DOMContentLoaded', () => {
   const likeButton = document.querySelector('.favo-btn');
   if (!likeButton) return;
@@ -89,10 +50,9 @@ document.addEventListener('DOMContentLoaded', () => {
 
 console.log("JS geladen");
 
-// check deze code:
 document.addEventListener('DOMContentLoaded', () => {
   const goingButton = document.getElementById('going-button');
-  const matchButton = document.querySelector('.eventCheck a'); // jouw match knop selector
+  const matchButton = document.querySelector('.eventCheck a');
 
   if (goingButton && matchButton) {
     goingButton.addEventListener('click', async () => {
@@ -107,7 +67,6 @@ document.addEventListener('DOMContentLoaded', () => {
         });
 
         if (response.ok) {
-          // Maak match knop klikbaar en haal disabled class weg
           matchButton.classList.remove('disabled');
           goingButton.classList.add('active');
           goingButton.textContent = "Je gaat naar dit Event! ✔";

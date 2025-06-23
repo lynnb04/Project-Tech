@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="nl">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -13,17 +13,14 @@
 
     <main>
         <section class="profiel">
-            <!-- knop die instellingen ontgrendelt -->
             <div class="center-wrapper">
               <button type="button" class="fullscreen-button" onclick="enableEditing()">Bewerk instellingen</button>
             </div>
 
             <h2>Profiel</h2>
-            <!-- alles in een formulier -->
             <div class="form-wrapper">
                 <form action="/profile-settings" method="POST" enctype="multipart/form-data">
 
-                    <!-- profielfoto code uit account halen -->
                     <div class="profielfoto-wrapper">
                     <div class="profielfoto">
                         <% if (user.imagePath) { %>
@@ -65,34 +62,29 @@
 
         <section class="accountmanagement">
             <h2>Accountmanagement</h2>
-                <div class="email">
-                    <input type="email" name="email" placeholder="E-mail" value="<%= user.email || '' %>" disabled/>
-                </div>
-        <!--    <div class="wachtwoord">
-                    <input type="password" name="password" placeholder="Wachtwoord" disabled/>
-                </div>  -->
-
-                <!-- account verwijderen -->
+            <div class="email">
+                <input type="email" name="email" placeholder="E-mail" value="<%= user.email || '' %>" disabled/>
+            </div>
         </section>
 
         <section class="concertvoorkeuren">
             <h2>Concertvoorkeuren</h2>
                 <h3>Genres</h3>
-                    <ul class="genres">
-                        <% genres.forEach(function(genre) { %>
-                            <li>
-                              <input
-                                type="checkbox"
-                                name="genres"
-                                value="<%= genre %>"
-                                id="genre_<%= genre %>"
-                                <% if (selectedGenres.includes(genre)) { %> checked <% } %>
-                                disabled
-                                >
-                                <label for="genre_<%= genre %>"><%= genre %></label>
-                            </li>
-                        <% }); %>
-                    </ul>
+                <ul class="genres">
+                    <% genres.forEach(function(genre) { %>
+                        <li>
+                            <input
+                            type="checkbox"
+                            name="genres"
+                            value="<%= genre %>"
+                            id="genre_<%= genre %>"
+                            <% if (selectedGenres.includes(genre)) { %> checked <% } %>
+                            disabled
+                            >
+                            <label for="genre_<%= genre %>"><%= genre %></label>
+                        </li>
+                    <% }); %>
+                </ul>
         </section>
        
         <section class="matchvoorkeuren">
@@ -148,7 +140,7 @@
                             <label for="else">Anders</label>
 
                             <input type="text" id="taal-anders-input" name="taalAnders" placeholder="Typ een taal..."
-                            value="<%= taalAnders || '' %>" style="<%= selectedTaal !== 'nl' && selectedTaal !== 'en' && selectedTaal !== 'nvt' ? 'display:inline-block;' : 'display:none;' %>">
+                            value="<%= taalAnders || '' %>"style="<%= selectedTaal !== 'nl' && selectedTaal !== 'en' && selectedTaal !== 'nvt' ? 'display:inline-block;' : 'display:none;' %>">
                      </div>
         </section>
 
@@ -159,8 +151,6 @@
             <label>Geblokkeerde accounts</label><br>
             pop-up met lijst van accounts
         </section>
-
-
         <section class="notificaties">
             <h2>Notificaties</h2>
             <div class="toggle-group">
@@ -180,7 +170,6 @@
                 <label for="locaties">Concerten op je favoriete locaties</label>
             </div>
         </section> -->
-    
 
         <section class="uitloggen">
             <br>
@@ -190,9 +179,9 @@
 
         <div class="center-wrapper">
             <button type="submit" id="saveButton" style="display: none;">Instellingen opslaan</button>
-            </div>
-                </form>
-                </main>
+        </div>
+    </form>
+</main>
 
     <%- include('../partials/footer'); %>
 <script src="profileSettings.js" defer></script>

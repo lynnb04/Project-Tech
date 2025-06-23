@@ -36,3 +36,4 @@ function fillColor() {
     sliderTrack.style.background = `linear-gradient(to right, #dadae5 ${percent1}%, #6B3AB4 ${percent1}%, #6B3AB4 ${percent2}%, #dadae5 ${percent2}%)`;
 }
   
+//https://codepen.io/alexpg96/pen/xxrBgbP
