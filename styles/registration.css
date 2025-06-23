@@ -245,7 +245,7 @@ input[type="submit"]:hover {
 
 /* Alleen voor labels met radio-buttons */
 input[type="radio"] + label,
-#matchPreferances label {
+#matchVoorkeuren label {
   flex-direction: row-reverse;
   align-items: center;
   justify-content: start;
