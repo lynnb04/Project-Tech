@@ -106,7 +106,7 @@
             <li data-date="<%= event.dates.start.localDate %>">
               <a class="card-link" href="/detail/<%= event.id %>"></a>
               <div class="card-img-wrapper">
-                <img src="<%= event.images[2]?.url || event.images[0].url %>" alt="Foto van event" />
+                <img loading="lazy" src="<%= event.images[2]?.url || event.images[0].url %>" alt="Foto van event" />
           
                 <% 
                   const dateParts = event.dates.start.localDate.split("-");
