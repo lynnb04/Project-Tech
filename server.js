@@ -74,9 +74,6 @@ try {
 connectDB();
 
 
-
-
-
 // index
 // --------------------
 app.get('/', function(req, res) {
@@ -99,7 +96,6 @@ app.get('/', function(req, res) {
     and description: ${req.body.description}
       `)
     }
-
 
 app.post('/form', upload.single('img'), async (req, res) => {
     try {
@@ -124,22 +120,6 @@ app.post('/form', upload.single('img'), async (req, res) => {
     }
 });
 
-// app.get('/detail', async function(req, res) {
-//     const url = `${process.env.API_URL}?countryCode=NL&segmentName=Music&apikey=${process.env.API_KEY}`;
-  
-//     try {
-//       const response = await fetch(url);
-//       const data = await response.json();
-//       const events = data._embedded?.events || [];
-//       res.render('pages/detail', { events });
-//     } catch (error) {
-//       console.error("Fout bij ophalen data:", error);
-//       res.render('pages/detail', { events: [] });
-//     }
-//   });
-
-
-
 
 // matching pagina
 // --------------------
@@ -153,7 +133,7 @@ app.get('/matching', async (req, res) => {
 
     const prefs = currentUser.preferences;
 
-    // Verzamel uitgesloten gebruikers (already swiped/matched)
+    // Verzamel uitgesloten gebruikers
     const excludedIds = [
       ...(currentUser.pendingMatch || []),
       ...(currentUser.noMatch || []),
@@ -167,9 +147,9 @@ app.get('/matching', async (req, res) => {
       return item.toString();
     });
 
-    // Eerste filter: gebruikers die voldoen aan jouw voorkeuren
+    // Gebruikers die voldoen aan jouw voorkeuren
     const initialQuery = {
-      _id: { $ne: new ObjectId(currentUserId) }, // Niet jezelf
+      _id: { $ne: new ObjectId(currentUserId) },
       age: { $gte: prefs.minAge, $lte: prefs.maxAge }
     };
 
@@ -187,7 +167,7 @@ app.get('/matching', async (req, res) => {
 
     const users = await db.collection('users').find(initialQuery).toArray();
 
-    // Tweede filter: wederzijdse voorkeuren én niet eerder geswipet
+    // Wderzijdse voorkeuren én niet eerder geswipet
     const mutualMatches = users.filter(user => {
       const otherPrefs = user.preferences;
 
@@ -218,6 +198,7 @@ app.get('/matching', async (req, res) => {
 // https://www.mongodb.com/docs/manual/reference/operator/query/gte/
 // https://www.mongodb.com/docs/manual/reference/operator/query/ne/
 
+
 // match toevoegen of afwijzen
 // --------------------
 // add match
@@ -225,7 +206,7 @@ app.post('/match/add/:id', async (req, res) => {
   try {
     const currentUserId = req.session.user.id;
     const targetUserId = req.params.id;
-    const eventId = req.body.eventId || null; // ← komt vanuit hidden input in je EJS
+    const eventId = req.body.eventId || null;
 
     const dbUsers = db.collection('users');
 
@@ -237,13 +218,12 @@ app.post('/match/add/:id', async (req, res) => {
     const hasMatchedMe = (targetUser.pendingMatch || []).some(match => {
       if (typeof match === 'object' && match._id) {
         return match._id.toString() === currentUserId &&
-               (!eventId || match.eventId === eventId); // match moet bij zelfde event horen
+               (!eventId || match.eventId === eventId);
       }
-      return match === currentUserId; // voor backward compatibility
+      return match === currentUserId;
     });
 
     if (hasMatchedMe) {
-      // Wederzijdse match!
       await dbUsers.updateOne(
         { _id: new ObjectId(currentUserId) },
         {
@@ -270,7 +250,7 @@ app.post('/match/add/:id', async (req, res) => {
 
       res.redirect(`/matching?matchId=${targetUserId}`);
     } else {
-      // Nog geen wederzijdse match, zet in afwachting
+      // Voeg de huidige gebruiker toe aan de pendingMatch van de target user
       const pendingEntry = { _id: new ObjectId(targetUserId) };
       if (eventId) pendingEntry.eventId = eventId;
 
@@ -307,8 +287,6 @@ app.post('/match/skip/:id', async (req, res) => {
 });
 
 
-
-
 // concertMatching
 // --------------------
 app.get('/concertMatching/:eventId', async (req, res) => {
@@ -323,12 +301,12 @@ app.get('/concertMatching/:eventId', async (req, res) => {
     const currentUser = await db.collection('users').findOne({ _id: new ObjectId(currentUserId) });
     if (!currentUser) return res.redirect('/');
 
-    // Check of gebruiker dit event bezoekt
+    // Check of gebruiker dit concert bezoekt
     if (!currentUser.goingEvents || !currentUser.goingEvents.includes(eventId)) {
       return res.status(403).send('Toegang geweigerd. Je hebt niet aangegeven dat je naar dit event gaat.');
     }
 
-    // Haal eventtitel op via API
+    // Haal concerttitel op via API
     const eventUrl = `${process.env.API_URL_DETAIL}/${eventId}.json?apikey=${process.env.API_KEY}`;
     const response = await fetch(eventUrl);
     if (!response.ok) throw new Error('Event ophalen mislukt');
@@ -378,13 +356,13 @@ app.get('/concertMatching/:eventId', async (req, res) => {
       return matchesTheirAgeRange && genderMatches && notAlreadyHandled;
     });
 
-    // Add match logic for popup
+    // Popup logica
     let match = null;
     if (req.query.matchId) {
       match = await db.collection('users').findOne({ _id: new ObjectId(req.query.matchId) });
     }
 
-    // Geef event name mee aan de EJS
+    // Geef concert naam mee aan de EJS
     res.render('pages/concertMatching', {
       users: mutualMatches,
       eventTitle: event.name,
@@ -431,7 +409,7 @@ app.get('/overview', async function (req, res) {
   
       const genres = Array.from(genresSet).sort();
   
-      // Evenementen ophalen
+      // Concerten ophalen
       const eventsResponse = await fetch(urlEvents);
       const eventsData = await eventsResponse.json();
       let events = eventsData._embedded?.events || [];
@@ -442,15 +420,12 @@ app.get('/overview', async function (req, res) {
           const genre = event.classifications?.[0]?.genre?.name;
           const city = event._embedded?.venues?.[0]?.city?.name;
           const date = new Date(event.dates.start.localDate); 
-          // Genre filter
           if (selectedGenres.length && (!genre || !selectedGenres.includes(genre))) {
             return false;
           } 
-          // City filter
           if (selectedCities.length && (!city || !selectedCities.includes(city))) {
             return false;
           }  
-          // Date filters
           if (dateFrom && date < new Date(dateFrom)) {
             return false;
           }  
@@ -477,12 +452,6 @@ app.get('/overview', async function (req, res) {
       res.render('pages/overview', {events: [], genres: [], cities: [], selectedGenres: [], selectedCities: [], dateFrom: null, dateTo: null});
     }
 });
-
-// profile
-// --------------------
-// app.get('/profile', function(req, res) {
-//     res.render('pages/profile');
-// });
 
 
 // registration
@@ -581,15 +550,12 @@ app.post('/registration', upload.single('img'), async (req, res) => {
 
 // Login
 // --------------------
-
-// const session = require("express-session");
-
 // Middleware for session management
 app.use(
   session({
     secret: process.env.SESSION_SECRET,
-    resave: false, // Prevent unnecessary session saving
-    saveUninitialized: false, // Do not save empty sessions
+    resave: false,
+    saveUninitialized: false,
     cookie: {
       secure: process.env.NODE_ENV === "production", 
       // Use secure cookies in production
@@ -603,9 +569,9 @@ app.use(
 
 const isLoggedIn = (req, res, next) => {
   if (req.session && req.session.isLoggedIn) {
-    next(); // User is logged in, proceed to the next middleware or route handler
+    next();
   } else {
-    res.redirect("/"); // Redirect to the index page if not authenticated
+    res.redirect("/");
   }
 };
 
@@ -613,25 +579,23 @@ app.post("/login", async (req, res) => {
   const { email, password } = req.body;
 
   try {
-    // Simulate fetching user from the database
     const zoekBezoeker = await db.collection('users').findOne({email:email});
     
-    console.log(zoekBezoeker)// Replace with your DB query function
+    console.log(zoekBezoeker)
 
     if (!zoekBezoeker) {
       return res.render("pages/login", { bericht: "Gebruiker niet gevonden." });
     }
 
-    // Compare passwords (assuming compareData is a password comparison function)
     const match = await compareData(password, zoekBezoeker.password);
 
     if (match) {
-      req.session.isLoggedIn = true; // Set session variable
+      req.session.isLoggedIn = true;
       req.session.user = {
-        id: zoekBezoeker._id.toString() // altijd als string opslaan
+        id: zoekBezoeker._id.toString()
       };
 
-      return res.redirect("/account"); // Redirect to account page on successful login
+      return res.redirect("/account");
     } else {
       return res.render("pages/login", { bericht: "Onjuist wachtwoord." });
     }
@@ -714,16 +678,13 @@ app.get("/account", isLoggedIn, async (req, res) => {
 });
 
 
-
-
-
 app.post("/logout", (req, res) => {
   req.session.destroy((err) => {
     if (err) {
       console.error("Error destroying session:", err);
       return res.status(500).send("Er is een fout opgetreden bij het uitloggen.");
     }
-    res.redirect("/login?logout=true"); // Redirect with a query parameter indicating logout success
+    res.redirect("/login?logout=true");
   });
 });
 
@@ -770,7 +731,7 @@ app.post('/favorites', async (req, res) => {
   try {
     await db.collection('users').updateOne(
       { _id: new ObjectId(userId) },
-      { $addToSet: { favorites: eventId.toString() } } // toegevoegde favorite eventId als string
+      { $addToSet: { favorites: eventId.toString() } }
     );
     res.json({ success: true });
   } catch (err) {
@@ -807,7 +768,6 @@ app.get("/account", isLoggedIn, async (req, res) => {
     const gebruiker = await db.collection('users').findOne({ _id: new ObjectId(userId) });
     if (!gebruiker) return res.status(404).send("Gebruiker niet gevonden.");
 
-    // -------------------
     // Voeg hier de matchedUsers code toe:
     let matchedUsers = [];
     if (Array.isArray(gebruiker.matched) && gebruiker.matched.length > 0) {
@@ -823,11 +783,8 @@ app.get("/account", isLoggedIn, async (req, res) => {
           .toArray();
       }
     }
-    // -------------------
 
-    // Later kun je hier ook favoriteEvents en goingEvents ophalen...
-
-    res.render("pages/account", { user: gebruiker, matchedUsers /*, favoriteEvents, goingEvents */ });
+    res.render("pages/account", { user: gebruiker, matchedUsers });
 
   } catch (error) {
     console.error("Fout bij ophalen gebruiker:", error);
@@ -959,11 +916,11 @@ app.post('/profile-settings', upload.single('profilePic'), async (req, res) => {
       email,
       age: Number(age),
       bio,
-      geslacht: eigenGeslacht, // ← eigen geslacht opslaan op hoofdniveau
+      geslacht: eigenGeslacht,
       preferences: {
         minAge: Number(minAge),
         maxAge: Number(maxAge),
-        geslachtVoorkeur,       // ← voorkeur geslacht juist benoemd
+        geslachtVoorkeur,
         taal: gekozenTaal,
         genres: Array.isArray(genres) ? genres : [genres]
       }
@@ -1060,7 +1017,6 @@ app.get('/profile/:id', async (req, res) => {
     const user = await db.collection('users').findOne({ _id: new ObjectId(userId) });
     if (!user) return res.status(404).send('Gebruiker niet gevonden.');
 
-    // Fetch events where this user is going
     let goingEvents = [];
     if (Array.isArray(user.goingEvents) && user.goingEvents.length > 0) {
       const eventPromises = user.goingEvents.map(eventId => {

@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="nl">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -31,7 +31,7 @@
                         <% }) %>
                         </ul>
                     <% } else { %>
-                        No genres selected
+                        <p>Geen genres gevonden</p>
                     <% } %>
                     <div class="matchButtons">
                         <form action="/match/skip/<%= user._id %>" method="POST">
@@ -51,11 +51,11 @@
                 <img src="/static/close_button.svg" alt="×">
               </button>
           
-              <h2>You have a match!</h2>
+              <h2>Je hebt een match!</h2>
               <img src="<%= match.imagePath %>" alt="Match Image">
-              <p>You matched with: <br><strong><%= match.firstName %> <%= match.lastName %></strong></p>
+              <p>Je hebt een match met: <br><strong><%= match.firstName %> <%= match.lastName %></strong></p>
           
-              <a href="/matches">View match</a>
+              <a href="/matches">Bekijk match</a>
             </section>
           <% } %>
     </main>

@@ -1,87 +1,86 @@
 main {
-    max-width: 900px;
-    margin: 0 auto;
-    font-family: 'Quicksand', sans-serif;
-  }
-
-ul{
-    padding-left: 0;
+  max-width: 900px;
+  margin: 0 auto;
+  font-family: 'Quicksand', sans-serif;
 }
-  
+
+ul {
+  padding-left: 0;
+}
+
 h1 {
-    font-size: 1.5em;
-    color: var(--kop);
-    margin: 0.75em 0 1em 0.75em;
-  }
-  
+  font-size: 1.5em;
+  color: var(--kop);
+  margin: 0.75em 0 1em 0.75em;
+}
+
 p {
-    font-size: 1em;
-    margin: 0.25em 0;
-    color: var(--tekst);
-    margin: 0 1em 0 1em;
-  }
-
-.card-img-wrapper {
-    position: relative;
-    display: grid;
-    width: 100%;
-    grid-template-areas: "image";
-  }
-  
-.card-img-wrapper img {
-    width: 100%;
-    height: auto;
-    display: block;
-  }
-  
-
-.card-date {
-    position: absolute;
-    bottom: 0.75em;
-    left: 0.75em;
-    background-color: var(--backgroundSecundary);
-    padding: 0.6em .75em;
-    border-radius: 0.5em;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    font-weight: bold;
-  }
-  
-.card-date .day {
-    font-size: 1.5em;
-    color: var(--lichtBlauw);
-    line-height: 1;
-  }
-  
-.card-date .month {
-    font-size: 0.75em;
-    color: var(--tekstSecundary);
-    text-transform: lowercase;
-    line-height: 1;
-  }
-
-.titel{
-    display: grid;
-    grid-template-columns: 1fr auto;
-    align-items: start;
-    gap: 1em;  
+  font-size: 1em;
+  margin: 0.25em 0;
+  color: var(--tekst);
+  margin: 0 1em 0 1em;
 }
-  
-.favo-btn {
-    width: 3.5em;
-    height: 3.5em;
-    background: none;
-    border: none;
-    padding: 0;
-    margin: 1.5em 1.5em 0 0;
+
+.cardImgWrapper {
+  position: relative;
+  display: grid;
+  width: 100%;
+  grid-template-areas: "image";
 }
-  
-.favo-btn img {
-    width: 100%;
-    height: 100%;
-    display: block;
-    object-fit: contain;
+
+.cardImgWrapper img {
+  width: 100%;
+  height: auto;
+  display: block;
+}
+
+.cardDate {
+  position: absolute;
+  bottom: 0.75em;
+  left: 0.75em;
+  background-color: var(--backgroundSecundary);
+  padding: 0.6em 0.75em;
+  border-radius: 0.5em;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  font-weight: bold;
+}
+
+.cardDate .day {
+  font-size: 1.5em;
+  color: var(--lichtBlauw);
+  line-height: 1;
+}
+
+.cardDate .month {
+  font-size: 0.75em;
+  color: var(--tekstSecundary);
+  text-transform: lowercase;
+  line-height: 1;
+}
+
+.title {
+  display: grid;
+  grid-template-columns: 1fr auto;
+  align-items: start;
+  gap: 1em;
+}
+
+.favoBtn {
+  width: 3.5em;
+  height: 3.5em;
+  background: none;
+  border: none;
+  padding: 0;
+  margin: 1.5em 1.5em 0 0;
+}
+
+.favoBtn img {
+  width: 100%;
+  height: 100%;
+  display: block;
+  object-fit: contain;
 }
 
 @keyframes pulse {
@@ -93,83 +92,81 @@ p {
   }
 }
 
-/* Pulse-klasse voor één enkele puls */
-.favo-btn.pulse {
+.favoBtn.pulse {
   animation: pulse 0.3s ease-out;
 }
 
-.time-tag{
-    display: inline-flex;
-    justify-items: center;
-    align-items: center;
-    background-color: var(--backgroundSecundary);
-    color: var(--tekst);
-    padding: 0.5em 0 0.5em 0;
-    border-radius: 5em;
-    font-size: 1.2em;
-    margin: 0 0 0.75em 0.75em;
+.timeTag {
+  display: inline-flex;
+  justify-items: center;
+  align-items: center;
+  background-color: var(--backgroundSecundary);
+  color: var(--tekst);
+  padding: 0.5em 0 0.5em 0;
+  border-radius: 5em;
+  font-size: 1.2em;
+  margin: 0 0 0.75em 0.75em;
 }
 
-.time-tag img{
-    width: 1.2em;
-    height: 1.2em;
-    padding-left: 0.5em;
+.timeTag img {
+  width: 1.2em;
+  height: 1.2em;
+  padding-left: 0.5em;
 }
 
-.time-tag p{
-    margin: 0 0.75em 0 0.75em;
+.timeTag p {
+  margin: 0 0.75em 0 0.75em;
 }
 
-.time-tag p:nth-last-of-type(2){
-    margin: 0;
+.timeTag p:nth-last-of-type(2) {
+  margin: 0;
 }
 
-.close-btn {
-    position: fixed;
-    top: 6em;
-    right: 1em;
-    width: 2em;
-    height: 2em;
-    z-index: 1000;
-  }
+.closeBtn {
+  position: fixed;
+  top: 6em;
+  right: 1em;
+  width: 2em;
+  height: 2em;
+  z-index: 1000;
+}
 
-.genre-container {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 0.5em;
-    margin: 1em 0 1em 1em;
-  }
-  
-.genre-tag {
-    background-color: var(--paars);
-    color: white;
-    padding: 0.25em 0.75em;
-    border-radius: 10em;
-    font-size: 0.9em;
-    font-weight: 500;
-  }
+.genreContainer {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5em;
+  margin: 1em 0 1em 1em;
+}
 
-.subgenre-tag{
-    background-color: var(--roze);
-    color: white;
-    padding: 0.25em 0.75em;
-    border-radius: 10em;
-    font-size: 0.9em;
-    font-weight: 500;
-  }
+.genreTag {
+  background-color: var(--paars);
+  color: white;
+  padding: 0.25em 0.75em;
+  border-radius: 10em;
+  font-size: 0.9em;
+  font-weight: 500;
+}
 
-.eventCheck{
+.subgenreTag {
+  background-color: var(--roze);
+  color: white;
+  padding: 0.25em 0.75em;
+  border-radius: 10em;
+  font-size: 0.9em;
+  font-weight: 500;
+}
+
+.eventCheck {
   display: flex;
   margin: 2em 1em 1em 1em;
   align-content: center;
 }
 
-.eventCheck button{
+.eventCheck button {
   width: 16em;
-  border-radius: 3em .4em .4em 3em;
-  
+  border-radius: 3em 0.4em 0.4em 3em;
   display: block;
-  margin: .2em;
+  margin: 0.2em;
   text-align: center;
   font-family: 'Quicksand';
   font-size: 1em;
@@ -177,31 +174,26 @@ p {
   background-color: var(--roze);
   height: 2.875em;
   border: 0;
-
-  transition: background-color 0.3s ease
+  transition: background-color 0.3s ease;
 }
 
-.eventCheck a{
+.eventCheck a {
   width: 9em;
-  border-radius: .4em 3em 3em .4em;
-
+  border-radius: 0.4em 3em 3em 0.4em;
   display: block;
-  margin: .2em;
-  /* text-align: center; */
+  margin: 0.2em;
   font-family: 'Quicksand';
   font-size: 1em;
   color: var(--tekst);
   background-color: var(--roze);
   height: 2.875em;
-
   display: flex;
   align-items: center;
   justify-content: center;
-
   transition: background-color 0.3s ease;
 }
 
-.eventCheck a.disabled{
+.eventCheck a.disabled {
   pointer-events: none;
   background-color: var(--backgroundSecundary);
 }
@@ -211,14 +203,14 @@ a {
 }
 
 .tickets {
-    display: flex;
-    justify-content: center;
-    color: var(--tekst);
-    text-decoration: underline;
-    margin: 4em 3em 0 3em;
-  }
+  display: flex;
+  justify-content: center;
+  color: var(--tekst);
+  text-decoration: underline;
+  margin: 4em 3em 0 3em;
+}
 
 .eventCheck button.active {
-    background-color: var(--backgroundSecundary);
-    font-weight: 700;
+  background-color: var(--backgroundSecundary);
+  font-weight: 700;
 }

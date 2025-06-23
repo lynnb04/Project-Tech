@@ -8,7 +8,7 @@ let sliderTwo = document.getElementById("slider-2");
 let displayValOne = document.getElementById("range1");
 let displayValTwo = document.getElementById("range2");
 let minGap = 0;
-let sliderTrack = document.querySelector(".slider-track");
+let sliderTrack = document.querySelector(".sliderTrack");
   
 function slideOne() {
     if (parseInt(sliderTwo.value) - parseInt(sliderOne.value) <= minGap) {
@@ -36,3 +36,4 @@ function fillColor() {
     sliderTrack.style.background = `linear-gradient(to right, #dadae5 ${percent1}%, #6B3AB4 ${percent1}%, #6B3AB4 ${percent2}%, #dadae5 ${percent2}%)`;
 }
   
+//https://codepen.io/alexpg96/pen/xxrBgbP

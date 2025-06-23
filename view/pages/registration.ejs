@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="nl">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -11,7 +11,7 @@
 <body>
     <%- include('../partials/header'); %>
     <main>
-        <form action="/registration" method="POST" enctype="multipart/form-data" class="persoonsGegevensWrapper">
+        <form action="/registration" method="POST" enctype="multipart/form-data" class="personalInformationWrapper">
             <fieldset id="persoonsGegevens">
               <div>
                 <legend>Registreer</legend>
@@ -30,7 +30,7 @@
                 <label for="age">Leeftijd
                     <input type="number" name="age" placeholder="Enter your age">
                 </label>
-                <section class="geslacht">
+                <section class="gender">
                 <label>Geslacht</label>
                       <label for="man">Man
                         <input type="radio" name="geslacht" id="man" value="man">
@@ -51,7 +51,7 @@
                 <label for="bio">Biografie
                     <textarea id="bio" name="bio"></textarea>
                 </label>
-                <section class="form-nav">
+                <section class="formNav">
                   <span></span>
                   <a href="#genres">Volgende</a>
                 </section>
@@ -69,13 +69,11 @@
                     </li>
                   <% }); %>
                 </ul>
-                <section class="form-nav">
+                <section class="formNav">
                   <a href="#persoonsGegevens">Vorige</a>
                   <a href="#matchVoorkeuren">Volgende</a>
                 </section>
               </fieldset>
-  
-            <fieldset id="artiesten"></fieldset>
             
             <fieldset id="matchVoorkeuren">
                 <legend>Matching voorkeuren</legend>
@@ -90,7 +88,7 @@
                       </span>
                     </div>
                     <div class="container">
-                      <div class="slider-track"></div>
+                      <div class="sliderTrack"></div>
                       <input type="range" min="18" max="100" value="18" id="slider-1" name="minAge" oninput="slideOne()">
                       <input type="range" min="18" max="100" value="100" id="slider-2" name="maxAge" oninput="slideTwo()">
                     </div>
@@ -119,7 +117,7 @@
                       <label for="nvt">Geen voorkeur
                         <input type="radio" name="taal" id="nvt" value="nvt">
                       </label>
-                      <section class="form-nav">
+                      <section class="formNav">
                         <a href="#genres">Vorige</a>
                         <input type="submit" value="Submit">
                       </section>

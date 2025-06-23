@@ -53,7 +53,7 @@ nav.controls {
   align-items: center;
 }
 
-nav.controls button.filter + .filter-count {
+nav.controls button.filterBtn + .filterCount {
   margin-left: 0.5em;
 }
 
@@ -72,11 +72,11 @@ nav.controls button, nav.controls select {
   font-size: 0.9em;
 }
 
-nav.controls button.filter:active {
+nav.controls button.filterBtn:active {
   background-color: var(--backgroundSecundary);
 }
 
-nav.controls .filter-count {
+nav.controls .filterCount {
   background-color: var(--roze);
   color: var(--tekst);
   border-radius: 10em;
@@ -86,7 +86,7 @@ nav.controls .filter-count {
 }
 
 /* Tags in de locatie-filter */
-.filter-tag {
+.filterTag {
   padding: 0.4em 1em;
   border-radius: 999em;
   background: var(--background);
@@ -98,7 +98,7 @@ nav.controls .filter-count {
 }
 
 /* Actieve (geselecteerde) filter-tag */
-.filter-tag.selected {
+.filterTag.selected {
   background: var(--roze);
   border-color: var(--paars); /* of var(--background), afhankelijk van jouw design */
   color: var(--tekst);        /* zorg dat tekst leesbaar blijft */
@@ -116,7 +116,7 @@ nav.controls .filter-count {
   padding-top: 5em;
 }
  
-.modal-content {
+.modalContent {
   background: var(--background);
   border-radius: 1em;
   gap: 1.5em;
@@ -130,7 +130,7 @@ nav.controls .filter-count {
   flex-direction: column;
 }
 
-.modal-content .close-btn {
+.modalContent .closeBtn {
   position: absolute;
   top: 2.5em;
   right: 2em;
@@ -142,14 +142,14 @@ nav.controls .filter-count {
   cursor: pointer;
 }
 
-.modal-content .close-btn img {
+.modalContent .closeBtn img {
   width: 100%;
   height: 100%;
   object-fit: contain;
 }
   
 /* Filter-menu binnen de modal */
-.modal-content .filter-menu {
+.modalContent .filterMenu {
   display: flex;
   flex-direction: column;
   flex: 1;
@@ -158,17 +158,17 @@ nav.controls .filter-count {
   padding: 0;
 }
 
-.filter-menu {
+.filterMenu {
   display: flex;
   flex-direction: column;
 }
 
 /* Details */
-.filter-menu details {
+.filterMenu details {
   margin-bottom: 2em;
 }
 
-.filter-menu summary {
+.filterMenu summary {
   cursor: pointer;
   padding: 0.5em;
   border-bottom: 0.075em solid var(--tekst);
@@ -177,14 +177,14 @@ nav.controls .filter-count {
 }
 
 /* Filter opties */
-.filter-options {
+.filterOptions {
   display: flex;
   flex-wrap: wrap;
   gap: 0.5em;
   margin: 1em 0;
 }
 
-.filter-tag {
+.filterTag {
   padding: 0.4em 1em;
   border-radius: 999em;
   background: var(--background);
@@ -195,7 +195,7 @@ nav.controls .filter-count {
   transition: background-color 0.2s;
 }
 
-.filter-tag.selected {
+.filterTag.selected {
   background: var(--roze);
   border-color: var(--background);
 }
@@ -232,16 +232,16 @@ ul.cities {
 }
 
 /* Datum */
-.date-inputs label{
+.dateInputs label{
   display: block;
   margin: 1em 0 0.5em 0;
 }
 
-.date-inputs input{
+.dateInputs input{
   margin: 0.5em 0 0.5em 0;
 }
 
-.date-filter {
+.dateFilter {
   width: 100%;
   padding: 0.5em 1em;
   font-size: 1em;
@@ -283,7 +283,7 @@ ul.genres {
 }
 
 /* Apply knop */
-.modal-content .submitsection {
+.modalContent .submitsection {
   position: sticky;
   bottom: 0;                       /* altijd onderaan in modal */
   background: var(--background);
@@ -293,7 +293,7 @@ ul.genres {
   z-index: 1;
 }
 
-.filter-submit {
+.filterSubmit {
   margin-top: auto;       /* duwt knop naar onder */
   align-self: center;     /* centreert horizontaal */
   position: sticky;
@@ -310,14 +310,14 @@ ul.genres {
 }
 
 /* Push de Apply-knop onderaan en centreer ’m */
-.filter-menu .filter-submit {
+.filterMenu .filterSubmit {
   margin-top: auto;          /* neemt alle vrije ruimte boven de knop */
   position: sticky;          
   bottom: 0;                 /* ónderin het menu */
   align-self: center;        /* centreert de knop horizontaal */
 }
 
-.filter-submit:disabled {
+.filterSubmit:disabled {
   background: var(--backgroundSecundary);
 }
 
@@ -329,31 +329,13 @@ article li > div p:nth-of-type(2){
   background-color: var(--blauw); 
 }
 
-.card-link {
+.cardLink {
   position: absolute;
   inset: 0; 
   z-index: 10;
   text-decoration: none;
   color: inherit;
 }
-
-/* extra code van thomas voor animatie van de cards */
-/* @media (prefers-reduced-motion: no-preference){
-  article li:nth-child(even){
-      opacity: 0.2; 
-      transform: scale(0.8) rotate(-20deg) translate(15em, -5em);
-      animation: showConcert linear forwards;
-      animation-timeline: view(38em -15em);
-      animation-range: contain;
-  }}
-  
-  article li:nth-child(odd){
-      opacity: 0.2; 
-      transform: scale(0.8) rotate(20deg) translate(-15em, -5em);
-      animation: showConcert linear forwards;
-      animation-timeline: view(38em -15em);
-      animation-range: contain;
-  } */
 
 article li {
   position: relative;
@@ -369,14 +351,14 @@ article li {
 }
 
 
-.card-img-wrapper {
+.cardImgWrapper {
   grid-area: 1 / 1 / 2 / 3;
   position: relative;
   width: 100%;
   height: 100%;
 }
 
-.card-img-wrapper img {
+.cardImgWrapper img {
   width: 100%;
   height: 13em;
   object-fit: cover;
@@ -384,7 +366,7 @@ article li {
   display: block;
 }
 
-.card-date {
+.cardDate {
   position: absolute;
   bottom: 1.5em;
   left: 0.75em;
@@ -398,13 +380,13 @@ article li {
   z-index: 5;
 }
 
-.card-date .day {
+.cardDate .day {
   font-size: 1.5em;
   color: var(--lichtBlauw);
   line-height: 1;
 }
 
-.card-date .month {
+.cardDate .month {
   font-size: 0.75em;
   color: var(--tekstSecundary);
   text-transform: lowercase;
@@ -462,7 +444,7 @@ article li > div p:nth-of-type(2) {
 }
 
 /* Link over hele kaart */
-.card-link {
+.cardLink {
   position: absolute;
   inset: 0;
   z-index: 10;
@@ -494,7 +476,7 @@ article li > div p:nth-of-type(2) {
   }
 }
 
-.no-scroll {
+.noScroll {
   overflow: hidden;
   height: 100vh;
 }
