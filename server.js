@@ -378,11 +378,18 @@ app.get('/concertMatching/:eventId', async (req, res) => {
       return matchesTheirAgeRange && genderMatches && notAlreadyHandled;
     });
 
+    // Add match logic for popup
+    let match = null;
+    if (req.query.matchId) {
+      match = await db.collection('users').findOne({ _id: new ObjectId(req.query.matchId) });
+    }
+
     // Geef event name mee aan de EJS
     res.render('pages/concertMatching', {
       users: mutualMatches,
       eventTitle: event.name,
-      eventId
+      eventId,
+      match
     });
 
   } catch (err) {
