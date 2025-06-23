@@ -63,13 +63,14 @@
           </li>
           <li><strong>Talen:</strong></li>
           <ul>
-            <% user.preferences.taal.forEach(function(taal) { %>
+            <% let talen = Array.isArray(user.preferences.taal) ? user.preferences.taal : (user.preferences.taal ? [user.preferences.taal] : []); %>
+            <% talen.forEach(function(taal) { %>
               <% if (taal) { %>
                 <li>
                   <%= taal %>
                 </li>
-                <% } %>
-                  <% }) %>
+              <% } %>
+            <% }) %>
           </ul>
         </ul>
       </section>
