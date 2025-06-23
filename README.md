@@ -15,12 +15,18 @@ Dit project bevat het profielinstellingen-gedeelte van de Concertbuddy webapplic
 
 ## Belangrijke Bestanden
 
-Bestand / Map                      | Beschrijving                                      
+Bestand / Map                      | Beschrijving
+
                                    |
+                                   
 `routes/profile-settings`          | Verwerkt GET en POST van profielinstellingen
+
 `views/pages/profileSettings.ejs`  | HTML-pagina met EJS-template voor profielbeheer
+
 `public/profileSettings.css`       | Styling van de profielpagina
+
 `uploads/`                         | Bevat geüploade profielfoto's
+
 `partials/header/footer`           | Herbruikbare paginaonderdelen (navigatie, footer)
 
 ## Installatie instructies
