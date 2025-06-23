@@ -21,7 +21,7 @@ git clone https://github.com/ThomasPlas/projTech.git
 
 3. stuur ons een berichtje voor het env. bestand.
 
-##features
+## features
 ### Index / Login 
 - inloggen
 - naar account aan maken gaan
