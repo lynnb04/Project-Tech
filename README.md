@@ -40,6 +40,7 @@ API_KEY=your_api_key_here
 SESSION_SECRET=your_session_secret_here
 
 npm start
+
 De app draait standaard op http://localhost:3000.
 
 ## Vereisten
