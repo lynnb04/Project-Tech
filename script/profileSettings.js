@@ -1,19 +1,20 @@
             function enableEditing() {
-                // Schakel alle invoervelden en select-elementen in
+                // Enable all input fields and select elements
                 const fields = document.querySelectorAll('input, select, textarea, button');
                 fields.forEach(field => field.disabled = false);
 
-                // Verberg de bewerk-knop
-                document.querySelector('button[onclick="enableEditing()"]').style.display = "none";
+                // Hide the edit button
+                document.querySelector('button[onclick="enableEditing()"]')
+                  .style.display = "none";
 
-                // Toon de opslaan-knop
+                // Show the save button
                 document.getElementById('saveButton').style.display = "inline-block";
 
-                // Verberg de uitlog-knop
+                // Hide the logout button
                 document.getElementById('logoutButton').style.display = "none";
 
                 // Classlist bug fix
-                document.body.classlist.add("editing-enabled");
+                document.body.classList.add("editingEnabled");
 
                 sliderOne.disabled = false;
                 sliderTwo.disabled = false;
@@ -30,7 +31,7 @@
             let displayValOne = document.getElementById("range1");
             let displayValTwo = document.getElementById("range2");
             let minGap = 0;
-            let sliderTrack = document.querySelector(".slider-track");
+            let sliderTrack = document.querySelector(".sliderTrack");
             let sliderMaxValue = document.getElementById("slider-1").max;
 
             function slideOne() {
@@ -53,19 +54,19 @@
             }
             //https://codepen.io/alexpg96/pen/xxrBgbP
 
-            // tonen van invulveld bij taal-anders
-            const andersRadio = document.getElementById("else");
-            const andersInput = document.getElementById("taal-anders-input");
+            // Show input field for language 'anders'
+            const elseRadio = document.getElementById("else");
+            const elseInput = document.getElementById("taalAndersInput");
 
             const radioButtons = document.querySelectorAll('input[name="taal"]');
 
             radioButtons.forEach(rb => {
                 rb.addEventListener("change", () => {
-                if (andersRadio.checked) {
-                    andersInput.style.display = "inline-block";
+                if (elseRadio.checked) {
+                    elseInput.style.display = "inline-block";
                 } else {
-                    andersInput.style.display = "none";
-                    andersInput.value = ""; // reset
+                    elseInput.style.display = "none";
+                    elseInput.value = ""; // reset
                 }
                 });
             });
