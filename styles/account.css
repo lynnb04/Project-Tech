@@ -26,25 +26,25 @@ section:nth-of-type(1) p {
   margin: 0;
 }
 
-.profiel-bio .info-headings {
+.profileBio .infoHeadings {
   display: flex;
   justify-content: space-between;
   margin-bottom: 1em;
 }
 
-.profiel-bio h3 {
+.profileBio h3 {
   margin: 0;
   font-size: 1.1em;
 }
 
-.profiel-bio p {
+.profileBio p {
   line-height: 1.5;
   margin: 0;
   background-color: var(--backgroundSecundary);
   padding: 1em;
 }
 
-.profiel-bio {
+.profileBio {
   margin: 5em 3em 3em 3em;
 }
 
@@ -117,14 +117,14 @@ section:nth-of-type(3) ul li {
 }
 
 
-.concerten {
+.concerts {
   display: flex;
   flex-direction: column;
   align-items: center;
   width: 100%;
 }
 
-.concerten ul.list {
+.concerts ul.list {
   display: flex;
   flex-direction: row;
   gap: 2em;
@@ -138,7 +138,7 @@ section:nth-of-type(3) ul li {
   scroll-snap-type: x mandatory;
 }
 
-.concerten ul.list li {
+.concerts ul.list li {
   flex: 0 0 auto;
   width: 20em;
   scroll-snap-align: start;
@@ -152,7 +152,7 @@ section:nth-of-type(3) ul li {
 }
 
 
-.concerten li {
+.concerts li {
   position: relative;
   background-color: var(--backgroundSecundary);
   border-radius: 1em;
@@ -165,14 +165,14 @@ section:nth-of-type(3) ul li {
   border: 0.075em solid var(--lichtBlauw);
 }
 
-.card-img-wrapper {
+.cardImgWrapper {
   grid-area: 1 / 1 / 2 / 3;
   position: relative;
   width: 100%;
   height: 100%;
 }
 
-.card-img-wrapper img {
+.cardImgWrapper img {
   width: 100%;
   height: 13em;
   object-fit: cover;
@@ -180,7 +180,7 @@ section:nth-of-type(3) ul li {
   display: block;
 }
 
-.card-date {
+.cardDate {
   position: absolute;
   bottom: 1.5em;
   left: 0.75em;
@@ -194,20 +194,20 @@ section:nth-of-type(3) ul li {
   z-index: 5;
 }
 
-.card-date .day {
+.cardDate .day {
   font-size: 1.5em;
   color: var(--lichtBlauw);
   line-height: 1;
 }
 
-.card-date .month {
+.cardDate .month {
   font-size: 0.75em;
   color: var(--tekstSecundary);
   text-transform: lowercase;
   line-height: 1;
 }
 
-.concerten li h1 {
+.concerts li h1 {
   grid-area: 2 / 1 / 3 / 3;
   margin: 0 1em 0.5em 1em;
   justify-self: start;
@@ -215,21 +215,21 @@ section:nth-of-type(3) ul li {
   font-size: 1.2em;
 }
 
-.concerten li > p:nth-of-type(1) {
+.concerts li > p:nth-of-type(1) {
   color: var(--lichtBlauw);
   grid-area: 3 / 1 / 4 / 3;
   margin-left: 1em;
   justify-self: start;
 }
 
-.concerten li > p:nth-of-type(2) {
+.concerts li > p:nth-of-type(2) {
   grid-area: 4 / 1 / 5 / 2;
   align-self: start;
   margin-left: 1em;
   justify-self: start;
 }
 
-.concerten li > div {
+.concerts li > div {
   align-self: center;
   display: flex;
   column-gap: 0.3em;
@@ -237,7 +237,7 @@ section:nth-of-type(3) ul li {
   margin-right: 1.5em;
 }
 
-.concerten li > div p {
+.concerts li > div p {
   font-size: 0.85em;
   margin-top: .5em;
   margin-bottom: 1em;
@@ -246,16 +246,16 @@ section:nth-of-type(3) ul li {
   color: var(--tekst);
 }
 
-.concerten li > div p:nth-of-type(1) {
+.concerts li > div p:nth-of-type(1) {
   background-color: var(--roze);
 }
 
-.concerten li > div p:nth-of-type(2) {
+.concerts li > div p:nth-of-type(2) {
   background-color: var(--blauw);
 }
 
 /* Link over hele kaart */
-.card-link {
+.cardLink {
   position: absolute;
   inset: 0;
   z-index: 10;
@@ -263,7 +263,7 @@ section:nth-of-type(3) ul li {
   color: inherit;
 }
 
-.event-link {
+.eventLink {
   all: unset; /* reset alle kaartstijlen */
   display: block;
   text-align: center;
@@ -276,7 +276,7 @@ section:nth-of-type(3) ul li {
   font-family: 'poppins', sans-serif;
 }
 
-.concerten h2 {
+.concerts h2 {
   font-size: 1.5em;
 }
 
@@ -291,7 +291,7 @@ section:nth-of-type(3) ul li {
   align-items: center;
 }
 
-.matches ul.match-list {
+.matches ul.matchList {
   display: flex;
   flex-direction: row;
   gap: 2em;
@@ -309,7 +309,7 @@ section:nth-of-type(3) ul li {
   white-space: nowrap; /* voorkom wrapping */
 }
 
-.matches ul.match-list li {
+.matches ul.matchList li {
   flex: 0 0 auto; /* voorkom dat ze krimpen of uitrekken */
   width: 10em;  /* vaste breedte */
   scroll-snap-align: start;
@@ -321,7 +321,7 @@ section:nth-of-type(3) ul li {
 }
 
 
-.match-img-wrapper {
+.matchImgWrapper {
   width: 8em;
   height: 8em;
   border-radius: 50%;
@@ -329,7 +329,7 @@ section:nth-of-type(3) ul li {
   margin-bottom: 0.5em;
 }
 
-.match-img-wrapper img {
+.matchImgWrapper img {
   width: 100%;
   height: 100%;
   object-fit: cover;
@@ -352,7 +352,7 @@ ul.list > li:nth-of-type(1){
   text-decoration: none;
 }
 
-.close-btn {
+.closeBtn {
   position: absolute;
   top: 6.5em;
   right: 2em;
@@ -364,7 +364,7 @@ ul.list > li:nth-of-type(1){
   cursor: pointer;
 }
 
-.close-btn img {
+.closeBtn img {
   width: 100%;
   height: 100%;
   object-fit: contain;

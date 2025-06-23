@@ -26,8 +26,8 @@
         </h2>
       </section>
 
-      <article class="profiel-bio">
-        <div class="info-headings">
+      <article class="profileBio">
+        <div class="infoHeadings">
           <h3>
             <%= user.age %> jaar oud
           </h3>
@@ -77,10 +77,10 @@
       <section class="matches">
         <h2>Matches</h2>
         <% if (matchedUsers.length > 0) { %>
-          <ul class="match-list">
+          <ul class="matchList">
             <% matchedUsers.forEach(function(match) { %>
               <li>
-                <div class="match-img-wrapper">
+                <div class="matchImgWrapper">
                   <img src="<%= match.imagePath %>" alt="Foto van <%= match.firstName %>" />
                 </div>
                 <span>
@@ -89,25 +89,25 @@
               </li>
             <% }) %>
           </ul>
-          <a class="event-link" href="/matching">Bekijk alle matches</a>
+          <a class="eventLink" href="/matching">Bekijk alle matches</a>
         <% } else { %>
           <a class="find" href="/matching">Nog geen matches – vind jouw match</a>
         <% } %>
       </section>
 
-        <section class="concerten">
+        <section class="concerts">
           <h2>Favorieten</h2>
           <% if (goingEvents.length> 0) { %>
             <!-- Alleen de kaarten gaan in de ul -->
             <ul class="list">
               <% goingEvents.forEach(function(event) { %>
                 <li data-date="<%= event.dates.start.localDate %>">
-                  <a class="card-link" href="/detail/<%= event.id %>"></a>
-                  <div class="card-img-wrapper">
+                  <a class="cardLink" href="/detail/<%= event.id %>"></a>
+                  <div class="cardImgWrapper">
                     <img src="<%= event.images[2]?.url || event.images[0].url %>" alt="Foto van event" />
                     <% const dateParts=event.dates.start.localDate.split("-"); const day=parseInt(dateParts[2], 10);
                       const month=new Date(event.dates.start.localDate).toLocaleString('nl-NL', { month: 'short' }); %>
-                      <div class="card-date">
+                      <div class="cardDate">
                         <span class="day">
                           <%= day %>
                         </span>
@@ -144,7 +144,7 @@
             </ul>
 
             <!-- Losse link onder de scrollbare ul -->
-              <a class="event-link" href="/overview">Vind meer favorieten</a>
+              <a class="eventLink" href="/overview">Vind meer favorieten</a>
 
             <% } else { %>
               <!-- Geen events? Toon alleen dit -->
@@ -153,7 +153,7 @@
               <% } %>
         </section>
 
-        <section class="concerten">
+        <section class="concerts">
           <h2>Events waar je naartoe gaat</h2>
         
           <% if (goingEvents.length > 0) { %>
@@ -161,9 +161,9 @@
             <ul class="list">
               <% goingEvents.forEach(function(event) { %>
                 <li data-date="<%= event.dates.start.localDate %>">
-                  <a class="card-link" href="/detail/<%= event.id %>"></a>
+                  <a class="cardLink" href="/detail/<%= event.id %>"></a>
         
-                  <div class="card-img-wrapper">
+                  <div class="cardImgWrapper">
                     <img src="<%= event.images[2]?.url || event.images[0].url %>" alt="Foto van event" />
         
                     <% 
@@ -172,7 +172,7 @@
                       const month = new Date(event.dates.start.localDate).toLocaleString('nl-NL', { month: 'short' });
                     %>
         
-                    <div class="card-date">
+                    <div class="cardDate">
                       <span class="day"><%= day %></span>
                       <span class="month"><%= month %></span>
                     </div>
@@ -197,7 +197,7 @@
             </ul>
         
             <!-- Link onder de scrollbare lijst -->
-            <a class="event-link" href="/overview">Vind meer events</a>
+            <a class="eventLink" href="/overview">Vind meer events</a>
         
           <% } else { %>
             <!-- Geen events -->
