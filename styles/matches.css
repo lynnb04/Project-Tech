@@ -27,7 +27,7 @@ li {
     list-style: none;
 }
 
-li.match-item a {
+li.matchItem a {
     display: flex;
     background-color: var(--backgroundSecundary);
     padding: 1em;
@@ -37,19 +37,19 @@ li.match-item a {
     text-decoration: none;
 }
 
-.match-item a img{
+.matchItem a img.matchImg{
     width: 4em;
     height: 4em;
     border-radius: 10em;
     margin-right: 1em;
 }
 
-li.match-item a div{
+li.matchItem a div.matchInfo{
     align-self: center;
 }
 
 /* More matches button fixed bottom center */
-a.more-matches {
+a.moreMatches {
     position: fixed;
     bottom: 7.5em;   
     left: 50%;
