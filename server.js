@@ -860,79 +860,6 @@ app.post('/api/going', async (req, res) => {
 });
 
 
-// profileSettings
-// -----------------------
-// app.get('/profile-settings', isLoggedIn, async (req, res) => {
-//   try {
-//     const gebruiker = await db.collection('users').findOne({ _id: new ObjectId(req.session.userId) });
-
-//     if (!gebruiker) {
-//       return res.status(404).send('Gebruiker niet gevonden');
-//     }
-
-//     res.render('pages/profileSettings', { user: gebruiker });
-//   } catch (error) {
-//     console.error(error);
-//     res.status(500).send('Er is iets misgegaan');
-//   }
-// });
-
-// app.use(express.static('public'));
-
-// app.post('/profile-settings', upload.single('profilePic'), async (req, res) => {
-//   const userId = req.session.user.id;
-
-//   // Verzamel standaard gebruikersinfo
-//   const updateData = {
-//     firstName: req.body.firstName,
-//     lastName: req.body.lastName,
-//     age: parseInt(req.body.age),
-//     gender: req.body.gender,
-//     bio: req.body.bio,
-//     email: req.body.email
-//   };
-
-//   // Wachtwoord versleutelen indien ingevoerd
-//   if (req.body.password && req.body.password.trim() !== '') {
-//     const hashedPassword = await bcrypt.hash(req.body.password, 10);
-//     updateData.password = hashedPassword;
-//   }
-
-//   // Profielfoto upload
-//   if (req.file) {
-//     updateData.profilePic = req.file.filename;
-//   }
-
-//   // Concertvoorkeuren (bijv. array van genres)
-//   if (Array.isArray(req.body.genres)) {
-//     updateData.genres = req.body.genres;
-//   } else if (typeof req.body.genres === 'string') {
-//     updateData.genres = [req.body.genres]; // voor enkelvoudige selectie
-//   }
-
-//   // Matchvoorkeuren opslaan
-//   updateData.matchPreferences = {
-//     ageRange: {
-//       min: parseInt(req.body.ageMin) || 18,
-//       max: parseInt(req.body.ageMax) || 99
-//     },
-//     gender: req.body.matchGender || '',
-//     language: req.body.matchLanguage || ''
-//   };
-
-//   try {
-//     await db.collection('users').updateOne(
-//       { _id: new ObjectId(userId) },
-//       { $set: updateData }
-//     );
-
-//     res.redirect('/profile-settings');
-//   } catch (err) {
-//     console.error('Update mislukt:', err);
-//     res.status(500).send('Fout bij updaten van profielinstellingen.');
-//   }
-// });
-
 // profile settings
 // --------------------
 const fs = require('fs');
@@ -953,11 +880,6 @@ const fs = require('fs');
  app.use('/uploads', express.static(uploadDir));
  app.use('/public', express.static(path.join(__dirname, 'public')));
 
-// render profile settings pagina
-//  app.get('/profile-settings', (req, res) => {
-//    res.render('pages/profileSettings', { user });
-//  });
-
 //database profiel ophalen
 app.get('/profile-settings', async (req, res) => {
   try {
@@ -970,7 +892,7 @@ app.get('/profile-settings', async (req, res) => {
       return res.status(404).send('Gebruiker niet gevonden');
     }
 
-    // Fetch genres from API
+    // Fetch genres uit API
     const urlGenres = `${process.env.API_URL_GENRES}?apikey=${process.env.API_KEY}`;
     const response = await fetch(urlGenres);
     const data = await response.json();
@@ -986,18 +908,26 @@ app.get('/profile-settings', async (req, res) => {
     });
     const genres = Array.from(genresSet).sort();
 
-    // Determine selected genres
+    // selected genres
     const selectedGenres = user.genres || user.preferences?.genres || [];
 
-    res.render('pages/profileSettings', { user, genres, selectedGenres });
+    // Haal de geselecteerde taal op
+    const gekozenTaal = user.preferences?.taal || '';
+
+    // Bepaal of het een bekende taal is (nl, en, nvt) of 'anders'
+    const selectedTaal = ['nl', 'en', 'nvt'].includes(gekozenTaal) ? gekozenTaal : 'anders';
+    const taalAnders = selectedTaal === 'anders' ? gekozenTaal : '';
+
+    res.render('pages/profileSettings', { user, genres, selectedGenres, selectedTaal, taalAnders });
   } catch (error) {
     console.error('Fout bij ophalen gebruiker:', error);
     res.status(500).send('Er is een fout opgetreden');
+    
   }
 });
 
 // formulier uploaden
- app.post('/profile-settings', upload.single('profilePic'), async (req, res) => {
+app.post('/profile-settings', upload.single('profilePic'), async (req, res) => {
   try {
     const userId = req.session.user && req.session.user.id;
     if (!userId) {
@@ -1010,7 +940,18 @@ app.get('/profile-settings', async (req, res) => {
       email,
       age,
       bio,
+      minAge,
+      maxAge,
+      eigenGeslacht,         
+      geslachtVoorkeur,      
+      taal,
+      genres
     } = req.body;
+
+    let gekozenTaal = taal;
+    if (taal === 'anders') {
+      gekozenTaal = req.body.taalAnders || null;
+    }
 
     const updateData = {
       firstName,
@@ -1018,6 +959,14 @@ app.get('/profile-settings', async (req, res) => {
       email,
       age: Number(age),
       bio,
+      geslacht: eigenGeslacht, // ← eigen geslacht opslaan op hoofdniveau
+      preferences: {
+        minAge: Number(minAge),
+        maxAge: Number(maxAge),
+        geslachtVoorkeur,       // ← voorkeur geslacht juist benoemd
+        taal: gekozenTaal,
+        genres: Array.isArray(genres) ? genres : [genres]
+      }
     };
 
     if (req.file) {
@@ -1036,8 +985,9 @@ app.get('/profile-settings', async (req, res) => {
   }
 });
 
- app.listen(port, () => {
-   console.log(`Server running at http://localhost:${port}`);
+ //uitloggen
+ app.get('/', (req, res) => {
+  res.render('pages/index', {bericht: null});
  });
 
 

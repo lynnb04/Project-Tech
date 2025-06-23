@@ -19,15 +19,15 @@
             </div>
 
             <h2>Profiel</h2>
-
-            <!-- formulier -->
+            <!-- alles in een formulier -->
             <div class="form-wrapper">
                 <form action="/profile-settings" method="POST" enctype="multipart/form-data">
 
+                    <!-- profielfoto code uit account halen -->
                     <div class="profielfoto-wrapper">
                     <div class="profielfoto">
-                        <% if (user.profilePic) { %>
-                        <img src="/uploads/<%= user.profilePic %>" alt="Profile Picture">
+                        <% if (user.imagePath) { %>
+                        <img src="<%= user.imagePath %>" alt="Profile Picture">
                         <% } else { %>
                         <span class="placeholder"></span>
                         <% } %>
@@ -50,13 +50,12 @@
                     </div>
 
                     <div class="geslacht">
-                        <select name="gender" disabled>
-                            <option value="" <%= !user.gender ? 'selected' : '' %> >Geslacht</option>
-                            <option value="man" <%= user.gender === 'man' ? 'selected' : '' %> >Man</option>
-                            <option value="vrouw" <%= user.gender === 'vrouw' ? 'selected' : '' %> >Vrouw</option>
-                            <option value="anders" <%= user.gender === 'anders' ? 'selected' : '' %> >Anders</option>
+                        <select name="eigenGeslacht" id="eigenGeslacht" disabled>
+                            <option value="man" <%= user.geslacht === 'man' ? 'selected' : '' %>>Man</option>
+                            <option value="vrouw" <%= user.geslacht === 'vrouw' ? 'selected' : '' %>>Vrouw</option>
+                            <option value="anders" <%= user.geslacht === 'anders' ? 'selected' : '' %>>Anders</option>
                         </select>
-                    </div>
+                        </div>
 
                     <div class="bio">
                         <input type="text" name="bio" placeholder="Vertel iets over jezelf..." value="<%= user.bio || '' %>" disabled/><br>
@@ -66,11 +65,9 @@
 
         <section class="accountmanagement">
             <h2>Accountmanagement</h2>
-
                 <div class="email">
                     <input type="email" name="email" placeholder="E-mail" value="<%= user.email || '' %>" disabled/>
                 </div>
-
         <!--    <div class="wachtwoord">
                     <input type="password" name="password" placeholder="Wachtwoord" disabled/>
                 </div>  -->
@@ -78,10 +75,9 @@
                 <!-- account verwijderen -->
         </section>
 
-
         <section class="concertvoorkeuren">
             <h2>Concertvoorkeuren</h2>
-                <h3>Genre's</h3>
+                <h3>Genres</h3>
                     <ul class="genres">
                         <% genres.forEach(function(genre) { %>
                             <li>
@@ -91,6 +87,7 @@
                                 value="<%= genre %>"
                                 id="genre_<%= genre %>"
                                 <% if (selectedGenres.includes(genre)) { %> checked <% } %>
+                                disabled
                                 >
                                 <label for="genre_<%= genre %>"><%= genre %></label>
                             </li>
@@ -98,50 +95,61 @@
                     </ul>
         </section>
        
-        
         <section class="matchvoorkeuren">
             <h2>Matchvoorkeuren</h2>
                 <h3>Leeftijd</h3>
-                    <% if (user.matchPreferences && user.matchPreferences.ageRange) { %>
-                        <p><%= user.matchPreferences.ageRange.min %> - <%= user.matchPreferences.ageRange.max %> jaar</p>
-                    <% } else { %>
-                        <p>Geen leeftijdsvoorkeur ingesteld.</p>
-                    <% } %>
-                    
-                    <div class="container">
-                        <div class="slider-track"></div>
-                        <input
-                            type="range"
-                            min="18"
-                            max="100"
-                            id="slider-1"
-                            name="minAge"
-                            value="<%= user.matchPreferences?.ageRange?.min || 18 %>"
-                            oninput="slideOne()"
-                        >
-                        <input
-                            type="range"
-                            min="18"
-                            max="100"
-                            id="slider-2"
-                            name="maxAge"
-                            value="<%= user.matchPreferences?.ageRange?.max || 100 %>"
-                            oninput="slideTwo()"
-                        >
-                        </div>
+                  <div class="container">
+                    <div class="values" id="range-values">
+                      <span id="range1"><%= user.preferences?.minAge || 18 %></span>
+                      <span> &dash; </span>
+                      <span id="range2"><%= user.preferences?.maxAge || 100 %></span>
+                    </div>
+                      <div class="slider-track"></div>
+                      <input type="range" min="18" max="100" value="<%= user.preferences?.minAge || 18 %>" id="slider-1" name="minAge" oninput="slideOne()" disabled>
+                      <input type="range" min="18" max="100" value="<%= user.preferences?.maxAge || 100 %>" id="slider-2" name="maxAge" oninput="slideTwo()" disabled>
+                    </div>
 
                 <h3>Geslacht</h3>
-                    <% if (user.matchPreferences && user.matchPreferences.gender) { %>
-                            <p><%= user.matchPreferences.gender %></p>
-                        <% } else { %>
-                            <p>Geen voorkeur opgegeven.</p>
-                        <% } %>
+                   <div class="geslacht-keuze">
+                    <input type="radio" name="geslachtVoorkeur" id="man" value="man"
+                        <%= user.preferences?.geslachtVoorkeur === 'man' ? 'checked' : '' %> disabled>
+                    <label for="man">Man</label>
+
+                    <input type="radio" name="geslachtVoorkeur" id="vrouw" value="vrouw"
+                        <%= user.preferences?.geslachtVoorkeur === 'vrouw' ? 'checked' : '' %> disabled>
+                    <label for="vrouw">Vrouw</label>
+
+                    <input type="radio" name="geslachtVoorkeur" id="anders" value="anders"
+                        <%= user.preferences?.geslachtVoorkeur === 'anders' ? 'checked' : '' %> disabled>
+                    <label for="anders">Anders</label>
+
+                    <input type="radio" name="geslachtVoorkeur" id="geenVoorkeur" value="nvt"
+                        <%= user.preferences?.geslachtVoorkeur === 'nvt' ? 'checked' : '' %> disabled>
+                    <label for="geenVoorkeur">Geen voorkeur</label>
+                    </div>
+                    <br>
+
                 <h3>Taal</h3>
-                    <% if (user.matchPreferences && user.matchPreferences.language) { %>
-                            <p><%= user.matchPreferences.language %></p>
-                        <% } else { %>
-                            <p>Geen voorkeur opgegeven.</p>
-                        <% } %>
+                     <div class="taal-keuze">
+                            <input type="radio" name="taal" id="nl" value="nl"
+                            <%= selectedTaal === 'nl' ? 'checked' : '' %> disabled>
+                            <label for="nl">Nederlands</label>
+
+                            <input type="radio" name="taal" id="en" value="en"
+                            <%= selectedTaal === 'en' ? 'checked' : '' %> disabled>
+                            <label for="en">English</label>
+
+                            <input type="radio" name="taal" id="nvt" value="nvt"
+                            <%= selectedTaal === 'nvt' ? 'checked' : '' %> disabled>
+                            <label for="nvt">Geen voorkeur</label>
+
+                            <input type="radio" name="taal" id="else" value="anders"
+                            <%= selectedTaal !== 'nl' && selectedTaal !== 'en' && selectedTaal !== 'nvt' ? 'checked' : '' %> disabled>
+                            <label for="else">Anders</label>
+
+                            <input type="text" id="taal-anders-input" name="taalAnders" placeholder="Typ een taal..."
+                            value="<%= taalAnders || '' %>" style="<%= selectedTaal !== 'nl' && selectedTaal !== 'en' && selectedTaal !== 'nvt' ? 'display:inline-block;' : 'display:none;' %>">
+                     </div>
         </section>
 
 
@@ -175,7 +183,8 @@
     
 
         <section class="uitloggen">
-            <button>Uitloggen</button>
+            <br>
+            <button type="button" id="logoutButton" class="logout-button" onclick="window.location.href='/'">Uitloggen</button>
         </section>
 
 
@@ -186,19 +195,6 @@
                 </main>
 
     <%- include('../partials/footer'); %>
-
-    <script>
-            function enableEditing() {
-                // Schakel alle invoervelden en select-elementen in
-                const fields = document.querySelectorAll('input, select, textarea, button');
-                fields.forEach(field => field.disabled = false);
-
-                // Verberg de bewerk-knop
-                document.querySelector('button[onclick="enableEditing()"]').style.display = "none";
-
-                // Toon de opslaan-knop
-                document.getElementById('saveButton').style.display = "inline-block";
-            }
-            </script>
+<script src="profileSettings.js" defer></script>
 </body>
 </html>
