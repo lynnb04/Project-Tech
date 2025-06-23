@@ -9,84 +9,81 @@
   <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined" rel="stylesheet">
 </head>
 <body>
-    <%- include('../partials/header'); %>
+  <%- include('../partials/header'); %>
 
-    <main>
-      <article>
-        <div class="card-img-wrapper">
-          <img src="<%= event.images[2]?.url || event.images[0].url %>" alt="Foto van event" />
-          
-          <% 
-            const dateParts = event.dates.start.localDate.split("-");
-            const day = parseInt(dateParts[2], 10);
-            const month = new Date(event.dates.start.localDate).toLocaleString('nl-NL', { month: 'short' });
-          %>
-          <div class="card-date">
-            <span class="day"><%= day %></span>
-            <span class="month"><%= month %></span>
-          </div>
-    
-          <a class="closeBtn" href="/overview">
-            <img src="/static/close_button.svg" alt="Sluit pagina">
-          </a>
-        </div> 
-    
-        <div class="titel">
-          <h1><%= event.name %></h1>
-          <% if (currentUser && Array.isArray(currentUser.favorites)) { %>
-            <% const isFavorite = currentUser.favorites.includes(event.id); %>
-            <button
-              class="favoBtn <%= isFavorite ? 'active' : '' %>"
-              data-event-id="<%= event.id %>">
-              <img
-                src="/static/<%= isFavorite ? 'heart_active' : 'heart_open' %>.svg"
-                alt="Toevoegen aan favorieten">
-            </button>
-          <% } else { %>
-            
-          <% } %>
+  <main>
+    <article>
+      <div class="cardImgWrapper">
+        <img src="<%= event.images[2]?.url || event.images[0].url %>" alt="Foto van event" />
+
+        <% 
+          const dateParts = event.dates.start.localDate.split("-");
+          const day = parseInt(dateParts[2], 10);
+          const month = new Date(event.dates.start.localDate).toLocaleString("nl-NL", { month: "short" });
+        %>
+        <div class="cardDate">
+          <span class="day"><%= day %></span>
+          <span class="month"><%= month %></span>
         </div>
-    
-        <div class="time-tag">
-          <img src="/static/time_icon.svg" alt="Begin- en eindtijd">
-          <p><%= event.dates.start.localTime ? event.dates.start.localTime.slice(0, 5) : 'Tijd onbekend' %></p>
-        </div>
-    
-        <p><strong><%= event._embedded.venues[0].name %></strong></p>
-        <p><%= event._embedded.venues[0].city.name %></p>
-    
-        <div class="genre-container">
-          <% const genre = event.classifications?.[0]?.genre?.name; %>
-          <% const subgenre = event.classifications?.[0]?.subGenre?.name; %>
-    
-          <% if (genre) { %>
-            <div class="genre-tag"><%= genre %></div>
-          <% } %>
-    
-          <% if (subgenre && subgenre !== genre) { %>
-            <div class="subgenre-tag"><%= subgenre %></div>
-          <% } %>
-        </div>
-    
-        <div class="eventCheck">
-          <button id="goingButton" 
-            class="<%= isGoing ? 'active' : '' %>" 
+
+        <a class="closeBtn" href="/overview">
+          <img src="/static/close_button.svg" alt="Sluit pagina">
+        </a>
+      </div> 
+
+      <div class="title">
+        <h1><%= event.name %></h1>
+        <% if (currentUser && Array.isArray(currentUser.favorites)) { %>
+          <% const isFavorite = currentUser.favorites.includes(event.id); %>
+          <button
+            class="favoBtn <%= isFavorite ? 'active' : '' %>"
             data-event-id="<%= event.id %>">
-            <%= isGoing ? 'You are going to this Event ✔' : 'I am going to this Event!' %>
+            <img
+              src="/static/<%= isFavorite ? 'heart_active' : 'heart_open' %>.svg"
+              alt="Toevoegen aan favorieten">
           </button>
-          <a href="/concertMatching/<%= event.id %>" class="<%= isGoing ? '' : 'disabled' %>">Find match</a>
-        </div>
-  
-        <!-- Link naar tickets -->
-        <% if (event.url) { %>
-          <p>
-            <a class="tickets" href="<%= event.url %>" target="_blank" rel="noopener noreferrer">Bekijk beschikbare tickets</a>
-          </p>
         <% } %>
-      </article>
-    </main>
-    
-    <%- include('../partials/footer'); %>
-    <script src="/detail.js"></script>
+      </div>
+
+      <div class="timeTag">
+        <img src="/static/time_icon.svg" alt="Begin- en eindtijd">
+        <p><%= event.dates.start.localTime ? event.dates.start.localTime.slice(0, 5) : 'Tijd onbekend' %></p>
+      </div>
+
+      <p><strong><%= event._embedded.venues[0].name %></strong></p>
+      <p><%= event._embedded.venues[0].city.name %></p>
+
+      <div class="genreContainer">
+        <% const genre = event.classifications?.[0]?.genre?.name; %>
+        <% const subgenre = event.classifications?.[0]?.subGenre?.name; %>
+
+        <% if (genre) { %>
+          <div class="genreTag"><%= genre %></div>
+        <% } %>
+
+        <% if (subgenre && subgenre !== genre) { %>
+          <div class="subgenreTag"><%= subgenre %></div>
+        <% } %>
+      </div>
+
+      <div class="eventCheck">
+        <button id="goingButton" 
+          class="<%= isGoing ? 'active' : '' %>" 
+          data-event-id="<%= event.id %>">
+          <%= isGoing ? 'Je gaat naar dit concert! ✔' : 'Ik wil naar dit concert!' %>
+        </button>
+        <a href="/concertMatching/<%= event.id %>" class="<%= isGoing ? '' : 'disabled' %>">Vindt match</a>
+      </div>
+
+      <% if (event.url) { %>
+        <p>
+          <a class="tickets" href="<%= event.url %>" target="_blank" rel="noopener noreferrer">Bekijk beschikbare tickets</a>
+        </p>
+      <% } %>
+    </article>
+  </main>
+
+  <%- include('../partials/footer'); %>
+  <script src="/detail.js"></script>
 </body>
 </html>
