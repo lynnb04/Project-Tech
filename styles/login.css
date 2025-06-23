@@ -96,3 +96,16 @@ input::placeholder {
   .showPassword input {
     margin-left: 1em;
   }
+
+  .purpleButton {
+    display: block;
+    text-align: center;
+    margin: 3em auto;
+    color: var(--tekst);
+
+    background-color: var(--roze);
+    padding: 0.7em 1.5em;
+    border-radius: 5em;
+    text-decoration: none;
+    font-family: 'poppins', sans-serif;
+  }

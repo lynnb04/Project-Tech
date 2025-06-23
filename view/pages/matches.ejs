@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="nl">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -14,12 +14,12 @@
     <h1>Jouw Matches</h1>
 
     <% if (matches.length > 0) { %>
-      <ul class="match-list">
+      <ul class="matchList">
         <% matches.forEach(function(match) { %>
-          <li class="match-item">
+          <li class="matchItem">
             <a href="/profile/<%= match._id %>">
-              <img src="<%= match.imagePath %>" alt="Foto van <%= match.firstName %>" class="match-img" />
-              <div class="match-info">
+              <img src="<%= match.imagePath %>" alt="Foto van <%= match.firstName %>" class="matchImg" />
+              <div class="matchInfo">
                 <h2><%= match.firstName %> <%= match.lastName %></h2>
                 <p><%= match.age %> jaar oud</p>
               </div>
@@ -30,12 +30,10 @@
     <% } else { %>
       <p>Je hebt nog geen matches.</p>
     <% } %>
-    <a class="more-matches" href="/matching">Vind meer matches</a>
+    <a class="moreMatches" href="/matching">Vind meer matches</a>
   </main>
 
   <%- include('../partials/footer'); %>
+  <script src="/registration.js"></script>
 </body>
 </html>
-    <%- include('../partials/footer'); %>
-    <script src="/registration.js"></script>
-</body>

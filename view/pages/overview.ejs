@@ -1,18 +1,13 @@
 <!DOCTYPE html>
-<html lang="en">
-<head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Concertoverview</title>
-<link rel="stylesheet" href="/styles.css">
-<link rel="stylesheet" href="/overview.css">
-<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined" rel="stylesheet">
-<style>
-.filter-tag input[type="checkbox"]:checked + span {
-  /* style for selected */
-}
-</style>
-</head>
+<html lang="nl">
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Concertoverview</title>
+    <link rel="stylesheet" href="/styles.css">
+    <link rel="stylesheet" href="/overview.css">
+    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined" rel="stylesheet">
+  </head>
 <body>
   <%- include('../partials/header'); %>
   <main>
@@ -30,11 +25,11 @@
 
     <!-- Filter- en sorteerknoppen -->
     <nav class="controls">
-      <button class="filter" type="button">
+      <button class="filterBtn" type="button">
         Filter
       </button>
-      <span class="filter-count hidden">0</span>
-      <select id="sort-select" class="sort">
+      <span class="filterCount hidden">0</span>
+      <select id="sortSelect" class="sort">
         <option value="name-asc">Naam A→Z</option>
         <option value="name-desc">Naam Z→A</option>
       </select>  
@@ -42,18 +37,18 @@
 
     <!-- Modal popup voor het filtermenu -->
     <div id="filterModal" class="modal">
-      <div class="modal-content">
+      <div class="modalContent">
         <h1>Filters</h1>
-        <button type="button" class="close-btn">
+        <button type="button" class="closeBtn">
           <img src="/static/close_button.svg" alt="Sluit filtermenu">
         </button>
-        <form class="filter-menu" method="GET" action="/overview">
+        <form class="filterMenu" method="GET" action="/overview">
           <!-- Locatie -->
           <details open name="filters">
             <summary>Locatie</summary>
             <ul class="cities">
               <% cities.forEach(city => { %>
-                <li><label class="filter-tag">
+                <li><label class="filterTag">
                   <input type="checkbox" name="cities" value="<%= city %>" 
                     <%= selectedCities.includes(city) ? 'checked' : '' %>>
                   <%= city %>
@@ -65,12 +60,12 @@
           <!-- Datum -->
           <details name="filters">
             <summary>Datum</summary>
-            <div class="date-inputs">
+            <div class="dateInputs">
               <label>Vanaf:
-                <input type="date" class="date-filter" name="dateFrom" value="<%= dateFrom||'' %>">
+                <input type="date" class="dateFilter" name="dateFrom" value="<%= dateFrom||'' %>">
               </label>
               <label>Tot aan:
-                <input type="date" class="date-filter" name="dateTo"   value="<%= dateTo||'' %>">
+                <input type="date" class="dateFilter" name="dateTo"   value="<%= dateTo||'' %>">
               </label>
             </div>
           </details>
@@ -81,7 +76,7 @@
             <ul class="genres">
               <% genres.forEach(genre => { %>
                 <li>
-                  <label class="filter-tag">
+                  <label class="filterTag">
                   <input type="checkbox" name="genres" value="<%= genre %>" 
                     <%= selectedGenres.includes(genre)?'checked':'' %>>
                   <%= genre %>
@@ -92,7 +87,7 @@
           </details>
 
           <div class="submitsection">
-            <button type="submit" class="filter-submit" disabled>Toepassen</button>
+            <button type="submit" class="filterSubmit" disabled>Toepassen</button>
           </div>
         </form>
       </div>
@@ -104,8 +99,8 @@
         <ul class="list">
           <% events.forEach(event => { %>
             <li data-date="<%= event.dates.start.localDate %>">
-              <a class="card-link" href="/detail/<%= event.id %>"></a>
-              <div class="card-img-wrapper">
+              <a class="cardLink" href="/detail/<%= event.id %>"></a>
+              <div class="cardImgWrapper">
                 <img loading="lazy" src="<%= event.images[2]?.url || event.images[0].url %>" alt="Foto van event" />
           
                 <% 
@@ -113,7 +108,7 @@
                   const day = parseInt(dateParts[2], 10);
                   const month = new Date(event.dates.start.localDate).toLocaleString('nl-NL', { month: 'short' });
                 %>
-                <div class="card-date">
+                <div class="cardDate">
                   <span class="day"><%= day %></span>
                   <span class="month"><%= month %></span>
                 </div>

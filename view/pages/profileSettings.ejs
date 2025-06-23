@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="nl">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -13,19 +13,16 @@
 
     <main>
         <section class="profiel">
-            <!-- knop die instellingen ontgrendelt -->
-            <div class="center-wrapper">
-              <button type="button" class="fullscreen-button" onclick="enableEditing()">Bewerk instellingen</button>
+            <div class="centerWrapper">
+              <button type="button" class="fullscreenButton" onclick="enableEditing()">Bewerk instellingen</button>
             </div>
 
             <h2>Profiel</h2>
-            <!-- alles in een formulier -->
-            <div class="form-wrapper">
+            <div class="formWrapper">
                 <form action="/profile-settings" method="POST" enctype="multipart/form-data">
 
-                    <!-- profielfoto code uit account halen -->
-                    <div class="profielfoto-wrapper">
-                    <div class="profielfoto">
+                    <div class="profilePhotoWrapper">
+                    <div class="profilePhoto">
                         <% if (user.imagePath) { %>
                         <img src="<%= user.imagePath %>" alt="Profile Picture">
                         <% } else { %>
@@ -33,10 +30,10 @@
                         <% } %>
                         <input type="file" id="profileUpload" name="profilePic" accept="image/*" disabled>
                     </div>
-                    <label for="profileUpload" class="plus-button">+</label>
+                    <label for="profileUpload" class="plusButton">+</label>
                     </div>
 
-                    <div class="name-fields">
+                    <div class="nameFields">
                     <div class="firstName">
                         <input type="text" name="firstName" placeholder="Voornaam" value="<%= user.firstName || '' %>" disabled />
                     </div>
@@ -65,34 +62,29 @@
 
         <section class="accountmanagement">
             <h2>Accountmanagement</h2>
-                <div class="email">
-                    <input type="email" name="email" placeholder="E-mail" value="<%= user.email || '' %>" disabled/>
-                </div>
-        <!--    <div class="wachtwoord">
-                    <input type="password" name="password" placeholder="Wachtwoord" disabled/>
-                </div>  -->
-
-                <!-- account verwijderen -->
+            <div class="email">
+                <input type="email" name="email" placeholder="E-mail" value="<%= user.email || '' %>" disabled/>
+            </div>
         </section>
 
         <section class="concertvoorkeuren">
             <h2>Concertvoorkeuren</h2>
                 <h3>Genres</h3>
-                    <ul class="genres">
-                        <% genres.forEach(function(genre) { %>
-                            <li>
-                              <input
-                                type="checkbox"
-                                name="genres"
-                                value="<%= genre %>"
-                                id="genre_<%= genre %>"
-                                <% if (selectedGenres.includes(genre)) { %> checked <% } %>
-                                disabled
-                                >
-                                <label for="genre_<%= genre %>"><%= genre %></label>
-                            </li>
-                        <% }); %>
-                    </ul>
+                <ul class="genres">
+                    <% genres.forEach(function(genre) { %>
+                        <li>
+                            <input
+                            type="checkbox"
+                            name="genres"
+                            value="<%= genre %>"
+                            id="genre_<%= genre %>"
+                            <% if (selectedGenres.includes(genre)) { %> checked <% } %>
+                            disabled
+                            >
+                            <label for="genre_<%= genre %>"><%= genre %></label>
+                        </li>
+                    <% }); %>
+                </ul>
         </section>
        
         <section class="matchvoorkeuren">
@@ -104,13 +96,13 @@
                       <span> &dash; </span>
                       <span id="range2"><%= user.preferences?.maxAge || 100 %></span>
                     </div>
-                      <div class="slider-track"></div>
+                      <div class="sliderTrack"></div>
                       <input type="range" min="18" max="100" value="<%= user.preferences?.minAge || 18 %>" id="slider-1" name="minAge" oninput="slideOne()" disabled>
                       <input type="range" min="18" max="100" value="<%= user.preferences?.maxAge || 100 %>" id="slider-2" name="maxAge" oninput="slideTwo()" disabled>
                     </div>
 
                 <h3>Geslacht</h3>
-                   <div class="geslacht-keuze">
+                   <div class="geslachtKeuze">
                     <input type="radio" name="geslachtVoorkeur" id="man" value="man"
                         <%= user.preferences?.geslachtVoorkeur === 'man' ? 'checked' : '' %> disabled>
                     <label for="man">Man</label>
@@ -130,7 +122,7 @@
                     <br>
 
                 <h3>Taal</h3>
-                     <div class="taal-keuze">
+                     <div class="taalKeuze">
                             <input type="radio" name="taal" id="nl" value="nl"
                             <%= selectedTaal === 'nl' ? 'checked' : '' %> disabled>
                             <label for="nl">Nederlands</label>
@@ -147,8 +139,8 @@
                             <%= selectedTaal !== 'nl' && selectedTaal !== 'en' && selectedTaal !== 'nvt' ? 'checked' : '' %> disabled>
                             <label for="else">Anders</label>
 
-                            <input type="text" id="taal-anders-input" name="taalAnders" placeholder="Typ een taal..."
-                            value="<%= taalAnders || '' %>" style="<%= selectedTaal !== 'nl' && selectedTaal !== 'en' && selectedTaal !== 'nvt' ? 'display:inline-block;' : 'display:none;' %>">
+                            <input type="text" id="taalAndersInput" name="taalAnders" placeholder="Typ een taal..."
+                            value="<%= taalAnders || '' %>"style="<%= selectedTaal !== 'nl' && selectedTaal !== 'en' && selectedTaal !== 'nvt' ? 'display:inline-block;' : 'display:none;' %>">
                      </div>
         </section>
 
@@ -159,8 +151,6 @@
             <label>Geblokkeerde accounts</label><br>
             pop-up met lijst van accounts
         </section>
-
-
         <section class="notificaties">
             <h2>Notificaties</h2>
             <div class="toggle-group">
@@ -180,19 +170,18 @@
                 <label for="locaties">Concerten op je favoriete locaties</label>
             </div>
         </section> -->
-    
 
         <section class="uitloggen">
             <br>
-            <button type="button" id="logoutButton" class="logout-button" onclick="window.location.href='/'">Uitloggen</button>
+            <button type="button" id="logoutButton" class="logoutButton" onclick="window.location.href='/'">Uitloggen</button>
         </section>
 
 
-        <div class="center-wrapper">
+        <div class="centerWrapper">
             <button type="submit" id="saveButton" style="display: none;">Instellingen opslaan</button>
-            </div>
-                </form>
-                </main>
+        </div>
+    </form>
+</main>
 
     <%- include('../partials/footer'); %>
 <script src="profileSettings.js" defer></script>

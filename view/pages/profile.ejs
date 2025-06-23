@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="nl">
 
 <head>
   <meta charset="UTF-8">
@@ -16,7 +16,7 @@
   <%- include('../partials/header'); %>
 
     <main>
-      <a class="close-btn" href="/matches">
+      <a class="closeBtn" href="/matches">
         <img src="/static/close_button.svg" alt="Sluit pagina">
       </a>
       <img src="<%= user.imagePath %>" alt="Profielfoto" />
@@ -28,8 +28,8 @@
         </h2>
       </section>
 
-      <article class="profiel-bio">
-        <div class="info-headings">
+      <article class="profileBio">
+        <div class="infoHeadings">
           <h3>
             <%= user.age %> jaar oud
           </h3>
@@ -63,18 +63,19 @@
           </li>
           <li><strong>Talen:</strong></li>
           <ul>
-            <% user.preferences.taal.forEach(function(taal) { %>
+            <% let talen = Array.isArray(user.preferences.taal) ? user.preferences.taal : (user.preferences.taal ? [user.preferences.taal] : []); %>
+            <% talen.forEach(function(taal) { %>
               <% if (taal) { %>
                 <li>
                   <%= taal %>
                 </li>
-                <% } %>
-                  <% }) %>
+              <% } %>
+            <% }) %>
           </ul>
         </ul>
       </section>
 
-        <section class="concerten">
+        <section class="concerts">
           <h2>Favorieten</h2>
 
           <% if (goingEvents.length> 0) { %>
@@ -82,12 +83,12 @@
             <ul class="list">
               <% goingEvents.forEach(function(event) { %>
                 <li data-date="<%= event.dates.start.localDate %>">
-                  <a class="card-link" href="/detail/<%= event.id %>"></a>
-                  <div class="card-img-wrapper">
+                  <a class="cardLink" href="/detail/<%= event.id %>"></a>
+                  <div class="cardImgWrapper">
                     <img src="<%= event.images[2]?.url || event.images[0].url %>" alt="Foto van event" />
                     <% const dateParts=event.dates.start.localDate.split("-"); const day=parseInt(dateParts[2], 10);
                       const month=new Date(event.dates.start.localDate).toLocaleString('nl-NL', { month: 'short' }); %>
-                      <div class="card-date">
+                      <div class="cardDate">
                         <span class="day">
                           <%= day %>
                         </span>
@@ -123,8 +124,6 @@
                 <% }) %>
             </ul>
 
-
-
             <% } else { %>
               <!-- Geen events? Toon alleen dit -->
               <p>Nog geen events</p>
@@ -132,8 +131,7 @@
               <% } %>
         </section>
 
-
-        <section class="concerten">
+        <section class="concerts">
           <h2>Events waar je naartoe gaat</h2>
         
           <% if (goingEvents.length > 0) { %>
@@ -141,9 +139,9 @@
             <ul class="list">
               <% goingEvents.forEach(function(event) { %>
                 <li data-date="<%= event.dates.start.localDate %>">
-                  <a class="card-link" href="/detail/<%= event.id %>"></a>
+                  <a class="cardLink" href="/detail/<%= event.id %>"></a>
         
-                  <div class="card-img-wrapper">
+                  <div class="cardImgWrapper">
                     <img src="<%= event.images[2]?.url || event.images[0].url %>" alt="Foto van event" />
         
                     <% 
@@ -152,7 +150,7 @@
                       const month = new Date(event.dates.start.localDate).toLocaleString('nl-NL', { month: 'short' });
                     %>
         
-                    <div class="card-date">
+                    <div class="cardDate">
                       <span class="day"><%= day %></span>
                       <span class="month"><%= month %></span>
                     </div>
@@ -176,19 +174,13 @@
               <% }); %>
             </ul>
         
-        
           <% } else { %>
             <!-- Geen events -->
             <p>Nog geen events </p>
           <% } %>
         </section>
-        
-
 
     </main>
-
     <%- include('../partials/footer'); %>
-
 </body>
-
 </html>
