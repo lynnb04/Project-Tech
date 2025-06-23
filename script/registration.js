@@ -8,7 +8,7 @@ let sliderTwo = document.getElementById("slider-2");
 let displayValOne = document.getElementById("range1");
 let displayValTwo = document.getElementById("range2");
 let minGap = 0;
-let sliderTrack = document.querySelector(".slider-track");
+let sliderTrack = document.querySelector(".sliderTrack");
   
 function slideOne() {
     if (parseInt(sliderTwo.value) - parseInt(sliderOne.value) <= minGap) {

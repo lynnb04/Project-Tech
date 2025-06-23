@@ -4,40 +4,6 @@ fieldset {
   margin: 0;
 }
 
-/* styling for genres */
-/* .genres ul {
-    list-style: none;
-    padding: 0;
-    margin: 0;
-    display: flex; 
-    flex-wrap: wrap;
-    gap: .5em;
-}
-  
-.genres li {
-    margin: 0;
-}
-
-.genres input[type="checkbox"] {
-    display: none;
-}
-  
-.genres label {
-    display: inline-block;
-    padding: .5em 1em;
-    background-color: var(--lichtBlauw);
-    color: var(--tekst);
-    cursor: pointer;
-    border-radius: 99em;
-    transition: all 0.3s ease;
-}
-  
-.genres label:has(input[type="checkbox"]:checked) {
-    background-color: var(--roze);
-
-} */
-
-
 /*********************/
 /* slider */
 /*********************/
@@ -65,7 +31,7 @@ input[type="range"] {
   pointer-events: none;
 }
 
-.slider-track {
+.sliderTrack {
   width: 100%;
   height: .3em;
   position: absolute;
@@ -156,7 +122,7 @@ input[type="range"]:active::-webkit-slider-thumb {
 /* styling form */
 
 /* Formulier container */
-.persoonsGegevensWrapper {
+.personalInformationWrapper {
   display: flex;
   flex-direction: column;
   gap: 2em;
@@ -185,7 +151,7 @@ main {
   margin-bottom: 3em;
 }
 
-.persoonsGegevensWrapper fieldset {
+.personalInformationWrapper fieldset {
   margin-bottom: 2em;
 }
 
@@ -279,7 +245,7 @@ input[type="submit"]:hover {
 
 /* Alleen voor labels met radio-buttons */
 input[type="radio"] + label,
-#matchVoorkeuren label {
+#matchPreferances label {
   flex-direction: row-reverse;
   align-items: center;
   justify-content: start;
@@ -297,7 +263,7 @@ form>fieldset:target {
   display: block;
 }
 
-.geslacht {
+.gender {
   label {
     flex-direction: row-reverse;
     align-items: center;
@@ -312,7 +278,7 @@ form>fieldset:target {
   flex-direction: column;
 }
 
-.form-nav {
+.formNav {
   display: flex;
   justify-content: space-between;
   gap: 1em;
